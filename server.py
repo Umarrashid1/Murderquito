@@ -4,7 +4,7 @@ import numpy
 import pickle
 
 s = socket.socket(socket.AF_INET , socket.SOCK_DGRAM)
-ip="172.20.10.2"
+ip="0.0.0.0"
 port=6666
 s.bind((ip,port))
 
