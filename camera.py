@@ -6,5 +6,5 @@ picam2.start()
 while True:
     frame  = picam2.capture_array()
     cv2.imshow("camera", frame)
-            break
+break
 cv2.destroyAllWindows()
