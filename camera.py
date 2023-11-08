@@ -6,5 +6,6 @@ picam2.start()
 while True:
     frame  = picam2.capture_array()
     cv2.imshow("camera", frame)
-break
+    if cv2.waitKey(1)==ord('q'):
+        break
 cv2.destroyAllWindows()
