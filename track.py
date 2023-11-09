@@ -6,7 +6,7 @@ lower = np.array([30, 100, 20])
 upper = np.array([90, 250, 255])
 
 # Activating camera image - We will change this later, as we gonna use the camera class.
-webcam_video = cv2.VideoCapture(1)
+webcam_video = cv2.VideoCapture(0)
 
 while True:
     # Read the camera footage
