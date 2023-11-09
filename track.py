@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 
 # Specifying the color that we want to detect
-lower = np.array([30, 100, 20])
-upper = np.array([90, 250, 255])
+# lower = np.array([30, 100, 20])
+# upper = np.array([90, 250, 255])
 
 # Detection of face file
 face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
@@ -18,22 +18,25 @@ while True:
     success, video = webcam_video.read()
 
     # Converting the BGR image from webcam to HSV format
-    img = cv2.cvtColor(video, cv2.COLOR_BGR2HSV)
+    img = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
 
     # Converting the BGR image from webcam to gray scale
     gray_scale = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
 
+    # Thresh
+    thresh = cv2.threshold(gray_scale, 100, 1, cv2.THRESH_BINARY_INV)[1]
+
     # Creating a mask to find our color
-    mask = cv2.inRange(img, lower, upper)
+    # mask = cv2.inRange(img, lower, upper)
 
     # Finding contours in mask image
-    mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Find the position of the contour and draw a circle
     if len(mask_contours) != 0:
         for mask_contour in mask_contours:
             # Defining the least amount of pixels, I want it to register.
-            if cv2.contourArea(mask_contour) > 200:
+            if cv2.contourArea(mask_contour) > 100:
                 # Setting up the circle
                 (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                 center = (int(x), int(y))
@@ -48,7 +51,7 @@ while True:
         cv2.rectangle(video, (x, y), (x+w, y+h), (255, 0, 0), 2)
 
     # Open a window and display the mask image
-    cv2.imshow("Mask image", mask)
+    cv2.imshow("Mask image", img)
 
     # Open a window and display the webcam image
     cv2.imshow("Webcam Image", video)
