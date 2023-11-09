@@ -1,6 +1,6 @@
 import time
 import io
-from Motor import Motor
+from servo import servo
 
 
 def main():
