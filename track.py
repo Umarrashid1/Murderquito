@@ -5,6 +5,11 @@ import numpy as np
 lower = np.array([30, 100, 20])
 upper = np.array([90, 250, 255])
 
+# Detection of face file
+face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
+
+cascade = cv2.CascadeClassifier(face_file_path)
+
 # Activating camera image - We will change this later, as we gonna use the camera class.
 webcam_video = cv2.VideoCapture(0)
 
@@ -14,6 +19,9 @@ while True:
 
     # Converting the BGR image from webcam to HSV format
     img = cv2.cvtColor(video, cv2.COLOR_BGR2HSV)
+
+    # Converting the BGR image from webcam to gray scale
+    gray_scale = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
 
     # Creating a mask to find our color
     mask = cv2.inRange(img, lower, upper)
@@ -32,6 +40,12 @@ while True:
                 radius = int(radius)
                 # Creating the circle
                 cv2.circle(video, center, radius, (0, 0, 255), 3)
+
+    # Recognize a face
+    faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
+
+    for x, y, w, h in faces:
+        cv2.rectangle(video, (x, y), (x+w, y+h), (255, 0, 0), 2)
 
     # Open a window and display the mask image
     cv2.imshow("Mask image", mask)
