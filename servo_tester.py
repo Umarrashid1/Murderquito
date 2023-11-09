@@ -2,8 +2,9 @@ import time
 import io
 from Motor import Motor
 
-def main()
+
+def main():
 
     motorx = Motor(x)
     motorx.move(180)
-    motor.stop()
+    motorx.stop()
