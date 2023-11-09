@@ -1,5 +1,6 @@
 import pigpio
 import time
+import GPIO
 
 
 class Servo:
@@ -9,28 +10,28 @@ class Servo:
 
     def __init__(self, axis, PIN):
         self.axis = axis
-        self.angle = 0        
+        self.angle = 0
         GPIO.setmode(GPIO.PWM)
-        if axis == x:
+        if axis == "x":
             self.pin = 14
         else:
             self.pin = 15
-        GPIO.setup(pin, GPIO.OUT)
-        self.io = GPIO.PWM(servoPIN, 50)
-        io.start(0) #Initizialation
-    def move(self, angle):
-        if angle <  180 or angle > 0:
-            if angle != angle
-            self.angle = angle
-            self.set_pwm(self.angle_pwm_conv(angle))
+        GPIO.setup(self.pin, GPIO.OUT)
+        self.io = GPIO.PWM(self.pin, 50)
+        self.io.start(0)  #Initizialation
 
-    
+    def move(self, angle):
+        if angle < 180 or angle > 0:
+            if angle != angle:
+                self.angle = angle
+                self.set_pwm(self.angle_pwm_conv(angle))
+
     def angle_pwm_conv(angle):
-        duty = (dc_max-dc_min) / 180 * angle +dc_min
+        duty = (dc_max - dc_min) / 180 * angle + dc_min
         return duty
     
     def set_pwm(dc):
-         self.io.ChangeDutyCycle(dc_min)
+         io.ChangeDutyCycle(dc_min)
 
     def stop():
         p.stop()
