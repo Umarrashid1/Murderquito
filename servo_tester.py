@@ -1,6 +1,6 @@
 import time
 import io
-from servo import servo
+from servo import Servo
 
 
 def main():
