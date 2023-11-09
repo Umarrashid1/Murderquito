@@ -1,6 +1,6 @@
 import pigpio
 import time
-import GPIO
+import RPi.GPIO as GPIO
 
 
 class Servo:
