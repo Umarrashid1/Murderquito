@@ -41,8 +41,13 @@ while True:
                 (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                 center = (int(x), int(y))
                 radius = int(radius)
+
                 # Creating the circle
                 cv2.circle(video, center, radius, (0, 0, 255), 3)
+
+                # Show coordinates for the center of the black object
+                cv2.putText(video, f'({x},{y})', center, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                cv2.circle(video, center, 3, (0, 255, 255), -1)
 
     # Recognize a face
     faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
