@@ -9,9 +9,9 @@ class Servo:
     pwm_hz = 50    # Frequency
     angle = 0    # angle set to 0 for init
     axis = 0
-    def __init__(self, axis, PIN):
+    def __init__(self, axis):
         self.axis = axis
-        GPIO.setmode(GPIO.PWM)
+        GPIO.setmode(GPIO.BCM)
         if axis == "x":
             self.pin = 14
         else:
