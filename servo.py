@@ -32,7 +32,7 @@ class Servo:
         return duty
     
     def set_pwm(self, dc):
-        self.io.ChangeDutyCycle(self.dc_min)
+        self.io.ChangeDutyCycle(self.dc)
 
     def stop(self):
         self.p.stop()
