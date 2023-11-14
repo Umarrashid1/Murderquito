@@ -32,8 +32,8 @@ class Servo:
         return duty
     
     def set_pwm(self, dc):
-        self.io.ChangeDutyCycle(self.dc)
+        self.io.ChangeDutyCycle(dc)
 
     def stop(self):
-        self.p.stop()
+        self.io.stop()
         GPIO.cleanup()
