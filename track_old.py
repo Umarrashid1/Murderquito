@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from picamera2 import Picamera2
 
 # Specifying the color that we want to detect
 # lower = np.array([30, 100, 20])
@@ -11,11 +12,11 @@ face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
 cascade = cv2.CascadeClassifier(face_file_path)
 
 # Activating camera image - We will change this later, as we gonna use the camera class.
-webcam_video = cv2.VideoCapture(0)
-
+webcam_video = Picamera2()
+webcam_video.start()
 while True:
     # Read the camera footage
-    success, video = webcam_video.read()
+    video = webcam_video.capture_array()
 
     # Converting the BGR image from webcam to HSV format
     img = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
