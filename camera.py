@@ -1,6 +1,5 @@
 import cv2
 from picamera2 import Picamera2
-from track import track
 
 camera = Picamera2()
 camera.start()
