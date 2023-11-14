@@ -4,7 +4,6 @@ from servo import Servo
 
 
 def main():
-
-    motorx = Motor(x)
-    motorx.move(180)
-    motorx.stop()
+    servo_x = Servo("x")
+    servo_x.move(180)
+    servo_x.stop()
