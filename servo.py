@@ -8,7 +8,7 @@ class Servo:
     dc_max = 12    # duty cyckle for 180 degrees
     pwm_hz = 50    # Frequency
     angle = 0    # angle set to 0 for init
-    
+    axis = 0
     def __init__(self, axis, PIN):
         self.axis = axis
         GPIO.setmode(GPIO.PWM)
@@ -19,7 +19,7 @@ class Servo:
         GPIO.setup(self.pin, GPIO.OUT)
         self.io = GPIO.PWM(self.pin, 50)
         self.io.start(0)  # Initizialation
-        self.move(angle)    #Move to current angle (0)
+        self.move(self.angle)    # Move to current angle (0)
 
     def move(self, angle):
         if angle < 180 or angle > 0:
