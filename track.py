@@ -10,14 +10,13 @@ class tracker:
     # Converting the BGR image from webcam to HSV format
     img = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
 
-    # Converting the BGR image from webcam to gray scale
+     # Converting the BGR image from webcam to gray scale
     gray_scale = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
 
     # Thresh
     thresh = cv2.threshold(gray_scale, 100, 1, cv2.THRESH_BINARY_INV)[1]
 
-    
-    
+        
     def track_faces(self, gray_scale, img, video):
         
         # Specifying the color that we want to detect
@@ -51,7 +50,7 @@ class tracker:
             # Defining the delay pr frame.
             cv2.waitKey(1)
 
-    def track_black_dot(self, thresh, img, video):
+    def find_black_dot(self, thresh, img, video):
         # Creating a mask to find our color
             # mask = cv2.inRange(img, lower, upper)
 
