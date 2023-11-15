@@ -6,7 +6,7 @@ class BondingBoxes:
         for x, y, w, h in object:
             cv2.rectangle(video, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-    def circle(self, x, y):
+    def circle(self, x, y, mask_contour):
         # Setting up the circle
         (x, y), radius = cv2.minEnclosingCircle(mask_contour)
         center = (int(x), int(y))

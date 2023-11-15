@@ -1,5 +1,5 @@
 class Identify_Objects:
-    def find_faces(self, gray_scale, img, video):
+    def face_object(self, gray_scale, img, video):
     # Identification og detection of face file
     face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
     cascade = cv2.CascadeClassifier(face_file_path)
@@ -11,7 +11,7 @@ class Identify_Objects:
         for x, y, w, h in faces:
             cv2.rectangle(video, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-    def find_black_dot(self, thresh, img, video):
+    def black_dot_object(self, thresh, img, video):
 
     while True:
     # Find the position of the contour and draw a circle
