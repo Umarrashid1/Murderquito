@@ -1,10 +1,12 @@
 import cv2
 from picamera2 import Picamera2
-from cameraera import Camera
+from camera import Camera
 
 cam = Camera()
+cam.init()
 cam.start()
-cam.autofocus
+cam.autofocus()
+
 while True:
     frame = cam.run()
     cam.show("Video", frame)

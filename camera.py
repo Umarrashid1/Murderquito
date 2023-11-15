@@ -1,23 +1,24 @@
 import cv2
 from picamera2 import Picamera2
+from libcamera import controls
 
 
 class Camera:
     frame = 0
     camera = 0
 
-    def __init__(self):
+    def init(self):
         self.camera = Picamera2()
         return self.camera
 
-    def start(self, camera):
-        camera.start
+    def start(self):
+        self.camera.start()
 
     def autofocus(self):
-        autofocus
+        self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
-    def run(self, camera):
-        self.frame = camera.capture_array()
+    def run(self):
+        self.frame = self.camera.capture_array()
         return self.frame
 
     def show(self, name, frame):
