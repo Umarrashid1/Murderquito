@@ -5,7 +5,7 @@ from picamera2 import Picamera2
 class Camera:
     frame = 0
     camera = 0
-    
+
     def __init__(self):
         self.camera = Picamera2()
         return self.camera
