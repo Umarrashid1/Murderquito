@@ -31,9 +31,9 @@ class tracker:
         # Activating camera image - We will change this later, as we gonna use the camera class.
         webcam_video = cv2.VideoCapture(1)
         while True:
-            
 
-            
+
+
 
             # Recognize a face
             faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
@@ -73,7 +73,7 @@ class tracker:
                         # Show coordinates for the center of the black object
                         cv2.putText(video, f'({x},{y})', center, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                         cv2.circle(video, center, 3, (0, 255, 255), -1)
-            
+
             # Open a window and display the mask image
             cv2.imshow("Mask image", img)
 
