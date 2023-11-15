@@ -1,4 +1,4 @@
-class Markers:
+class BondingBoxes:
     def __init__(self):
         x, y, w, h, radius = 0
 
