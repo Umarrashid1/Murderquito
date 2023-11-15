@@ -1,6 +1,6 @@
+from Bounding_Boxes_subclasses.Rectangle import Rectangle
 import cv2
-import numpy as np
-from picamera2 import Picamera2
+
 
 # Specifying the color that we want to detect
 # lower = np.array([30, 100, 20])
@@ -12,11 +12,11 @@ face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
 cascade = cv2.CascadeClassifier(face_file_path)
 
 # Activating camera image - We will change this later, as we gonna use the camera class.
-webcam_video = Picamera2()
-webcam_video.start()
+webcam_video = cv2.VideoCapture(0)
+
 while True:
     # Read the camera footage
-    video = webcam_video.capture_array()
+    success, video = webcam_video.read()
 
     # Converting the BGR image from webcam to HSV format
     img = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
@@ -53,8 +53,9 @@ while True:
     # Recognize a face
     faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
 
-    for x, y, w, h in faces:
-        cv2.rectangle(video, (x, y), (x+w, y+h), (255, 0, 0), 2)
+    rectangle_BoundingBox1 = Rectangle.rectangle_bounding_box(Rectangle(faces), video)
+
+
 
     # Open a window and display the mask image
     cv2.imshow("Mask image", img)
