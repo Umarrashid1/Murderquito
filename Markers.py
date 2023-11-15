@@ -1,12 +1,10 @@
-class Identify_Objects:
-    def find_faces(self, gray_scale, img, video):
-    # Identification og detection of face file
-    face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
-    cascade = cv2.CascadeClassifier(face_file_path)
+class Markers:
+    def __init__(self):
+        x, y, w, h, radius = 0
 
-    while True:
-        # Recognize a face
-        faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
+
+
+    def rectangle_marker(self):
 
         for x, y, w, h in faces:
             cv2.rectangle(video, (x, y), (x + w, y + h), (255, 0, 0), 2)
