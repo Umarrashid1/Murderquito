@@ -31,9 +31,6 @@ gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 # Thresh
 thresh = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
 
-# Creating a mask to find our color
-# mask = cv2.inRange(img, lower, upper)
-
 # Finding contours in mask image
 mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 

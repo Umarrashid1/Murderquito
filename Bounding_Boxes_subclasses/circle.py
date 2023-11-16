@@ -12,7 +12,7 @@ class Circle(BoundingBoxes):
     @classmethod
     def from_contours(cls, contours):
         max_contour = max(contours, key=cv2.contourArea)
-        if max_contour is not None:
+        if max_contour > 100:
             ((x, y), radius) = cv2.minEnclosingCircle(max_contour)
             return cls(int(x), int(y), int(radius), max_contour)
 
