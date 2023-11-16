@@ -42,12 +42,12 @@ class ServoCalibrator:
             return NotImplemented #make servo perpendicular
         
     def _px_to_cm_scale_checkerboard(object_in_frame):
-        return NotImplemented
+        NotImplemented
 
 
-    def approx_dist_to_wall_using_box():
-        1
-        #https://www.researchgate.net/publication/235196461_A_Simple_Method_for_Range_Finding_via_Laser_Triangulation
+    def approx_dist_to_wall_using_box(): #https://www.researchgate.net/publication/235196461_A_Simple_Method_for_Range_Finding_via_Laser_Triangulation
+        NotImplemented
+        
         
     def calculate_frame_dimensions():
         #hvis laser peger lige frem, så er:
@@ -55,7 +55,7 @@ class ServoCalibrator:
         #omregn mellem pixel og cm
 
         #hvis laser centreret og cam_to_wall er kendt
-        a = 1
+        NotImplemented
 
     def calc_angle_for_frame_center(self, servo): #
         if servo.axis == "x":
@@ -68,7 +68,7 @@ class ServoCalibrator:
             # return ValueError
         
         angle_to_axis = 90
-        return
+        return NotImplemented
     
 
         
@@ -79,24 +79,29 @@ class ServoCalibrator:
         laser_x = 1
         laser_y = 1 #kald track eller identification
 
-    def calc_distance_from__angle(self):
-        
+        NotImplemented
+
+    def calc_distance_from__angle(self):    
         #laseren skal enten vaere centreret, ellers skal den være i billedet om man skal omregne dimensioner til pixel
         cam_to_laser = 4
-
-        #
         x_angle = 2
         y_angle = 2 #servo.get_angle(y)?
 
+        NotImplemented
 
-
-        errr=1
-
-    def center_laser_in_img():
+    def center_laser_in_img(self, laser_dot, servo_x=Servo, servo_y=Servo):
         #ryk laser op/ned indtil den rammer midterlinjen
         #samme for højre venstre
         #når laser_dot = center_of_frame succes
-        d = 1
+        while(laser_dot.x_coord > self.cam_px_width):
+            servo_x.move(servo_x.angle+1)
+        while(laser_dot.x_coord < self.cam_px_width):
+            servo_x.move(servo_x.angle+1)
+        while(laser_dot.y_coord < self.cam_px_height):
+            servo_y.move(servo_y.angle + 1)
+        while(laser_dot.y_coord < self.cam_px_width):
+            servo_x.move(servo_x.angle + 1)
+        
 
 class ImageCalibrator:
     chessboard_size = (9,6) # number of corners in width and height
