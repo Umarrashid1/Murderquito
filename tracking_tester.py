@@ -37,6 +37,14 @@ mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN
 
 
 # Find the position of the contour and draw a rectangle
+
+identify = Identifyer()
+#bbox = identify.find_black_dot(thresh, gray_frame)
+
+
+"""
+    find_black_dot(self, thresh, img, video):
+
 if len(mask_contours) != 0:
     for mask_contour in mask_contours:
         # Defining the least amount of pixels, I want it to register.
@@ -51,8 +59,8 @@ if len(mask_contours) != 0:
             cv2.rectangle(gray_frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
             # Show coordinates for the top-left corner of the bounding box
-            cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            #cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1)
+            
+            #cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1) """
 
 #__________________________________________________________________________________________
 
