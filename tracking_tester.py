@@ -68,8 +68,8 @@ if len(mask_contours) != 0:
 #bbox = cv2.selectROI(frame, False)
 
 # Initialize tracker with first frame and bounding box
-bbox = identify.find_black_dot(thresh, gray_frame)
-ok, bbox = tracker.init(frame, bbox)
+bbox = detection.find_black_dot(thresh, gray_frame)
+ok = tracker.init(frame, bbox)
 
 while True:
     # Read a new frame
@@ -85,7 +85,8 @@ while True:
     # Run Detection every x frames
     if frame_counter == 30:
         # TODO: call Detection
-
+        bbox = detection.find_black_dot(thresh,gray_frame)
+        ok = tracker.init(frame, bbox)
         # Reset frame counter
         frame_counter = 0
 
