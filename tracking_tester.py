@@ -1,6 +1,7 @@
 import cv2
 import sys
 import numpy
+from detection import Identifyer
 
 tracker = cv2.legacy.TrackerKCF.create()
 
@@ -34,9 +35,6 @@ thresh = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
 # Finding contours in mask image
 mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Define an initial bounding box
-bbox = (287, 23, 86, 320)
-
 
 # Find the position of the contour and draw a rectangle
 if len(mask_contours) != 0:
@@ -62,7 +60,8 @@ if len(mask_contours) != 0:
 #bbox = cv2.selectROI(frame, False)
 
 # Initialize tracker with first frame and bounding box
-ok = tracker.init(frame, bbox)
+bbox = identify.find_black_dot(thresh, gray_frame)
+ok, bbox = tracker.init(frame, bbox)
 
 while True:
     # Read a new frame

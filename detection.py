@@ -46,10 +46,10 @@ class Identifyer:
         for mask_contour in mask_contours:
             if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register
                 x, y, w, h = cv2.boundingRect(mask_contour)
-                bbox = (x, y, w, h)
+                bboxes = (x, y, w, h)
 
                 cv2.putText(gray, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        return bbox
+        return bboxes
 
 
 
