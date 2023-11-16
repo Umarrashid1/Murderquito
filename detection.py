@@ -1,5 +1,6 @@
 import cv2
 from Bounding_Boxes_subclasses.rectangle import Rectangle
+
 from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
 
@@ -43,18 +44,15 @@ class Identifyer:
         # Finding contours in mask image
         mask_contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
                                            cv2.CHAIN_APPROX_SIMPLE)
-        for mask_contour in mask_contours:
-            if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register
-                x, y, w, h = cv2.boundingRect(mask_contour)
-                bboxes = (x, y, w, h)
-
-                cv2.putText(gray, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        if len(mask_contours) != 0:
+            for mask_contour in mask_contours:
+                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register
+                    x, y, w, h = cv2.boundingRect(mask_contour)
+                    bbox = (x, y, w, h)
+                    cv2.putText(gray, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         return bbox
 
-
-
-
-
+#ekstra ting kopieret et sted fra:
 """
 contours, _ = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 for c in contours:

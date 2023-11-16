@@ -38,7 +38,7 @@ mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN
 
 # Find the position of the contour and draw a rectangle
 
-identify = Identifyer()
+detection = Identifyer()
 #bbox = identify.find_black_dot(thresh, gray_frame)
 
 
@@ -99,7 +99,7 @@ while True:
     # Calculate Frames per second (FPS)
     fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
 
-    # Draw bounding box
+    # Draw bounding box TODO: egen funktion?
     if ok:
         # Tracking success
         p1 = (int(bbox[0]), int(bbox[1]))
