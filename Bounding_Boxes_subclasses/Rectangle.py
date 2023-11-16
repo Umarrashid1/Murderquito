@@ -3,13 +3,10 @@ import cv2
 
 
 class Rectangle(BoundingBoxes):
-    def __init__(self, cascade, x, y, w, h):
-        super().__init__(cascade)
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y)
+        self.width = width
+        self.height = height
 
-    def rectangle_bounding_box(self, frame):
-        for x, y, w, h in self.cascade_or_mask_object:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    def display(self, frame):
+        cv2.rectangle(frame, (self.x, self.y), (self.x + self.width, self.y + self.height), (255, 0, 0), 2)
