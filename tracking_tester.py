@@ -1,8 +1,12 @@
 import cv2
 import sys
 import numpy
+from detection import Identifyer
 
 tracker = cv2.legacy.TrackerKCF.create()
+
+frame_counter = 0
+
 
 
 # Read video
@@ -28,16 +32,19 @@ gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 # Thresh
 thresh = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
 
-# Creating a mask to find our color
-# mask = cv2.inRange(img, lower, upper)
-
 # Finding contours in mask image
 mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Define an initial bounding box
-bbox = (287, 23, 86, 320)
 
 # Find the position of the contour and draw a rectangle
+
+detection = Identifyer()
+#bbox = identify.find_black_dot(thresh, gray_frame)
+
+
+"""
+    find_black_dot(self, thresh, img, video):
+
 if len(mask_contours) != 0:
     for mask_contour in mask_contours:
         # Defining the least amount of pixels, I want it to register.
@@ -52,9 +59,8 @@ if len(mask_contours) != 0:
             cv2.rectangle(gray_frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
 
             # Show coordinates for the top-left corner of the bounding box
-            cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1)
-
+            
+            #cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1) """
 
 #__________________________________________________________________________________________
 
@@ -62,6 +68,7 @@ if len(mask_contours) != 0:
 #bbox = cv2.selectROI(frame, False)
 
 # Initialize tracker with first frame and bounding box
+bbox = detection.find_black_dot(thresh, gray_frame)
 ok = tracker.init(frame, bbox)
 
 while True:
@@ -72,6 +79,18 @@ while True:
     if not ok:
         break
 
+    # Increment frame counter
+    frame_counter += 1
+
+    # Run Detection every x frames
+    if frame_counter == 30:
+        # TODO: call Detection
+        bbox = detection.find_black_dot(thresh,gray_frame)
+        ok = tracker.init(frame, bbox)
+        # Reset frame counter
+        frame_counter = 0
+
+
     # Start timer
     timer = cv2.getTickCount()
 
@@ -81,7 +100,7 @@ while True:
     # Calculate Frames per second (FPS)
     fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
 
-    # Draw bounding box
+    # Draw bounding box TODO: egen funktion?
     if ok:
         # Tracking success
         p1 = (int(bbox[0]), int(bbox[1]))

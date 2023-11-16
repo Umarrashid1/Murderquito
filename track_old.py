@@ -1,5 +1,5 @@
-from Bounding_Boxes_subclasses.Rectangle import Rectangle
-from Bounding_Boxes_subclasses.Circle import Circle
+from Bounding_Boxes_subclasses.rectangle import Rectangle
+from Bounding_Boxes_subclasses.circle import Circle
 import cv2
 
 
