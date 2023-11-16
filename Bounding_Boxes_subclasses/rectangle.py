@@ -1,4 +1,4 @@
-from BoundingBoxes import BoundingBoxes
+from boundingboxes import BoundingBoxes
 import cv2
 
 

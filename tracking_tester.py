@@ -4,6 +4,9 @@ import numpy
 
 tracker = cv2.legacy.TrackerKCF.create()
 
+frame_counter = 0
+
+
 
 # Read video
 video = cv2.VideoCapture(0)
@@ -37,6 +40,7 @@ mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN
 # Define an initial bounding box
 bbox = (287, 23, 86, 320)
 
+
 # Find the position of the contour and draw a rectangle
 if len(mask_contours) != 0:
     for mask_contour in mask_contours:
@@ -53,8 +57,7 @@ if len(mask_contours) != 0:
 
             # Show coordinates for the top-left corner of the bounding box
             cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1)
-
+            #cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1)
 
 #__________________________________________________________________________________________
 
@@ -71,6 +74,17 @@ while True:
 
     if not ok:
         break
+
+    # Increment frame counter
+    frame_counter += 1
+
+    # Run Detection every x frames
+    if frame_counter == 30:
+        # TODO: call Detection
+
+        # Reset frame counter
+        frame_counter = 0
+
 
     # Start timer
     timer = cv2.getTickCount()

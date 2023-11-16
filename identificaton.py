@@ -31,10 +31,6 @@ class Identifyer:
         # Activating camera image - We will change this later, as we gonna use the camera class.
         webcam_video = cv2.VideoCapture(1)
         while True:
-
-
-
-
             # Recognize a face
             faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
 
