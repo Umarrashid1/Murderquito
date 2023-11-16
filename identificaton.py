@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class tracker:
+class Identifyer:
     # Read the camera footage
     webcam_video = cv2.VideoCapture(0)
     success, video = webcam_video.read()

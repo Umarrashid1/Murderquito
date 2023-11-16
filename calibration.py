@@ -5,48 +5,50 @@ import math
 import glob
 from camera import Camera
 import numpy as np
+from servo import Servo
 
 class ServoCalibrator:
-    cam_to_laser = 4
+    cam_to_laser_axis_y = 4
+    cam_to_laser_axis_x = 8
     cam_fov = 80
     cam_px_width = 1080
     cam_px_height = 720
-
+    cam_sensor_size = # 1.22 µm × 1.22 µm
+    cam_focal_length = 4.28 # mål i mm
+    # cam_focal_ratio = 1.75
     # β=arctan(b/a)
-
+    cam_distance_wall = 30
     
-    def px_dim_conv():
+
+    def find_px_dim_conv(self,servo_x= None, servo_y= None, object_in_frame = None):
+        if servo_x is Servo or servo_y is Servo and object_in_frame is LaserDot:
+            self._px_to_cm_scale_perpendicular_laser(servo_x, servo_y, object_in_frame)
+        if object_in_frame is Checkerbox:
+            self._px_to_cm_scale_checkerboard(object_in_frame)
+        
+    def _px_to_cm_scale_perpendicular_laser(self, servo_x= None, servo_y= None, laser_dot_object = None):
         #kend væggens bredde højde i billedrammen, eller dimensionerne på et objekt i billedet
         fucknuaf=1
+        if servo_x is Servo and servo_x.perpendicular is True:
+            dot_offset_x = abs((self.cam_px_width/2)- laser_dot_object.coord_x) #abs for kun at få positv værdi
+            self.px_to_cm_width_scale = (dot_offset_x / self.cam_to_laser_axis_y)
+        elif servo_x is Servo:
+            return NotImplemented #make servo perpendicular
+    
+        if servo_y is Servo and servo_y.perpendicular is True:
+            dot_offset_y = abs((self.cam_px_height/2)- laser_dot_object.coord_y) #abs for kun at få positv værdi
+            self.px_to_cm_heigth_scale = (dot_offset_y / self.cam_to_laser_axis_x)
+        elif servo_y is Servo:
+            return NotImplemented #make servo perpendicular
+        
+    def _px_to_cm_scale_checkerboard(object_in_frame):
+        return NotImplemented
 
-    def approximate_distance_to_wall():
-            #kassen har kendte dimensioner: x_cm y_cm
-            #kameraet har oploesning : x_pixel y_pixel
-            #find kasses x_pixel y_pixel
-            #brug det til at finde billedrammens bredde x_cm og hoejde y_cm
-                #Kamera_x_pixel / kasse_x_pixel
-            #und so weiter
 
-            black_box_dim = 2
-            mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-            # Find the position of the contour and draw a circle
-            if len(mask_contours) != 0:
-                for mask_contour in mask_contours:
-                    # Defining the least amount of pixels, I want it to register.
-                    if cv2.contourArea(mask_contour) > 100:
-                        # Setting up the circle
-                        (x, y), radius = cv2.minEnclosingCircle(mask_contour)
-                        center = (int(x), int(y))
-                        radius = int(radius)
-
-                        # Creating the circle
-                        cv2.circle(video, center, radius, (0, 0, 255), 3)
-
-                        # Show coordinates for the center of the black object
-                        cv2.putText(video, f'({x},{y})', center, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-                        cv2.circle(video, center, 3, (0, 255, 255), -1)
-
+    def approx_dist_to_wall_using_box():
+        1
+        #https://www.researchgate.net/publication/235196461_A_Simple_Method_for_Range_Finding_via_Laser_Triangulation
+        
     def calculate_frame_dimensions():
         #hvis laser peger lige frem, så er:
         # center_to_dot == cam_to_laser
@@ -55,20 +57,22 @@ class ServoCalibrator:
         #hvis laser centreret og cam_to_wall er kendt
         a = 1
 
-    def calc_angle_for_frame_center(): #
-        #   Use Pythagoras with DISTANCE between LASER ORIGIN and CAMERA CENTER 
-        #   alongside distance of WALL to calculate LASER ANGLE]
-        #   use x_coords to get x_angle     y_coords for angle_y
-        cam_to_laser = 3
-        cam_to_wall = 5
-
-        laser_dot_x = 2
-        laser_dot_y = 2
-            #vinklen for hvor laser ville møde midten af kameraet
-            #   α=arctan(a/b) for trekant med a = mid_to_dot, b = cam_to_wall
-            #   laser_vinkel = 90 - arctan(mid_to_dot/cam_to_wall)
+    def calc_angle_for_frame_center(self, servo): #
+        if servo.axis == "x":
+            dist_cam_to_axis = self.cam_to_laser_axis_y
+        elif servo.axis == "y":
+            dist_cam_to_axis = self.cam_to_laser_axis_x
+        else: 
+            print("\n\n\n\n\n\n input er ikke en akse:", servo.axis)
+            exit
+            # return ValueError
         
-        #gider ikke flere trekanter lige nu
+        angle_to_axis = 90
+        return
+    
+
+        
+        
 
     def calc_angle_from_distance(self):
         cam_to_wall = 12
