@@ -1,7 +1,7 @@
 import cv2
 import sys
 import numpy
-from detection import Identifyer
+from detection import Detection
 
 tracker = cv2.legacy.TrackerKCF.create()
 
@@ -38,7 +38,7 @@ mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN
 
 # Find the position of the contour and draw a rectangle
 
-detection = Identifyer()
+detection = Detection()
 #bbox = identify.find_black_dot(thresh, gray_frame)
 
 
@@ -76,17 +76,18 @@ while True:
     ok, frame = video.read()
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    if not ok:
-        break
 
     # Increment frame counter
     frame_counter += 1
 
-    # Run Detection every x frames
+    # Run Detection every 30 frames
     if frame_counter == 30:
-        # TODO: call Detection
-        bbox = detection.find_black_dot(thresh,gray_frame)
-        ok = tracker.init(frame, bbox)
+
+        bbox = detection.find_black_dot(thresh, gray_frame)
+        tracker.clear()
+        if bbox is not None:
+            tracker.init(frame, bbox)
+
         # Reset frame counter
         frame_counter = 0
 

@@ -1,23 +1,23 @@
 import cv2
 from Bounding_Boxes_subclasses.rectangle import Rectangle
 
-from Bounding_Boxes_subclasses.circle import Circle
+# from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
-from camera import Camera
+# from camera import Camera
 
 
-class Identifyer:
+class Detection:
 
     def find_black_rectangle(): #TODO find hjørner og evt sidelængder på rektangel/kvadrat maaske?
         x = 1
-        y= 2
+        y = 2
         point_one = [x,y]
         point_two = [x,y]
         point_three = [x,y]
         point_four = [x,y]  
         return point_one, point_two, point_two, point_three
 
-    def find_laser_dot(cam = Camera, coord_choice = None):
+    """def find_laser_dot(cam = Camera, coord_choice = None):
         frame = cam.run() 
         #TODO: find grøn lasers koordinat til frame
         # (Janice har lavet en. jeg finder den i commit history)
@@ -26,7 +26,7 @@ class Identifyer:
         elif coord_choice is 'x': return y_coord
         else: return (x_coord, y_coord)
         s = 1
-    
+    """
     # Read the camera footage
     webcam_video = cv2.VideoCapture(0)
     success, video = webcam_video.read()

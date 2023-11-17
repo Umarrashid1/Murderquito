@@ -5,7 +5,7 @@ import glob
 from camera import Camera
 import numpy as np
 from servo import Servo
-from detection import Identifyer
+from detection import Detection
 
 class ServoCalibrator:
     cam_to_laser_axis_y = 4
@@ -77,7 +77,7 @@ class ServoCalibrator:
 
         NotImplemented
 
-    def center_laser_in_img(self, det = Identifyer, servo_x=Servo, servo_y=Servo):  
+    def center_laser_in_img(self, det = Detection, servo_x=Servo, servo_y=Servo):
         #TODO: find elegant way of doing it. with and/or without trial&error / other way
         #ryk laser op/ned indtil den rammer midterlinjen
         x_coord = det.find_laser_dot('x')
