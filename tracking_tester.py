@@ -64,14 +64,13 @@ if len(mask_contours) != 0:
 
 #__________________________________________________________________________________________
 
-# Uncomment the line below to select a different bounding box
-#bbox = cv2.selectROI(frame, False)
 
 # Initialize tracker with first frame and bounding box
 bbox = detection.find_black_dot(thresh, gray_frame)
 ok = tracker.init(frame, bbox)
 
 while True:
+
     # Read a new frame
     ok, frame = video.read()
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -84,13 +83,16 @@ while True:
     if frame_counter == 30:
 
         bbox = detection.find_black_dot(thresh, gray_frame)
-        tracker.clear()
-        if bbox is not None:
+
+        if bbox:
             tracker.init(frame, bbox)
+            ok, bbox = tracker.update(frame)
+
+            tracker = cv2.legacy.TrackerKCF.create()
+
 
         # Reset frame counter
         frame_counter = 0
-
 
     # Start timer
     timer = cv2.getTickCount()
