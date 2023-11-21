@@ -1,13 +1,11 @@
 import cv2
 import sys
-import numpy
+import numpy as np
 from detection import Detection
 
 tracker = cv2.legacy.TrackerKCF.create()
 
 frame_counter = 0
-
-
 
 # Read video
 video = cv2.VideoCapture(0)
@@ -19,12 +17,10 @@ if not video.read():
 
 # Read first frame.
 ok, frame = video.read()
+
 if not ok:
     print("Cannot read video file")
     sys.exit()
-
-
-#__________________________________________________________________________________
 
 # Converting the BGR image from webcam to gray scale
 gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -32,41 +28,9 @@ gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 # Thresh
 thresh = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
 
-# Finding contours in mask image
-mask_contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-
-# Find the position of the contour and draw a rectangle
-
-detection = Detection()
-#bbox = identify.find_black_dot(thresh, gray_frame)
-
-
-"""
-    find_black_dot(self, thresh, img, video):
-
-if len(mask_contours) != 0:
-    for mask_contour in mask_contours:
-        # Defining the least amount of pixels, I want it to register.
-        if cv2.contourArea(mask_contour) > 100:
-            # Get bounding box for the contour
-            x, y, w, h = cv2.boundingRect(mask_contour)
-
-            # Set bbox with the correct format
-            bbox = (x, y, w, h)
-
-            # Draw rectangle
-            cv2.rectangle(gray_frame, (x, y), (x + w, y + h), (0, 0, 255), 3)
-
-            # Show coordinates for the top-left corner of the bounding box
-            
-            #cv2.circle(gray_frame, (x + w // 2, y + h // 2), 3, (0, 255, 255), -1) """
-
-#__________________________________________________________________________________________
-
-
 # Initialize tracker with first frame and bounding box
-bbox = detection.find_black_dot(thresh, gray_frame)
+detection = Detection()
+bbox = detection.find_circle(frame)
 ok = tracker.init(frame, bbox)
 
 while True:
@@ -75,24 +39,8 @@ while True:
     ok, frame = video.read()
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-
     # Increment frame counter
     frame_counter += 1
-
-    # Run Detection every 30 frames
-    if frame_counter == 30:
-
-        bbox = detection.find_black_dot(thresh, gray_frame)
-
-        if bbox:
-            tracker.init(frame, bbox)
-            ok, bbox = tracker.update(frame)
-
-            tracker = cv2.legacy.TrackerKCF.create()
-
-
-        # Reset frame counter
-        frame_counter = 0
 
     # Start timer
     timer = cv2.getTickCount()
@@ -112,9 +60,6 @@ while True:
     else:
         # Tracking failure
         cv2.putText(gray_frame, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
-
-    # Display tracker type on frame
-    #cv2.putText(frame,"Tracker", (100, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2);
 
     # Display FPS on frame
     cv2.putText(gray_frame, "FPS : " + str(int(fps)), (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2);

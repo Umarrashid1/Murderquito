@@ -60,18 +60,52 @@ class Detection:
             for box in bounding_boxes:
                 box.display(video)
 
-    def find_black_dot(self, thresh, gray, frame = None, video = None,):
-        bbox = (287, 23, 86, 320)
+    def find_black_dot(self, thresh):
+        bbox = None
+
         # Finding contours in mask image
         mask_contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
                                            cv2.CHAIN_APPROX_SIMPLE)
         if len(mask_contours) != 0:
             for mask_contour in mask_contours:
-                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register
+                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register/filter away noise
                     x, y, w, h = cv2.boundingRect(mask_contour)
                     bbox = (x, y, w, h)
-                    cv2.putText(gray, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                    #cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
         return bbox
+
+    def find_circle(self, image):
+        # Convert the image to grayscale
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        # Apply GaussianBlur to reduce noise and help the circle detection
+        blurred = cv2.GaussianBlur(gray, (9, 9), 2)
+
+        # Use Hough Circle Transform to detect circles
+        circles = cv2.HoughCircles(
+            blurred,
+            cv2.HOUGH_GRADIENT,
+            dp=1,
+            minDist=20,
+            param1=50,
+            param2=30,
+            minRadius=5,
+            maxRadius=50
+        )
+
+        if circles is not None:
+            # Convert the (x, y) coordinates and radius of the circles to integers
+            circles = np.round(circles[0, :]).astype("int")
+
+            # Return the bounding box of the first detected circle
+            x, y, radius = circles[0]
+            bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
+            return bbox
+
+        # Return None if no circle is found
+        return None
+
 
 #ekstra ting kopieret et sted fra:
 """
