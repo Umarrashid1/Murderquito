@@ -9,7 +9,7 @@ class Camera:
 
     def init(self):
         self.camera = Picamera2()
-        config = self.camera.create_preview_configuration()
+        config = self.camera.create_preview_configuration({'format': 'RGB888'})
         self.camera.configure(config)
 
     def start(self):
