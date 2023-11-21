@@ -9,7 +9,8 @@ class Camera:
 
     def init(self):
         self.camera = Picamera2()
-        return self.camera
+        config = self.camera.create_preview_configuration()
+        self.camera.configure(config)
 
     def start(self):
         self.camera.start()
