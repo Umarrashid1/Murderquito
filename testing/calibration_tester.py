@@ -1,4 +1,13 @@
-from calibration import ImageCalibrator
+import inspect
+import sys
+import os
+
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+from camera_calibration import ImageCalibrator
 from detection import Detection
 import cv2
 import numpy as np

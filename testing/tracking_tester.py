@@ -1,5 +1,13 @@
-import cv2
+import inspect
 import sys
+import os
+
+#til at tilgå ting i parent dir
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+import cv2
 import numpy
 from detection import Detection
 

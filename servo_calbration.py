@@ -29,7 +29,7 @@ class ServoCalibrator:
         if det.find_black_rectangle() != False:
             self.calc_dist_to_wall_using_box(det)
         elif servo_x is Servo or servo_y is Servo:
-            self.calc_distance_from__angle(det, servo_x = Servo, servo_y = Servo)
+            self.calc_dist_to_wall_using_angle(det, servo_x = Servo, servo_y = Servo)
         else: self.calc_dist_to_wall_using_checkerboard(det)
         
     def calc_dist_to_wall_using_checkerboard(NotImplemented): NotImplemented  #TODO    
