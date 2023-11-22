@@ -17,7 +17,7 @@ class Detection:
         self.init_tracker(cam)
     
     def init_tracker(self, cam):
-        self.tracker.init(getattr(cam, 'frame'), self.bbox)
+        ok = self.tracker.init(getattr(cam, 'frame'), self.bbox)
 
     def update_tracker(self, cam):
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
