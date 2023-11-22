@@ -13,7 +13,7 @@ class Detection:
 
     def __init__(self, cam):
         self.tracker = cv2.legacy.TrackerKCF.create()
-        self.bbox = self.find_black_dot(cam.gray_frame())
+        self.bbox = self.find_black_dot(cam)
         self.init_tracker(cam)
 
     def init_tracker(self, cam):
@@ -61,7 +61,7 @@ class Detection:
         # Return None if no circle is found
         return None
 
-    def find_black_dot(self, image):
+    def find_black_dot(self, cam):
         
         # Finding contours in mask image
         mask_contours, _ = cv2.findContours(cam.thresh_frame(), cv2.RETR_EXTERNAL,
