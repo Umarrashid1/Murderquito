@@ -13,7 +13,7 @@ class Detection:
     
     def __init__(self, cam):
         self.tracker = cv2.legacy.TrackerKCF.create()
-        self.bbox = self.find_cirle(cam.gray_frame())
+        self.bbox = self.find_circle(cam.gray_frame())
 
     def update_tracker(self, cam):
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
