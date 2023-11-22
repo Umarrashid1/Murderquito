@@ -9,8 +9,7 @@ det = Detection(cam)
 while True:
     frame = cam.run()
     det.update_tracker(cam)
-    frame_boundingbox = det.draw_boundingbox(cam)
-    cam.show("Murderquito", frame_boundingbox)
+    det.draw_boundingbox(cam)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
