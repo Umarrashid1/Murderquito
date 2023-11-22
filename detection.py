@@ -19,7 +19,7 @@ class Detection:
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
 
     def draw_boundingbox(self, cam):
-        frame_boundingbox = cam.gray_frame
+        frame_boundingbox = cam.gray_frame()
         if self.ok:
             # Tracking success
             p1 = (int(self.bbox[0]), int(self.bbox[1]))
