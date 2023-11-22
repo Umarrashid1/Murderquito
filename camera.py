@@ -30,5 +30,5 @@ class Camera:
         return gray_frame
 
     def thresh_frame(self):
-        thresh_frame = cv2.threshold(gray_frame(), 100, 1, cv2.THRESH_BINARY_INV)[1]
+        thresh_frame = cv2.threshold(self.gray_frame(), 100, 1, cv2.THRESH_BINARY_INV)[1]
         return thresh_frame
