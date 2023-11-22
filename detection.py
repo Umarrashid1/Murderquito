@@ -15,7 +15,7 @@ class Detection:
         self.tracker = cv2.legacy.TrackerKCF.create()
         self.bbox = self.find_circle(cam.gray_frame())
         self.init_tracker(cam)
-    
+
     def init_tracker(self, cam):
         ok = self.tracker.init(getattr(cam, 'frame'), self.bbox)
 
@@ -44,10 +44,10 @@ class Detection:
             cv2.HOUGH_GRADIENT,
             dp=1,
             minDist=20,
-            param1=50,
+            param1=200,
             param2=30,
             minRadius=5,
-            maxRadius=50
+            maxRadius=500
         )
 
         if circles is not None:
