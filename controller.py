@@ -1,10 +1,9 @@
 import cv2
-from picamera2 import Picamera2
 from camera import Camera
 from detection import Detection
 
 #No Camera() input parameter for picam
-cam = Camera(1)
+cam = Camera()
 det = Detection(cam)
 
 while True:

@@ -1,6 +1,4 @@
 import cv2
-from picamera2 import Picamera2
-from libcamera import controls
 
 
 class Camera:
@@ -11,6 +9,8 @@ class Camera:
     def __init__(self, device = 0):
         #device 0 is for pi cam, and any inputparameter is for normal pc camera
         if device == 0:
+            from picamera2 import Picamera2
+            from libcamera import controls
             self.camera = Picamera2()
             config = self.camera.create_preview_configuration({'format': 'RGB888'})
             self.camera.configure(config)
