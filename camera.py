@@ -6,20 +6,29 @@ from libcamera import controls
 class Camera:
     frame = None
     camera = None
+    device = 0
 
-    def __init__(self):
-        self.camera = Picamera2()
-        config = self.camera.create_preview_configuration({'format': 'RGB888'})
-        self.camera.configure(config)
-        self.camera.start()
-        self.autofocus()
-        self.frame = self.camera.capture_array()
+    def __init__(self, device  = 0)
+        if device == 0:
+            self.camera = Picamera2()
+            config = self.camera.create_preview_configuration({'format': 'RGB888'})
+            self.camera.configure(config)
+            self.camera.start()
+            self.autofocus()
+            self.frame = self.camera.capture_array()
+        else:
+            self.camera = cv2.VideoCapture(0)
+            self.frame = video.read()
+            self.device = 1
 
     def autofocus(self):
         self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
     def run(self):
-        self.frame = self.camera.capture_array()
+        if self.device == 0:
+            self.frame = self.camera.capture_array()
+        else:
+            self.frame = video.read()
         return self.frame
 
     def show(self, name, frame):
