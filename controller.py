@@ -3,7 +3,7 @@ from picamera2 import Picamera2
 from camera import Camera
 from detection import Detection
 
-cam = Camera()
+cam = Camera(1)
 det = Detection(cam)
 
 while True:
