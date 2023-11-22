@@ -14,7 +14,7 @@ class Detection:
         point_one = [x,y]
         point_two = [x,y]
         point_three = [x,y]
-        point_four = [x,y]  
+        point_four = [x,y]
         return point_one, point_two, point_two, point_three
 
     """def find_laser_dot(cam = Camera, coord_choice = None):
@@ -86,12 +86,12 @@ class Detection:
         circles = cv2.HoughCircles(
             blurred,
             cv2.HOUGH_GRADIENT,
-            dp=1,
-            minDist=30,
-            param1=50,
-            param2=30,
-            minRadius=2,
-            maxRadius=50
+            dp=1,  # 1 means the accumulator has the same resolution as the input image
+            minDist=30,  # Minimum distance between the centers of detected circles
+            param1=50,  # Higher value means less sensitive edge detection
+            param2=30,  # Higher value allows detection with lower confidence
+            minRadius=2,  # Minimum radius of detected circles
+            maxRadius=50   # Maximum radius of detected circles
         )
 
         if circles is not None:

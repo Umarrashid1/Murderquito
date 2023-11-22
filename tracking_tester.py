@@ -3,7 +3,8 @@ import sys
 import numpy as np
 from detection import Detection
 
-tracker = cv2.legacy.TrackerKCF.create()
+#tracker = cv2.legacy.TrackerKCF.create()
+tracker = cv2.TrackerKCF.create()
 
 frame_counter = 0
 
