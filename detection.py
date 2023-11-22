@@ -87,10 +87,10 @@ class Detection:
             blurred,
             cv2.HOUGH_GRADIENT,
             dp=1,
-            minDist=20,
+            minDist=30,
             param1=50,
             param2=30,
-            minRadius=5,
+            minRadius=2,
             maxRadius=50
         )
 
