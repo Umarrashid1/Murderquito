@@ -3,10 +3,31 @@ from Bounding_Boxes_subclasses.rectangle import Rectangle
 
 # from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
-# from camera import Camera
+from camera import Camera
 
 
 class Detection:
+    bbox = None
+    tracker = None
+    ok = False
+    
+    def __init__(self, cam):
+        self.tracker = cv2.legacy.TrackerKCF.create()
+        self.bbox = self.find_cirle(cam.gray_frame())
+
+    def update_tracker(self, cam):
+        ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
+
+    def draw_boundingbox(self, cam):
+        if self.ok:
+            # Tracking success
+            p1 = (int(self.bbox[0]), int(self.bbox[1]))
+            p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
+            cv2.rectangle(cam.gray_frame(), p1, p2, (255, 0, 0), 2, 1)
+        else:
+            # Tracking failure
+            cv2.putTextcam(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+        cv2.imshow("Tracking", cam.gray_frame)
 
     def find_black_rectangle(): #TODO find hjørner og evt sidelængder på rektangel/kvadrat maaske?
         x = 1
@@ -105,40 +126,3 @@ class Detection:
 
         # Return None if no circle is found
         return None
-
-
-#ekstra ting kopieret et sted fra:
-"""
-contours, _ = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-for c in contours:
-    rect = cv2.boundingRect(c)
-    if rect[2] < 100 or rect[3] < 100: continue
-    print cv2.contourArea(c)
-    x,y,w,h = rect
-    cv2.rectangle(im,(x,y),(x+w,y+h),(0,255,0),2)
-    cv2.putText(im,'Moth Detected',(x+w+10,y+h),0,0.3,(0,255,0))
-cv2.imshow("Show",im)
-cv2.waitKey()  
-cv2.destroyAllWindows() 
-
-
-
- bounding_boxes = []
-            circle_obj = Circle.from_contours(contours)
-            if circle_obj is not None:
-                bounding_boxes.append(circle_obj)
-
-            for box in bounding_boxes:
-                box.display(video)
-
-            # Open a window and display the mask image
-            cv2.imshow("Mask image", img)
-
-            # Open a window and display the webcam image
-            cv2.imshow("Webcam Image", video)
-
-            # Defining the delay pr frame.
-            cv2.waitKey(1)
-            
-"""
-
