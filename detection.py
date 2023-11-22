@@ -13,11 +13,11 @@ class Detection:
 
     def __init__(self, cam):
         self.tracker = cv2.legacy.TrackerKCF.create()
-        self.bbox = self.find_circle(cam.gray_frame())
+        self.bbox = self.find_black_dot(cam.gray_frame())
         self.init_tracker(cam)
 
     def init_tracker(self, cam):
-        ok = self.tracker.init(getattr(cam, 'frame'), self.bbox)
+        self.tracker.init(getattr(cam, 'frame'), self.bbox)
 
     def update_tracker(self, cam):
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
@@ -58,6 +58,19 @@ class Detection:
             x, y, radius = circles[0]
             bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
             return bbox
-
         # Return None if no circle is found
         return None
+
+    def find_black_dot(self, image):
+        
+        # Finding contours in mask image
+        mask_contours, _ = cv2.findContours(cam.thresh_frame(), cv2.RETR_EXTERNAL,
+                                           cv2.CHAIN_APPROX_SIMPLE)
+        if len(mask_contours) != 0:
+            for mask_contour in mask_contours:
+                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register/filter away noise
+                    x, y, w, h = cv2.boundingRect(mask_contour)
+                    bbox = (x, y, w, h)
+                    #cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        return bbox
