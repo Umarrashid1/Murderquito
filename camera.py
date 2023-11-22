@@ -9,6 +9,7 @@ class Camera:
     device = 0
 
     def __init__(self, device = 0):
+        #device 0 is for pi cam, and any inputparameter is for normal pc camera
         if device == 0:
             self.camera = Picamera2()
             config = self.camera.create_preview_configuration({'format': 'RGB888'})
