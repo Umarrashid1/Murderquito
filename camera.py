@@ -10,7 +10,6 @@ class Camera:
         #device 0 is for pi cam, and any inputparameter is for normal pc camera
         if device == 0:
             from picamera2 import Picamera2
-            from libcamera import controls
             self.camera = Picamera2()
             config = self.camera.create_preview_configuration({'format': 'RGB888'})
             self.camera.configure(config)
@@ -18,11 +17,13 @@ class Camera:
             self.autofocus()
             self.frame = self.camera.capture_array()
         else:
+
             self.camera = cv2.VideoCapture(0)
             self.frame = self.camera.read()
             self.device = 1
 
     def autofocus(self):
+        from libcamera import controls
         self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
     def run(self):
