@@ -27,7 +27,7 @@ class Detection:
         else:
             # Tracking failure
             cv2.putText(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
-        cv2.imshow("Tracking", cam.gray_frame)
+        cv2.imshow("Tracking", cam.gray_frame())
 
     def find_circle(self, image):
         # Apply GaussianBlur to reduce noise and help the circle detection
