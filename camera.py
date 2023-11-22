@@ -8,7 +8,7 @@ class Camera:
     camera = None
     device = 0
 
-    def __init__(self, device  = 0)
+    def __init__(self, device = 0):
         if device == 0:
             self.camera = Picamera2()
             config = self.camera.create_preview_configuration({'format': 'RGB888'})
@@ -18,7 +18,7 @@ class Camera:
             self.frame = self.camera.capture_array()
         else:
             self.camera = cv2.VideoCapture(0)
-            self.frame = video.read()
+            self.frame = self.camera.read()
             self.device = 1
 
     def autofocus(self):
@@ -28,7 +28,7 @@ class Camera:
         if self.device == 0:
             self.frame = self.camera.capture_array()
         else:
-            self.frame = video.read()
+            self.frame = self.camera.read()
         return self.frame
 
     def show(self, name, frame):
