@@ -14,6 +14,8 @@ class Camera:
         self.camera.start()
         self.autofocus()
         self.frame = self.camera.capture_array()
+        if self.frame is None:
+            print("fail")
 
     def autofocus(self):
         self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
