@@ -29,6 +29,8 @@ class Detection:
             cv2.putTextcam(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
         cv2.imshow("Tracking", cam.gray_frame)
 
+    ''''
+
     def find_black_rectangle(): #TODO find hjørner og evt sidelængder på rektangel/kvadrat maaske?
         x = 1
         y = 2
@@ -38,16 +40,6 @@ class Detection:
         point_four = [x,y]  
         return point_one, point_two, point_two, point_three
 
-    """def find_laser_dot(cam = Camera, coord_choice = None):
-        frame = cam.run() 
-        #TODO: find grøn lasers koordinat til frame
-        # (Janice har lavet en. jeg finder den i commit history)
-
-        if coord_choice is 'y': return x_coord
-        elif coord_choice is 'x': return y_coord
-        else: return (x_coord, y_coord)
-        s = 1
-    """
     # Read the camera footage
     webcam_video = cv2.VideoCapture(0)
     success, video = webcam_video.read()
@@ -95,7 +87,7 @@ class Detection:
                     #cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         return bbox
-
+''''
     def find_circle(self, image):
         # Convert the image to grayscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
