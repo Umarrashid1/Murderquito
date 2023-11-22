@@ -11,6 +11,6 @@ while True:
     det.update_tracker(cam)
     frame_boundingbox = det.draw_boundingbox(cam)
     cam.show("Murderquito", frame_boundingbox)
-     if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+    break
 
