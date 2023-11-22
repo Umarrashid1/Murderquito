@@ -13,7 +13,7 @@ class Detection:
 
     def __init__(self, cam):
         self.tracker = cv2.legacy.TrackerKCF.create()
-        self.bbox = self.find_black_dot(cam)
+        self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
 
     def init_tracker(self, cam):
@@ -34,20 +34,23 @@ class Detection:
             cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
         cv2.imshow("Tracking", frame_boundingbox)
 
-    def find_circle(self, image):
+    def find_circle(self, cam):
+        # Convert the image to grayscale
+        gray = cam.gray_frame()
+
         # Apply GaussianBlur to reduce noise and help the circle detection
-        blurred = cv2.GaussianBlur(image, (9, 9), 2)
+        blurred = cv2.GaussianBlur(gray, (9, 9), 2)
 
         # Use Hough Circle Transform to detect circles
         circles = cv2.HoughCircles(
             blurred,
             cv2.HOUGH_GRADIENT,
             dp=1,
-            minDist=20,
-            param1=200,
+            minDist=30,
+            param1=50,
             param2=30,
-            minRadius=5,
-            maxRadius=500
+            minRadius=2,
+            maxRadius=50
         )
 
         if circles is not None:
@@ -58,6 +61,7 @@ class Detection:
             x, y, radius = circles[0]
             bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
             return bbox
+
         # Return None if no circle is found
         return None
 
