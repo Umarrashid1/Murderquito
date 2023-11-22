@@ -10,7 +10,7 @@ class Detection:
     bbox = None
     tracker = None
     ok = False
-    
+
     def __init__(self, cam):
         self.tracker = cv2.legacy.TrackerKCF.create()
         self.bbox = self.find_circle(cam.gray_frame())
@@ -30,11 +30,8 @@ class Detection:
         cv2.imshow("Tracking", cam.gray_frame)
 
     def find_circle(self, image):
-        # Convert the image to grayscale
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
         # Apply GaussianBlur to reduce noise and help the circle detection
-        blurred = cv2.GaussianBlur(gray, (9, 9), 2)
+        blurred = cv2.GaussianBlur(image, (9, 9), 2)
 
         # Use Hough Circle Transform to detect circles
         circles = cv2.HoughCircles(
