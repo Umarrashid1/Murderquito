@@ -29,65 +29,6 @@ class Detection:
             cv2.putTextcam(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
         cv2.imshow("Tracking", cam.gray_frame)
 
-    ''''
-
-    def find_black_rectangle(): #TODO find hjørner og evt sidelængder på rektangel/kvadrat maaske?
-        x = 1
-        y = 2
-        point_one = [x,y]
-        point_two = [x,y]
-        point_three = [x,y]
-        point_four = [x,y]  
-        return point_one, point_two, point_two, point_three
-
-    # Read the camera footage
-    webcam_video = cv2.VideoCapture(0)
-    success, video = webcam_video.read()
-
-    # Converting the BGR image from webcam to HSV format
-    frame = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
-
-     # Converting the BGR image from webcam to gray scale
-    gray_scale = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
-
-    # Thresh
-    thresh = cv2.threshold(gray_scale, 100, 1, cv2.THRESH_BINARY_INV)[1]
-
-    def track_faces(self, gray_scale, img, video):
-        # Detection of face file
-        face_file_path = "data_cascade/haarcascade_frontalface_default.xml"
-        cascade = cv2.CascadeClassifier(face_file_path)
-
-        # Activating camera image - We will change this later, as we gonna use the camera class.
-        webcam_video = cv2.VideoCapture(1)
-        while True:
-            # Recognize a face
-            faces = cascade.detectMultiScale(gray_scale, 1.2, 3)
-
-            bounding_boxes = []
-
-            for (x, y, w, h) in faces:
-                rectangle_obj = Rectangle(x, y, w, h)
-                bounding_boxes.append(rectangle_obj)
-
-            for box in bounding_boxes:
-                box.display(video)
-
-    def find_black_dot(self, thresh):
-        bbox = None
-
-        # Finding contours in mask image
-        mask_contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL,
-                                           cv2.CHAIN_APPROX_SIMPLE)
-        if len(mask_contours) != 0:
-            for mask_contour in mask_contours:
-                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register/filter away noise
-                    x, y, w, h = cv2.boundingRect(mask_contour)
-                    bbox = (x, y, w, h)
-                    #cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-        return bbox
-''''
     def find_circle(self, image):
         # Convert the image to grayscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
