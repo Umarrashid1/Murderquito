@@ -26,7 +26,7 @@ class Detection:
             cv2.rectangle(cam.gray_frame(), p1, p2, (255, 0, 0), 2, 1)
         else:
             # Tracking failure
-            cv2.putTextcam(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+            cv2.putText(cam.gray_frame(), "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
         cv2.imshow("Tracking", cam.gray_frame)
 
     def find_circle(self, image):
