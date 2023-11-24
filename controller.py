@@ -1,10 +1,19 @@
 import cv2
+import sys
 from camera import Camera
 from detection import Detection
 
-#No Camera() input parameter for picam
-cam = Camera()
+
+#Get CLI arguments
+args = sys.argv[1:]
+if len(args)>0:
+    input_param = int(args[0])
+else:
+    input_param = None
+
+cam = Camera(input_param)
 det = Detection(cam)
+
 
 while True:
     frame = cam.run()

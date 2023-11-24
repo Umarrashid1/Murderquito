@@ -20,6 +20,7 @@ class Detection:
         self.tracker.init(getattr(cam, 'frame'), self.bbox)
 
     def update_tracker(self, cam):
+        print("tracker frame:", getattr(cam, 'frame'))
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
 
     def draw_boundingbox(self, cam):

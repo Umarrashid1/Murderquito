@@ -19,9 +19,9 @@ class Camera:
         else:
 
             self.camera = cv2.VideoCapture(0)
-            self.frame = self.camera.read()
+            ok, self.frame = self.camera.read()
             self.device = 1
-
+        print("value of frame:", self.frame)
     def autofocus(self):
         from libcamera import controls
         self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
@@ -30,7 +30,7 @@ class Camera:
         if self.device == 0:
             self.frame = self.camera.capture_array()
         else:
-            self.frame = self.camera.read()
+            ok, self.frame = self.camera.read()
         return self.frame
 
     def show(self, name, frame):
