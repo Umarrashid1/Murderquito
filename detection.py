@@ -36,6 +36,21 @@ class Detection:
         else:
             self.bbox = self.find_circle(cam)
 
+
+
+    def draw_boundingbox(self, cam):
+        frame_boundingbox = cam.gray_frame()
+        if self.bbox is not None:
+            # Tracking success
+            p1 = (int(self.bbox[0]), int(self.bbox[1]))
+            p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
+            cv2.rectangle(frame_boundingbox, p1, p2, (255, 0, 0), 2, 1)
+        else:
+            # Tracking failure
+            cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+                        (0, 0, 255), 2)
+        cv2.imshow("Tracking", frame_boundingbox)
+
     def get_center_coordinates(self):
         if self.bbox is not None:
             x, y, w, h = self.bbox
@@ -45,18 +60,18 @@ class Detection:
         else:
             return 0, 0
 
-    def draw_boundingbox(self, cam):
-            frame_boundingbox = cam.gray_frame()
-            if self.bbox is not None:
-                # Tracking success
-                p1 = (int(self.bbox[0]), int(self.bbox[1]))
-                p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
-                cv2.rectangle(frame_boundingbox, p1, p2, (255, 0, 0), 2, 1)
-            else:
-                # Tracking failure
-                cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                            (0, 0, 255), 2)
-            cv2.imshow("Tracking", frame_boundingbox)
+    def draw_cross(self, cam):
+
+        center_x, center_y = self.get_center_coordinates()
+
+        frame = getattr(cam, 'frame')
+
+        # Draw horizontal line
+        cv2.line(frame, (int(center_x - 10), int(center_y)), (int(center_x + 10), int(center_y)), (0, 255, 0), 2)
+
+        # Draw vertical line
+        cv2.line(frame, (int(center_x), int(center_y - 10)), (int(center_x), int(center_y + 10)), (0, 255, 0), 2)
+
 
     def find_circle(self, cam):
         # Convert the image to grayscale

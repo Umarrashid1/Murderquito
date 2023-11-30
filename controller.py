@@ -18,7 +18,9 @@ det = Detection(cam)
 while True:
     frame = cam.run()
     det.update_tracker(cam)
+    det.draw_cross(cam)
     det.draw_boundingbox(cam)
+
     coordinates = det.get_center_coordinates()
     print(coordinates[0], coordinates[1])
 
