@@ -19,5 +19,8 @@ while True:
     frame = cam.run()
     det.update_tracker(cam)
     det.draw_boundingbox(cam)
+    coordinates = det.get_center_coordinates()
+    print(coordinates[0], coordinates[1])
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
