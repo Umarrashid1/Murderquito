@@ -37,7 +37,7 @@ class Detection:
             self.bbox = self.find_circle(cam)
 
     def get_center_coordinates(self):
-        if self.bbox:
+        if self.bbox is not None:
             x, y, w, h = self.bbox
             center_x = x + w / 2
             center_y = y + h / 2
@@ -47,7 +47,7 @@ class Detection:
 
     def draw_boundingbox(self, cam):
             frame_boundingbox = cam.gray_frame()
-            if self.ok:
+            if self.bbox is not None:
                 # Tracking success
                 p1 = (int(self.bbox[0]), int(self.bbox[1]))
                 p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
