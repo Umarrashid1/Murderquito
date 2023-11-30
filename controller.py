@@ -21,4 +21,3 @@ while True:
     det.draw_boundingbox(cam)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-

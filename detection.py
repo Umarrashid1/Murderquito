@@ -12,7 +12,7 @@ class Detection:
     ok = False
 
     def __init__(self, cam):
-        self.tracker = cv2.legacy.TrackerKCF.create()
+        self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
        # self.init_tracker(cam)
 
@@ -24,16 +24,17 @@ class Detection:
         ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
 
     def draw_boundingbox(self, cam):
-        frame_boundingbox = cam.gray_frame()
-        if self.ok:
-            # Tracking success
-            p1 = (int(self.bbox[0]), int(self.bbox[1]))
-            p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
-            cv2.rectangle(frame_boundingbox, p1, p2, (255, 0, 0), 2, 1)
-        else:
-            # Tracking failure
-            cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
-        cv2.imshow("Tracking", frame_boundingbox)
+            frame_boundingbox = cam.gray_frame()
+            if self.ok:
+                # Tracking success
+                p1 = (int(self.bbox[0]), int(self.bbox[1]))
+                p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
+                cv2.rectangle(frame_boundingbox, p1, p2, (255, 0, 0), 2, 1)
+            else:
+                # Tracking failure
+                cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+                            (0, 0, 255), 2)
+            cv2.imshow("Tracking", frame_boundingbox)
 
     def find_circle(self, cam):
         # Convert the image to grayscale
@@ -67,7 +68,7 @@ class Detection:
         return None
 
     def find_black_dot(self, cam):
-        
+
         # Finding contours in mask image
         mask_contours, _ = cv2.findContours(cam.thresh_frame(), cv2.RETR_EXTERNAL,
                                            cv2.CHAIN_APPROX_SIMPLE)
