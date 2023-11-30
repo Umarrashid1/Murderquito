@@ -27,7 +27,7 @@ class Detection:
             # print("frame is:", getattr(cam, 'frame'))
             self.ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
 
-        if self.bbox:
+        if self.bbox is not None:
             if all(i == 0 for i in self.bbox):
                 self.bbox = self.find_circle(cam)
                 if self.bbox is not None:
@@ -76,8 +76,6 @@ class Detection:
             minRadius=2,  # Minimum radius of detected circles
             maxRadius=90  # Maximum radius of detected circles
         )
-
-
 
         if circles is not None:
             # Convert the (x, y) coordinates and radius of the circles to integers
