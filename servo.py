@@ -19,13 +19,13 @@ class Servo:
         GPIO.setup(self.pin, GPIO.OUT)
         self.io = GPIO.PWM(self.pin, 50)
         self.io.start(0)  # Initizialation
-        self.move(1)    # Move to current angle (0)
+        self.move(0)    # Move to current angle (0)
 
     def move(self, angle):
         print("angle:", angle)
         print("self.angle:", self.angle)
-        if 0 < angle < 180 and angle != self.angle:
-            self.angle = angle
+        if -90 < angle < 90 and angle != self.angle:
+            self.angle = angle + 90
             self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
