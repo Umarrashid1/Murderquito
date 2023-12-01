@@ -2,7 +2,7 @@ import cv2
 import sys
 from camera import Camera
 from detection import Detection
-import  servo_controller
+from servo_controller import  Servo_controller
 
 
 #Get CLI arguments
@@ -14,7 +14,7 @@ else:
 
 cam = Camera(input_param)
 det = Detection(cam)
-
+servo_c = Servo_controller()
 
 while True:
     frame = cam.run()
@@ -24,6 +24,6 @@ while True:
 
     coordinates = det.get_center_coordinates()
     print(coordinates[0], coordinates[1])
-    Detection.move(coordinates)
+    servo_c.move(coordinates)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
