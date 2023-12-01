@@ -17,29 +17,26 @@ class Detection:
         self.init_tracker(cam)
 
     def init_tracker(self, cam):
-        print("tracker bbox:", self.bbox)
         if self.bbox is not None:
-            self.tracker.init(getattr(cam, 'frame'), self.bbox)
+            self.tracker.init(cam.get_frame(), self.bbox)
 
     def update_tracker(self, cam):
+        print("bbox is:", self.bbox)
+       # if self.bbox is not None:
+        #    if all(i == 0 for i in self.bbox):
+          #      self.bbox = None
         if self.bbox is not None:
-            print("bbox is:", self.bbox)
-            # print("frame is:", getattr(cam, 'frame'))
-            self.ok, self.bbox = self.tracker.update(getattr(cam, 'frame'))
+            #print("frame is:", cam.get_frame())
+            self.ok, self.bbox = self.tracker.update(cam.get_frame())
 
-        if self.bbox is not None:
-            if all(i == 0 for i in self.bbox):
-                self.bbox = self.find_circle(cam)
-                if self.bbox is not None:
-                    self.tracker = cv2.TrackerKCF.create()
-                    self.init_tracker(cam)
         else:
             self.bbox = self.find_circle(cam)
+            self.init_tracker(cam)
 
 
 
     def draw_boundingbox(self, cam):
-        frame_boundingbox = cam.gray_frame()
+        frame_boundingbox = cam.get_gray_frame()
         if self.bbox is not None:
             # Tracking success
             p1 = (int(self.bbox[0]), int(self.bbox[1]))
@@ -64,7 +61,7 @@ class Detection:
 
         center_x, center_y = self.get_center_coordinates()
 
-        frame = getattr(cam, 'frame')
+        frame = cam.get_frame()
 
         # Draw horizontal line
         cv2.line(frame, (int(center_x - 10), int(center_y)), (int(center_x + 10), int(center_y)), (0, 255, 0), 2)
@@ -75,7 +72,7 @@ class Detection:
 
     def find_circle(self, cam):
         # Convert the image to grayscale
-        gray = cam.gray_frame()
+        gray = cam.get_gray_frame()
 
         # Apply GaussianBlur to reduce noise and help the circle detection
         blurred = cv2.GaussianBlur(gray, (9, 9), 2)

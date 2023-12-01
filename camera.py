@@ -36,10 +36,13 @@ class Camera:
     def show(self, name, frame):
         cv2.imshow(name, frame)
 
-    def gray_frame(self):
+    def get_frame(self):
+        return self.frame
+
+    def get_gray_frame(self):
         gray_frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
         return gray_frame
 
-    def thresh_frame(self):
+    def get_thresh_frame(self):
         thresh_frame = cv2.threshold(self.gray_frame(), 100, 1, cv2.THRESH_BINARY_INV)[1]
         return thresh_frame
