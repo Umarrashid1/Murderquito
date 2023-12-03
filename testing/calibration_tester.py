@@ -8,7 +8,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 from camera_calibration import ImageCalibrator
-from detection import Detection
+from detection import Detector
 import cv2
 import numpy as np
 import sys

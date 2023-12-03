@@ -6,7 +6,7 @@ import numpy as np
 # from camera import Camera
 
 
-class Detection:
+class Detector:
 
     def find_black_rectangle(): #TODO find hjørner og evt sidelængder på rektangel/kvadrat maaske?
         x = 1
@@ -27,6 +27,7 @@ class Detection:
         else: return (x_coord, y_coord)
         s = 1
     """
+   
     # Read the camera footage
     webcam_video = cv2.VideoCapture(0)
     success, video = webcam_video.read()

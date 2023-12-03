@@ -1,7 +1,7 @@
 import cv2
 import sys
 import numpy as np
-from detection import Detection
+from detection import Detector
 
 #tracker = cv2.legacy.TrackerKCF.create()
 tracker = cv2.TrackerKCF.create()
@@ -30,7 +30,7 @@ gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 thresh = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
 
 # Initialize tracker with first frame and bounding box
-detection = Detection()
+detection = Detector()
 bbox = detection.find_circle(frame)
 ok = tracker.init(frame, bbox)
 

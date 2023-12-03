@@ -5,7 +5,7 @@ import glob
 #from camera import Camera
 import numpy as np
 #from servo import Servo
-from detection import Detection
+from detection import Detector
 
 
 class ImageCalibrator:  #TODO unfinished
