@@ -6,7 +6,7 @@ import numpy as np
 from camera import Camera
 
 
-class Detection:
+class Detector:
     bbox = None
     tracker = None
     ok = False
@@ -74,7 +74,7 @@ class Detection:
         # Convert the image to grayscale
         gray = cam.get_gray_frame()
 
-        # Apply GaussianBlur to reduce noise and help the circle detection
+        # Apply GaussianBlur to reduce noise and help the circle Detector
         blurred = cv2.GaussianBlur(gray, (9, 9), 2)
 
         # Use Hough Circle Transform to detect circles
@@ -83,8 +83,8 @@ class Detection:
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
             minDist=30,  # Minimum distance between the centers of detected circles
-            param1=70,  # Higher value means less sensitive edge detection
-            param2=70,  # Higher value allows detection with lower confidence
+            param1=70,  # Higher value means less sensitive edge Detector
+            param2=70,  # Higher value allows Detector with lower confidence
             minRadius=2,  # Minimum radius of detected circles
             maxRadius=90  # Maximum radius of detected circles
         )
