@@ -15,11 +15,12 @@ class Camera:
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
-            self.frame = self.camera.capture_array()
+            self.frame = cv2.flip(self.camera.capture_array())
         else:
 
             self.camera = cv2.VideoCapture(0)
-            ok, self.frame = self.camera.read()
+            ok, int_frame = self.camera.read()
+            self.frame = cv2.flip(int_frame)
             self.device = 1
         # print("value of frame:", self.frame)
     def autofocus(self):
