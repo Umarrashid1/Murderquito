@@ -1,7 +1,7 @@
 import cv2
 import sys
 from camera import Camera
-from detection import Detection
+from detection import Detector
 from servo_controller import  Servo_controller
 
 
@@ -13,7 +13,7 @@ else:
     input_param = None
 
 cam = Camera(input_param)
-det = Detection(cam)
+det = Detector(cam)
 servo_c = Servo_controller()
 
 while True:
