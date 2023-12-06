@@ -15,4 +15,4 @@ servo_x = Servo("x")
 for i in range(180):
     servo_x.move(i)
     print(i)
-    time.sleep(5)
+    time.sleep(0.5)
