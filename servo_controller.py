@@ -20,10 +20,10 @@ class Servo_controller:
         self.servo_x.move(x)
         self.servo_y.move(y)
 
-    def center_laser(self, det = Detector):
+    def center_laser(self, det = Detector, cam):
         #TODO: find elegant way of doing it. with and/or without trial&error / other way
         #ryk laser op/ned indtil den rammer midterlinjen
-        coords = det.find_red()
+        coords = det.find_red(cam)
         if coords == (1280/2,720/2):
             return True
         else:
