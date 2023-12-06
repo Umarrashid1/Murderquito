@@ -16,7 +16,7 @@ pwm.set_servo_pulsewidth( servo, 1500 ) ;
 time.sleep( 3 )
 
 print( "180 deg" )
-pwm.set_servo_pulsewidth( servo, 2500 ) ;
+pwm.set_servo_pulsewidth( servo, 2000) ;
 time.sleep( 3 )
 
 # turning off servo
