@@ -1,14 +1,12 @@
-from gpiozero.pins.pigpio import PiGPIOFactory
-from gpiozero import AngularServo
+from gpiozero import Servo
 from time import sleep
 
-factory = PiGPIOFactory()
-joint_base = AngularServo(14, min_angle=-90, max_angle=90, pin_factory=factory)
-angle_base = 0
+servo = Servo(17)
+
 while True:
-    angle = int(input("Angle: "))
-
-    angle_base = angle
-    joint_base.angle = angle_base
-
-    print(angle, angle_base)
+    servo.min()
+    sleep(1)
+    servo.mid()
+    sleep(1)
+    servo.max()
+    sleep(1)
