@@ -142,3 +142,28 @@ class Detector:
                     # cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         return bbox
+    
+    def find_red(self, cam):
+        
+        # Specifying the color that we want to detect
+        lower = np.array([0, 50, 50])
+        upper = np.array([0, 100, 100])
+        # Creating a mask to find our color
+        mask = cv2.inRange(cam.get_frame(), lower, upper)
+        # Finding contours in mask image
+        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+         # Find the position of the contour and draw a circle
+        if len(mask_contours) != 0:
+            for mask_contour in mask_contours:
+                 # Defining the least amount of pixels, I want it to register.
+                if cv2.contourArea(mask_contour) > 200:
+                    # Setting up the circle
+                    (x, y), radius = cv2.minEnclosingCircle(mask_contour)
+                    center = (int(x), int(y))
+                    radius = int(radius)
+                    return x, y
+        return False
+
+
+            
