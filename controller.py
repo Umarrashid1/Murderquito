@@ -21,7 +21,7 @@ cam_axisy_dist = 4.6
 while True:
     frame = cam.run()
     det.update_tracker(cam) 
-    servo_c.center_laser(det, cam)
+    servo_c.center_laser(cam, det)
     angley, anglex = servo_c.calc_laser_angle_when_centered()
 
     #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide: 
