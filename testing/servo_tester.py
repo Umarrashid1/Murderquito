@@ -12,9 +12,7 @@ import io
 from servo import Servo
 
 servo_x = Servo("x")
-time.sleep(5)
-servo_x.move(179)
-time.sleep(5)
-servo_x.move(90)
-time.sleep(5)
-servo_x.stop()
+for i in range(180):
+    servo_x.move(i)
+    print(i)
+    time.sleep(5)
