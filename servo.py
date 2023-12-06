@@ -13,9 +13,9 @@ class Servo:
         self.axis = axis
         self.io = io
         if axis == "x":
-            self.pin = 14
+            self.pin = 12
         else:
-            self.pin = 15
+            self.pin = 13
 
         self.angle = 90
 
