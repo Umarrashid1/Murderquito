@@ -14,7 +14,7 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-servo_c = Servo_controller("x")
+servo_c = Servo_controller()
 
 while True:
     frame = cam.run()
