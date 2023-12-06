@@ -64,7 +64,7 @@ class Detector:
 
 
     def draw_boundingbox(self, cam):
-        frame_boundingbox = cam.get_gray_frame()
+        frame_boundingbox = cam.get_frame()
         if self.bbox is not None:
             # Tracking success
             p1 = (int(self.bbox[0]), int(self.bbox[1]))
