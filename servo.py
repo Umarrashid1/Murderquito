@@ -32,7 +32,7 @@ class Servo:
     def set_pwm(self, dc):
         if dc < self.dc_min or dc > self.dc_max:
             raise Exception
-
+        print(dc)
         self.io.hardware_PWM(self.pin, self.pwm_hz, int(dc*10000))
 
 
