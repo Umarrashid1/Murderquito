@@ -15,7 +15,7 @@ class Camera:
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
-            self.frame = cv2.flip(self.camera.capture_array())
+            self.frame = cv2.flip(self.camera.capture_array(), 0)
         else:
 
             self.camera = cv2.VideoCapture(0)
