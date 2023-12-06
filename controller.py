@@ -14,7 +14,7 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-#servo_c = Servo_controller()
+servo_c = Servo_controller("x")
 
 while True:
     frame = cam.run()
@@ -55,7 +55,7 @@ while True:
     det.draw_boundingbox(cam)
 
     coordinates = det.get_center_coordinates()
-
+    servo_c.move(coordinates)
     #servo_c.move(coordinates)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
