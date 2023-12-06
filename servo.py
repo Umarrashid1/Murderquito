@@ -1,5 +1,5 @@
 import time
-imoirt pigpio
+import pigpio
 
 class Servo:
     dc_min = 1       # duty cycle for 0 degrees
