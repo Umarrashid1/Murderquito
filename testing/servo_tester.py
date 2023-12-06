@@ -17,6 +17,6 @@ servo_x = Servo("x", io)
 for i in range(180):
     servo_x.move(i)
     print(i)
-    time.sleep(0.5)
+    time.sleep(0.1)
 
 servo_x.stop()
