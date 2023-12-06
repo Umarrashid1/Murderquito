@@ -2,7 +2,7 @@ import cv2
 import sys
 from camera import Camera
 from detection import Detector
-from servo_controller import  Servo_controller
+#from servo_controller import  Servo_controller
 
 
 #Get CLI arguments
@@ -14,7 +14,7 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-servo_c = Servo_controller()
+#servo_c = Servo_controller()
 
 while True:
     frame = cam.run()
@@ -51,11 +51,12 @@ while True:
      #så er der også det med at kameraet måske står lidt skævt, laseren måske sidder lidt skævt og fuck mig 
 
     #det var det jeg ville tjekke over weekenden, men... fucking clean
-
+    det.draw_cross(cam)
     det.draw_boundingbox(cam)
 
     coordinates = det.get_center_coordinates()
-    servo_c.move(coordinates)
+
+    #servo_c.move(coordinates)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 # ##########    se evt:     ######################
