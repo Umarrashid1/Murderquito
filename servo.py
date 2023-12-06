@@ -21,8 +21,7 @@ class Servo:
         self.move(0)    # Move to current angle (0)
 
     def move(self, angle):
-        if angle != self.angle:
-            self.set_pwm(self.angle_pwm_conv(angle))
+        self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
         duty = (self.dc_max - self.dc_min) / 180 * angle + self.dc_min
