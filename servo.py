@@ -15,7 +15,7 @@ class Servo:
         else:
             self.pin = 13
         self.io = io
-        self.io.set_mode(self.pin, pigpio.output)
+        self.io.set_mode(self.pin, pigpio.OUTPUT)
 
     def move(self, angle):
         self.set_pwm(self.angle_pwm_conv(angle))
