@@ -2,7 +2,7 @@ import cv2
 import sys
 from camera import Camera
 from detection import Detector
-#from servo_controller import  Servo_controller
+from servo_controller import  Servo_controller
 
 
 #Get CLI arguments
@@ -14,11 +14,17 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-#servo_c = Servo_controller()
+servo_c = Servo_controller()
+cam_las_ax_x = 4.4
+cam_las_ax_y = 4.6
 
 while True:
     frame = cam.run()
-    det.update_tracker(cam) #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide: 
+    det.update_tracker(cam) 
+    servo_c.center_laser()
+    angley, anglex = servo_c.calc_laser_angle_when_centered()
+
+    #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide: 
     #   afstand fra kameramidten til rotationspunktet om x-aksen
     #   afstand fra kameramidten til rotationspunktet om y-aksen
         #se skitse i fuckinglorteclean

@@ -143,7 +143,7 @@ class Detector:
 
         return bbox
     
-    def find_red(self, cam):
+    def find_red(self, cam, chosen_axis = None,):
         
         # Specifying the color that we want to detect
         lower = np.array([0, 50, 50])
@@ -162,8 +162,10 @@ class Detector:
                     (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                     center = (int(x), int(y))
                     radius = int(radius)
-                    return x, y
-        return False
-
-
+                    if chosen_axis == 'y':
+                        return y
+                    elif chosen_axis == 'x':
+                        return x
+                    else: return x, y
+        else: return False
             
