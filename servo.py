@@ -1,6 +1,5 @@
 import time
-import RPi.GPIO as GPIO
-
+imoirt pigpio
 
 class Servo:
     dc_min = 1       # duty cycle for 0 degrees
@@ -8,17 +7,19 @@ class Servo:
     pwm_hz = 50    # Frequency
     angle = 0
     axis = 0
-    def __init__(self, axis):
+
+    def __init__(self, axis, io):
+        
         self.axis = axis
-        GPIO.setmode(GPIO.BCM)
         if axis == "x":
             self.pin = 14
         else:
             self.pin = 15
-        GPIO.setup(self.pin, GPIO.OUT)
-        self.io = GPIO.PWM(self.pin, 50)
-        self.io.start(0)  # Initizialation
-        self.move(0)    # Move to current angle (0)
+
+        self.angle = 90
+
+        self.io.set_mode(self.pin, pigpio.OUTPUT)
+        
 
     def move(self, angle):
         self.set_pwm(self.angle_pwm_conv(angle))
@@ -28,8 +29,13 @@ class Servo:
         return duty
     
     def set_pwm(self, dc):
-        self.io.ChangeDutyCycle(dc)
+        if dc < self.dc_min or dc > self.dc_max:
+            raise Exception
+
+        self.io.hardware_PWM(self.pin, self.pwm_hz, int(duty*10000))
+
+
 
     def stop(self):
-        self.io.stop()
+        self.io.hardware_PWM(self.pin, 0, 0)
         GPIO.cleanup()
