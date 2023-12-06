@@ -1,6 +1,7 @@
 import inspect
 import sys
 import os
+import pigpio
 
 #til at tilgå ting i parent dir
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
