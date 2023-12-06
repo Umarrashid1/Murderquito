@@ -3,6 +3,7 @@ import sys
 from camera import Camera
 from detection import Detector
 from servo_controller import  Servo_controller
+from servo_controller import  Servo_controller
 
 
 #Get CLI arguments
@@ -14,9 +15,7 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-servo_c = Servo_controller()
-cam_las_ax_x = 4.4
-cam_las_ax_y = 4.6
+#servo_c = Servo_controller()
 
 while True:
     frame = cam.run()
@@ -61,7 +60,8 @@ while True:
     det.draw_boundingbox(cam)
 
     coordinates = det.get_center_coordinates()
-
+    print("coordinates are", coordinates)
+    servo_c.move(coordinates)
     #servo_c.move(coordinates)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

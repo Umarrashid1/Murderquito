@@ -1,5 +1,6 @@
 import time
 import io
+import pigpio
 from servo import Servo
 from detection import Detector
 
@@ -7,8 +8,9 @@ from detection import Detector
 class Servo_controller:
     
     def __init__(self):
-        self.servo_x = Servo("x")
-        self.servo_y = Servo ("y")
+        io = pigpio.pi()
+        self.servo_x = Servo("x", io)
+        self.servo_y = Servo ("y", io)
     
     
     def move(self, coordinates):
