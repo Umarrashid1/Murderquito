@@ -17,19 +17,47 @@ class Detector:
         self.init_tracker(cam)
 
     def init_tracker(self, cam):
-        if self.bbox is not None:
-            self.tracker.init(cam.get_frame(), self.bbox)
+        frame = cam.get_frame()
+
+        if frame is not None and self.bbox is not None and not all(i == 0 for i in self.bbox):
+            try:
+                self.tracker.init(frame, self.bbox)
+            except cv2.error as e:
+                print(f"Error during tracker initialization: {e}")
+                # print(frame)
+                # print(self.bbox)
+                # exit(1)
+                # Handle the error gracefully, e.g., by falling back to find_circle
+                self.bbox = self.find_circle(cam)
 
     def update_tracker(self, cam):
-        print("bbox is:", self.bbox)
-       # if self.bbox is not None:
-        #    if all(i == 0 for i in self.bbox):
-          #      self.bbox = None
-        if self.bbox is not None:
-            #print("frame is:", cam.get_frame())
-            self.ok, self.bbox = self.tracker.update(cam.get_frame())
+        if self.bbox is not None and not all(i == 0 for i in self.bbox):
+            frame = cam.get_frame()
 
+            if frame is not None:
+                try:
+                    # Check if the frame size matches the expected size
+                    if frame.shape[:2] == self.bbox[2:]:
+                        self.ok, self.bbox = self.tracker.update(frame)
+                        if not self.ok:
+                            # Object is lost, fall back to find_circle
+                            self.bbox = self.find_circle(cam)
+                            self.init_tracker(cam)
+                    else:
+                        # Handle the case where frame size doesn't match
+                        self.bbox = self.find_circle(cam)
+                        self.init_tracker(cam)
+                except cv2.error as e:
+                    print(f"Error during tracker update: {e}")
+                    # Handle the error gracefully, e.g., by falling back to find_circle
+                    self.bbox = self.find_circle(cam)
+                    self.init_tracker(cam)
+            else:
+                # Handle the case where frame is None
+                self.bbox = self.find_circle(cam)
+                self.init_tracker(cam)
         else:
+            # Handle the case where self.bbox is None or all elements are 0
             self.bbox = self.find_circle(cam)
             self.init_tracker(cam)
 
