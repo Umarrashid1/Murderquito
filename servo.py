@@ -33,7 +33,7 @@ class Servo:
         if dc < self.dc_min or dc > self.dc_max:
             raise Exception
 
-        self.io.hardware_PWM(self.pin, self.pwm_hz, int(duty*10000))
+        self.io.hardware_PWM(self.pin, self.pwm_hz, int(dc*10000))
 
 
 
