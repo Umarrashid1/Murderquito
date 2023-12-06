@@ -29,7 +29,7 @@ class Camera:
 
     def run(self):
         if self.device == 0:
-            self.frame = self.camera.capture_array()
+            self.frame = cv2.flip(self.camera.capture_array(), 0)
         else:
             ok, self.frame = self.camera.read()
         return self.frame
