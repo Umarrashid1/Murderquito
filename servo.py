@@ -11,6 +11,7 @@ class Servo:
     def __init__(self, axis, io):
         
         self.axis = axis
+        self.io = io
         if axis == "x":
             self.pin = 14
         else:
@@ -18,7 +19,7 @@ class Servo:
 
         self.angle = 90
 
-        io.set_mode(self.pin, pigpio.OUTPUT)
+        self.io.set_mode(self.pin, pigpio.OUTPUT)
         
 
     def move(self, angle):
