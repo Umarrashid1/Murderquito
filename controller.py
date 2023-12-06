@@ -2,7 +2,7 @@ import cv2
 import sys
 from camera import Camera
 from detection import Detector
-#from servo_controller import  Servo_controller
+from servo_controller import  Servo_controller
 
 
 #Get CLI arguments
