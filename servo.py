@@ -18,7 +18,7 @@ class Servo:
 
         self.angle = 90
 
-        self.io.set_mode(self.pin, pigpio.OUTPUT)
+        io.set_mode(self.pin, pigpio.OUTPUT)
         
 
     def move(self, angle):
@@ -38,4 +38,3 @@ class Servo:
 
     def stop(self):
         self.io.hardware_PWM(self.pin, 0, 0)
-        GPIO.cleanup()
