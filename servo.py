@@ -22,7 +22,6 @@ class Servo:
 
     def move(self, angle):
         if angle != self.angle:
-            self.angle = angle + 90
             self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
