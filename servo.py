@@ -26,6 +26,7 @@ class Servo:
         self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
+        print(angle)
         duty = (self.dc_max - self.dc_min) / 180 * angle + self.dc_min
         return duty
     
