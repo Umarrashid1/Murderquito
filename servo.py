@@ -26,14 +26,14 @@ class Servo:
         self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
-        print(angle)
+        print("angle is", angle)
         duty = (self.dc_max - self.dc_min) / 180 * angle + self.dc_min
         return duty
     
     def set_pwm(self, dc):
         if dc < self.dc_min or dc > self.dc_max:
             raise Exception
-        print(dc)
+        print("dutycycle is", dc)
         self.io.hardware_PWM(self.pin, self.pwm_hz, int(dc*10000))
 
 
