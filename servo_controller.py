@@ -24,23 +24,25 @@ class Servo_controller:
         #TODO: find elegant way of doing it. with and/or without trial&error / other way
         #ryk laser op/ned indtil den rammer midterlinjen
         coords = det.find_red(cam)
-        if coords == (1280/2,720/2):
+        center = (1280/2,720/2)
+        if coords == center:
+            print('oops coords == center')
             return True
         else:
-            self.servo_x.move(90)
-            self.servo_y.move(90)
+            self.servo_x.move(0)
+            self.servo_y.move(0)
             #NOTE: also, bare lige for at være sikker. hvor starter billedets koordina
             #lasers cordinat hvis laser 90 90. x= center_of_frame +/- cm_conv_px(cam_to_laser)
                             #if  x_coord == 1111:
                                 #self.calc_angle_for_frame_center(servo_y, x_coord)
-            while(det.find_red('x') > coords[0]):
-                self.servo_y.move(self.servo_y.angle-1)
-            while(det.find_red('x') < coords[0]):
+            while(det.find_red('x') > center[0]):
                 self.servo_y.move(self.servo_y.angle+1)
-            while(det.find_red('y') > coords[1]):
-                self.servo_x.move(self.servo_x.angle-1)
-            while(det.find_red('y') < coords[1]):
+            while(det.find_red('x') < center[0]):
+                self.servo_y.move(self.servo_y.angle-1)
+            while(det.find_red('y') > center[1]):
                 self.servo_x.move(self.servo_x.angle+1)
+            while(det.find_red('y') < center[1]):
+                self.servo_x.move(self.servo_x.angle-1)
             return True
 
 
