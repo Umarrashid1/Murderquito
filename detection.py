@@ -166,4 +166,20 @@ class Detector:
         return False
 
 
-            
+    def find_person(self, cam):
+        bounding_boxes = []
+        person_detector = cv2.CascadeClassifier("data_cascade/haarcascade_frontalface_default.xml")
+
+        gray_frame = cam.get_gray_frame()
+
+        persons = person_detector.detectMultiScale(
+            gray_frame, scaleFactor=1.05, minNeighbors=5,
+            minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE
+        )
+
+        for (x, y, w, h) in persons:
+            bounding_boxes.append((x, y, x + w, y + h))
+
+        for (x1, y1, x2, y2) in bounding_boxes:
+            cv2.rectangle(cam.get_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
