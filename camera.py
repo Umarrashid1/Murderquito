@@ -20,7 +20,7 @@ class Camera:
 
             self.camera = cv2.VideoCapture(0)
             ok, int_frame = self.camera.read()
-            self.frame = cv2.flip(int_frame)
+            self.frame = cv2.flip(int_frame, 0)
             self.device = 1
         # print("value of frame:", self.frame)
     def autofocus(self):

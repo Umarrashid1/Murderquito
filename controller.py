@@ -20,11 +20,12 @@ cam_axisx_dist = 4.4
 cam_axisy_dist = 4.6
 while True:
     frame = cam.run()
-    det.update_tracker(cam) 
+    det.update_tracker(cam)
     servo_c.center_laser(cam, det)
     angley, anglex = servo_c.calc_laser_angle_when_centered()
 
-    #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide: 
+    # meep
+    #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide:
     #   afstand fra kameramidten til rotationspunktet om x-aksen
     #   afstand fra kameramidten til rotationspunktet om y-aksen
         #se skitse i fuckinglorteclean
@@ -57,6 +58,14 @@ while True:
      #så er der også det med at kameraet måske står lidt skævt, laseren måske sidder lidt skævt og fuck mig 
 
     #det var det jeg ville tjekke over weekenden, men... fucking clean
+
+    det.find_red(cam)
+    center_coordinates = det.find_red(cam)
+    if center_coordinates:
+        print("Red dot found at:", center_coordinates)
+    else:
+        print("No red dot found.")
+
     det.draw_cross(cam)
     det.draw_boundingbox(cam)
 
