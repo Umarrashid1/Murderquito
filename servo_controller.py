@@ -4,6 +4,8 @@ import pigpio
 from servo import Servo
 from detection import Detector
 
+# højre mod venstre 0 mod 180 : midtpunkt = 100 (ikke halvfems)
+# op mod ned 0 mod 180 : midtpunkt = 128 (ikke halvfems)
 
 class Servo_controller:
     
@@ -11,6 +13,7 @@ class Servo_controller:
         io = pigpio.pi()
         self.servo_x = Servo("x", io)
         self.servo_y = Servo ("y", io)
+        
     
     
     def move(self, coordinates):
@@ -29,20 +32,26 @@ class Servo_controller:
             print('oops coords == center')
             return True
         else:
-            self.servo_x.move(0)
-            self.servo_y.move(0)
+            self.servo_x.move(100)
+            angle_servo_x = 100
+            self.servo_y.move(128)
+            angle_servo_y = 128
             #NOTE: also, bare lige for at være sikker. hvor starter billedets koordina
             #lasers cordinat hvis laser 90 90. x= center_of_frame +/- cm_conv_px(cam_to_laser)
                             #if  x_coord == 1111:
                                 #self.calc_angle_for_frame_center(servo_y, x_coord)
             while(det.find_red('x') > center[0]):
-                self.servo_y.move(self.servo_y.angle+1)
+                angle_servo_y = angle_servo_y + 1
+                self.servo_y.move(angle_servo_y)
             while(det.find_red('x') < center[0]):
-                self.servo_y.move(self.servo_y.angle-1)
+                angle_servo_y = angle_servo_y - 1
+                self.servo_y.move(angle_servo_y)
             while(det.find_red('y') > center[1]):
-                self.servo_x.move(self.servo_x.angle+1)
+                angle_servo_x = angle_servo_x -1
+                self.servo_x.move(angle_servo_x)
             while(det.find_red('y') < center[1]):
-                self.servo_x.move(self.servo_x.angle-1)
+                angle_servo_x = angle_servo_x + 1
+                self.servo_x.move(angle_servo_x)
             return True
 
 

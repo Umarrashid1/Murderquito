@@ -12,8 +12,12 @@ class Servo:
         self.axis = axis
         if axis == "x":
             self.pin = 12
+            self.angle_offset = 10
+            # højre mod venstre
         else:
             self.pin = 13
+            self.angle_offset =  38
+            # op mod ned
         self.io = io
         self.io.set_mode(self.pin, pigpio.OUTPUT)
 
