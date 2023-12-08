@@ -86,11 +86,11 @@ class ServoCalibrator:
     def _calc_dim_conv_fact_perpendicular_laser(self, detector = Detector, servo_x= None, servo_y= None):
         px_to_cm_heigth_scale = False 
         px_to_cm_width_scale = False
-
+        coords =  redetector.find_red()
         #hvis laseren er lige på, så er afstand fra midten til laserdot, det samme som kamera til laser
 
         if servo_y is Servo and servo_y.angle == 90:
-            dot_offset_x = abs((self.px_width/2)- detector.find_laser_dot('axis_y')) #abs for kun at få positv værdi
+            dot_offset_x = abs((self.px_width/2)- detector.find_red('x')) #abs for kun at få positv værdi
             px_to_cm_width_scale = (dot_offset_x / self.dist_cam_axis_y) 
         
         elif servo_x is Servo:
@@ -134,30 +134,6 @@ class ServoCalibrator:
             angle_for_center_x = 90 - servo_y.angle #same
             # angle_for_origin = den kan man også finde 
         return (angle_for_center_y, angle_for_center_x)
-
-
-    def center_laser_in_img(self, det = Detector, servo_x=Servo, servo_y=Servo):
-               #TODO: find elegant way of doing it. with and/or without trial&error / other way
-        #ryk laser op/ned indtil den rammer midterlinjen
-        x_coord = det.find_laser_dot('x')
-        y_coord = det.find_laser_dot('y')
-        if (x_coord, y_coord) == self.center_coords:
-            return True
-        else:
-            servo_x.move(90)
-            servo_y.move(90)
-            #NOTE: also, bare lige for at være sikker. hvor starter billedets koordina
-            #lasers cordinat hvis laser 90 90. x= center_of_frame +/- cm_conv_px(cam_to_laser)
-                            #if  x_coord == 1111:
-                                #self.calc_angle_for_frame_center(servo_y, x_coord)
-            while(det.find_laser_dot('x') > (self.px_width)/2):
-                servo_x.move(servo_x.angle - 1)
-            while(det.find_laser_dot('x') < (self.px_width)/2):
-                servo_x.move(servo_x.angle + 1)
-            while(det.find_laser_dot('y') > (self.px_height)/2):
-                servo_y.move(servo_y.angle - 1)
-            while(det.find_laser_dot('y') < (self.px_height)/2):
-                servo_x.move(servo_x.angle + 1)
 
 
             

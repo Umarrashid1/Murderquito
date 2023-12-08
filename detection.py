@@ -146,13 +146,13 @@ class Detector:
     def find_red(self, cam):
         
         # Specifying the color that we want to detect
-        lower = np.array([0, 50, 50])
-        upper = np.array([0, 100, 100])
+        lower = np.array([220, 250, 220])
+        upper = np.array([255, 255, 225])
         # Creating a mask to find our color
-        mask = cv2.inRange(cam.get_frame(), lower, upper)
+        frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
+        mask = cv2.inRange(frame_rgb(), lower, upper)
         # Finding contours in mask image
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
          # Find the position of the contour and draw a circle
         if len(mask_contours) != 0:
             for mask_contour in mask_contours:
