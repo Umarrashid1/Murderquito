@@ -17,6 +17,7 @@ class Servo:
         else:
             self.pin = 13
             self.angle_offset =  38
+            #self.angle_max = 160 #?
             # op mod ned
         self.io = io
         self.io.set_mode(self.pin, pigpio.OUTPUT)
