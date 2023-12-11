@@ -147,7 +147,7 @@ class Detector:
         
         # Specifying the color that we want to detect
         lower = np.array([0, 250, 220])
-        upper = np.array([255, 255, 225])
+        upper = np.array([255, 255, 255])
         # Creating a mask to find our color
         frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
         mask = cv2.inRange(frame_rgb(), lower, upper)
