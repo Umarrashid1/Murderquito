@@ -3,7 +3,7 @@ import sys
 from camera import Camera
 from detection import Detector
 from servo_controller import  Servo_controller
-from servo_controller import  Servo_controller
+from servo_calbration import  ServoCalibrator
 
 
 #Get CLI arguments
@@ -16,13 +16,15 @@ else:
 cam = Camera(input_param)
 det = Detector(cam)
 servo_c = Servo_controller()
-cam_axisx_dist = 4.4
-cam_axisy_dist = 4.6
+servo_cal = ServoCalibrator(cam)
+
+servo_cal.center_laser(cam, det)
+servo_cal.calc_dist_from_centerangle(cam, det, servo_c)
+
 while True:
     frame = cam.run()
     det.update_tracker(cam)
-    servo_c.center_laser(cam, det)
-    angley, anglex = servo_c.calc_laser_angle_when_centered()
+   
 
     # meep
     #før vi overhovedet kan gå igang med det her, er der nogle ting vi skal vide ting vi skal vide:
