@@ -11,17 +11,25 @@ class Servo_controller:
     
     def __init__(self):
         io = pigpio.pi()
-        self.servo_x = Servo("x", io)
-        self.servo_y = Servo ("y", io)
-        
-    
+        self.pan_servo = Servo("x", io)
+        self.tilt_servo = Servo ("y", io)
+        self.make_laser_perpendicular()
+        self.servoes = (self.pan_servo, self.tilt_servo)
+
+    def make_laser_perpendicular(self):
+        self.pan_servo.move(100)
+        self.pan_servo.angle = 100
+        time.sleep(2)
+        self.tilt_servo.move(128)
+        self.tilt_servo.angle = 128
+        time.sleep(2)
+        return self.pan_servo.angle, self.tilt_servo.angle    
     
     def move(self, coordinates):
         x = coordinates[0] / 180
         y = coordinates[1] / 180
 
-        self.servo_x.move(x)
-        self.servo_y.move(y)
+        
 
     def center_laser(self, cam, det):
         #TODO: find elegant way of doing it. with and/or without trial&error / other way
@@ -32,33 +40,33 @@ class Servo_controller:
             print('oops coords == center')
             return True
         else:
-            self.servo_x.move(100)
-            angle_servo_x = 100
-            self.servo_y.move(128)
-            angle_servo_y = 128
+            self.pan_servo.move(100)
+            pan_angle = 100
+            self.tilt_servo.move(128)
+            tilt_angle = 128
             #NOTE: also, bare lige for at være sikker. hvor starter billedets koordina
             #lasers cordinat hvis laser 90 90. x= center_of_frame +/- cm_conv_px(cam_to_laser)
                             #if  x_coord == 1111:
                                 #self.calc_angle_for_frame_center(servo_y, x_coord)
             while(det.find_red('x') > center[0]):
-                angle_servo_y = angle_servo_y + 1
-                self.servo_y.move(angle_servo_y)
+                tilt_angle = tilt_angle + 1
+                self.tilt_servo.move(tilt_angle)
             while(det.find_red('x') < center[0]):
-                angle_servo_y = angle_servo_y - 1
-                self.servo_y.move(angle_servo_y)
+                tilt_angle = tilt_angle - 1
+                self.tilt_servo.move(tilt_angle)
             while(det.find_red('y') > center[1]):
-                angle_servo_x = angle_servo_x -1
-                self.servo_x.move(angle_servo_x)
+                pan_angle = pan_angle -1
+                self.pan_servo.move(pan_angle)
             while(det.find_red('y') < center[1]):
-                angle_servo_x = angle_servo_x + 1
-                self.servo_x.move(angle_servo_x)
+                pan_angle = pan_angle + 1
+                self.pan_servo.move(pan_angle)
             return True
 
 
     def calc_laser_angle_when_centered(self):
         #hvis laser vinkelret er = 90, så find vinkelforskel mellem det og når den peger på midten:
 
-            angle_for_center_y = 90 - self.servo_x.angle #tjek om det er den ene eller anden laser. alt efter drejing om akse, eller bevægelse langs
-            angle_for_center_x = 90 - self.servo_y.angle #same
+            pan_angle_for_frame_center = 90 - self.pan_servo.angle #tjek om det er den ene eller anden laser. alt efter drejing om akse, eller bevægelse langs
+            tilt_angle_for_frame_center = 90 - self.tilt_servo.angle #same
             # angle_for_origin = den kan man også finde 
-            return (angle_for_center_y, angle_for_center_x)
+            return (pan_angle_for_frame_center, tilt_angle_for_frame_center)

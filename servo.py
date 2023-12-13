@@ -11,10 +11,12 @@ class Servo:
     def __init__(self, axis, io):
         self.axis = axis
         if axis == "x":
+            #pan
             self.pin = 12
             self.angle_offset = 10
             # højre mod venstre
         else:
+            #tilt
             self.pin = 13
             self.angle_offset =  38
             #self.angle_max = 160 #?
@@ -23,6 +25,7 @@ class Servo:
         self.io.set_mode(self.pin, pigpio.OUTPUT)
 
     def move(self, angle):
+        self.angle = angle
         self.set_pwm(self.angle_pwm_conv(angle))
 
     def angle_pwm_conv(self, angle):
