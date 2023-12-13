@@ -11,7 +11,7 @@ from detection import Detection
 class CameraCalibrator:  #TODO unfinished
     # NOTE: https://youtu.be/3h7wgR5fYik?si=Ij60L5DQ3I3LYzy4
     chessboard_size = (9, 6) # number of corners in width and height
-    frame_size = (640, 480)   
+    
     # termination criteria til at finde præcise hjørner med subpixels
     #           ved ikke præcist hvad det er 
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -21,7 +21,7 @@ class CameraCalibrator:  #TODO unfinished
     objp = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
     objp[:, :2] = np.mgrid[0: chessboard_size[0], 0: chessboard_size[1]].T.reshape(-1, 2)  
 
-    size_of_chessboard_squares_mm = 20 #actual physical size of squares on the printout. measure accurately!
+    size_of_chessboard_squares_mm = 24.1 #actual physical size of squares on the printout. measure accurately!
     objp = objp * size_of_chessboard_squares_mm
 
  
