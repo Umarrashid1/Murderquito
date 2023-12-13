@@ -1,0 +1,28 @@
+libcamera-still --width 1280 --height 720 -r -o smallframebox.jpg
+
+scp username@raspberrypi:/home/username/Murderquito/camera.py .
+scp username@raspberrypi:/home/username/Murderquito/controller.py .
+
+scp servotester.py username@raspberrypi:/home/username/Murderquito
+scp ./testing/servocal_tester.py username@raspberrypi:/home/username/Murderquito/Murderquito/testing
+
+scp detection.py username@raspberrypi:/home/username/Murderquito
+scp controller.py, detection.py, laser.py, servo.py, servo_calbration.py, servo_controller.py username@raspberrypi:/home/username/Murderquito
+
+
+scp username@raspberrypi:/home/username/Murderquito/controller.py, detection.py, laser.py, servo.py, servo_calbration.py, servo_controller.py .
+scp username@raspberrypi:/home/username/Murderquito/controller.py . 
+scp username@raspberrypi:/home/username/Murderquito/detection.py .
+scp username@raspberrypi:/home/username/Murderquito/servo.py .
+scp username@raspberrypi:/home/username/Murderquito/laser.py .
+scp username@raspberrypi:/home/username/Murderquito/servo_calbration.py .
+scp username@raspberrypi:/home/username/Murderquito/servo_controller.py .
+scp username@raspberrypi:/home/username/Murderquito/camera_calibration.py .
+
+scp username@raspberrypi:/home/username/Murderquito/Murderquito/loop_frame1.jpg, loop_frame2.jpg, loop_frame3.jpg, loop_frame4.jpg, loop_frame5.jpg ./testpic
+scp username@raspberrypi:/home/username/Murderquito/Murderquito/imgtestdet1.jpg, imgtestdet2.jpg, imgtestdet3.jpg, imgtestdet11.jpg,imgtestdet12.jpg, invertedtest.jpg, contrsall.jpg .
+scp username@raspberrypi:/home/username/Murderquito/Murderquito/ref_frame.jpg ./testpic
+
+
+username@raspberrypi:~/Murderquito $ libcamera-still -r -o fullbox.jpg
+
