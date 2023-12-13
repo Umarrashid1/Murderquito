@@ -15,12 +15,11 @@ class Detector:
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
-        
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
 
-        if frame is not None and self.bbox is not None and not all(i == 0 for i in self.bbox):
+        if frame is not None and self.bbox is not False and not all(i == 0 for i in self.bbox):
             try:
                 self.tracker.init(frame, self.bbox)
             except cv2.error as e:
@@ -32,41 +31,34 @@ class Detector:
                 self.bbox = self.find_circle(cam)
 
     def update_tracker(self, cam):
-        if self.bbox is not None and not all(i == 0 for i in self.bbox):
+        if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
 
-            if frame is not None:
-                try:
-                    # Check if the frame size matches the expected size
-                    if frame.shape[:2] == self.bbox[2:]:
-                        self.ok, self.bbox = self.tracker.update(frame)
-                        if not self.ok:
-                            # Object is lost, fall back to find_circle
-                            self.bbox = self.find_circle(cam)
-                            self.init_tracker(cam)
-                    else:
-                        # Handle the case where frame size doesn't match
-                        self.bbox = self.find_circle(cam)
-                        self.init_tracker(cam)
-                except cv2.error as e:
-                    print(f"Error during tracker update: {e}")
-                    # Handle the error gracefully, e.g., by falling back to find_circle
+            try:
+                # Check if the frame size matches the expected size
+
+                self.ok, self.bbox = self.tracker.update(frame)
+                if not self.ok:
+                    # Object is lost, fall back to find_circle
                     self.bbox = self.find_circle(cam)
+                    self.tracker = cv2.TrackerKCF.create()
                     self.init_tracker(cam)
-            else:
-                # Handle the case where frame is None
+            except cv2.error as e:
+                print(f"Error during tracker update: {e}")
+                # Handle the error gracefully, e.g., by falling back to find_circle
                 self.bbox = self.find_circle(cam)
+                self.tracker = cv2.TrackerKCF.create()
                 self.init_tracker(cam)
+
         else:
-            # Handle the case where self.bbox is None or all elements are 0
+            # Handle the case where self.bbox is False or all elements are 0
             self.bbox = self.find_circle(cam)
+            self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
-
-
 
     def draw_boundingbox(self, cam):
         frame_boundingbox = cam.get_frame()
-        if self.bbox is not None:
+        if self.bbox is not False:
             # Tracking success
             p1 = (int(self.bbox[0]), int(self.bbox[1]))
             p2 = (int(self.bbox[0] + self.bbox[2]), int(self.bbox[1] + self.bbox[3]))
@@ -78,7 +70,7 @@ class Detector:
         cv2.imshow("Tracking", frame_boundingbox)
 
     def get_center_coordinates(self):
-        if self.bbox is not None:
+        if self.bbox is not False:
             x, y, w, h = self.bbox
             center_x = x + w / 2
             center_y = y + h / 2
@@ -98,7 +90,6 @@ class Detector:
         # Draw vertical line
         cv2.line(frame, (int(center_x), int(center_y - 10)), (int(center_x), int(center_y + 10)), (0, 255, 0), 2)
 
-
     def find_circle(self, cam):
         # Convert the image to grayscale
         gray = cam.get_gray_frame()
@@ -112,10 +103,10 @@ class Detector:
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
             minDist=30,  # Minimum distance between the centers of detected circles
-            param1=70,  # Higher value means less sensitive edge Detector
-            param2=70,  # Higher value allows Detector with lower confidence
+            param1=90,  # Higher value means less sensitive edge Detector
+            param2=90,  # Higher value allows Detector with lower confidence
             minRadius=2,  # Minimum radius of detected circles
-            maxRadius=90  # Maximum radius of detected circles
+            maxRadius=400  # Maximum radius of detected circles
         )
 
         if circles is not None:
@@ -127,8 +118,8 @@ class Detector:
             bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
             return bbox
 
-        # Return None if no circle is found
-        return None
+        # Return False if no circle is found
+        return False
 
     def find_black_dot(self, cam):
 
@@ -143,7 +134,7 @@ class Detector:
                     # cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         return bbox
-    
+
     def find_red(self, frame):
         """
         # Specifying the color that we want to detect
@@ -164,11 +155,11 @@ class Detector:
         mask22 = cv2.bitwise_not(mask2)
 
         mask_contours, hierarchy = cv2.findContours(mask22, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
-         # Find the position of the contour and draw a circle
+
+        # Find the position of the contour and draw a circle
         if len(mask_contours) != 0:
-            for mask_contour in mask_contours:     
-                 # Defining the least amount of pixels, I want it to register.
+            for mask_contour in mask_contours:
+                # Defining the least amount of pixels, I want it to register.
                 if cv2.contourArea(mask_contour) > 2:
                     # Setting up the circle
                     (x, y), radius = cv2.minEnclosingCircle(mask_contour)
@@ -176,7 +167,6 @@ class Detector:
                     radius = int(radius)
                     return center
         return False
-
 
     def find_person(self, cam):
         bounding_boxes = []
