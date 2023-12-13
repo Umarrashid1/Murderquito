@@ -3,7 +3,7 @@ import sys
 from camera import Camera
 from detection import Detector
 from servo_controller import  Servo_controller
-from servo_calbration import  ServoCalibrator
+from servo_calibrator import  ServoCalibrator
 from laser import Laser
 
 #Get CLI arguments
