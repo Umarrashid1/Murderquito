@@ -52,7 +52,6 @@ while True:
     det.draw_cross(cam)
     det.draw_boundingbox(cam)
 
-    print("coordinates are", coordinates)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 # ##########    se evt:     ######################
