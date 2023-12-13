@@ -15,6 +15,7 @@ class Detector:
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
+        
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
@@ -143,26 +144,37 @@ class Detector:
 
         return bbox
     
-    def find_red(self, cam):
-        
+    def find_red(self, frame):
+        """
         # Specifying the color that we want to detect
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
         # Creating a mask to find our color
         frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
-        mask = cv2.inRange(frame_rgb(), lower, upper)
-        # Finding contours in mask image
-        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        mask = cv2.inRange(frame_rgb, lower, upper)
+                    cv2.imwrite("imgtestdet1.jpg", frame_rgb)
+                    cv2.imwrite("imgtestdet2.jpg", mask)
+        # Finding contours in mask image"""
+
+        reference = cv2.imread("ref_frame.jpg")
+        mask = cv2.subtract(frame, reference)
+        gray_mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
+        blurred = cv2.GaussianBlur(gray_mask, (9, 9), 2)
+        mask2 = cv2.threshold(blurred, 25, 255, cv2.THRESH_BINARY_INV)[1]
+        mask22 = cv2.bitwise_not(mask2)
+
+        mask_contours, hierarchy = cv2.findContours(mask22, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
          # Find the position of the contour and draw a circle
         if len(mask_contours) != 0:
-            for mask_contour in mask_contours:
+            for mask_contour in mask_contours:     
                  # Defining the least amount of pixels, I want it to register.
-                if cv2.contourArea(mask_contour) > 200:
+                if cv2.contourArea(mask_contour) > 2:
                     # Setting up the circle
                     (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                     center = (int(x), int(y))
                     radius = int(radius)
-                    return x, y
+                    return center
         return False
 
 
