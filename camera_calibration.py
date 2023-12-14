@@ -51,7 +51,7 @@ class CameraCalibrator:  #TODO unfinished
                       [0, 0, 0, x, y, 1, -Y*x, -Y*y]])
             B.extend([X, Y])
         print("A:", np.array(A))
-        print ("B:" np.array(B))
+        print ("B:", np.array(B))
         return np.array(A), np.array(B)
 
     def show_corners(self):
