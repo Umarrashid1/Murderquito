@@ -1,5 +1,4 @@
 import cv2
-from Bounding_Boxes_subclasses.rectangle import Rectangle
 
 # from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
@@ -135,7 +134,7 @@ class Detector:
 
         return bbox
 
-    def ffind_red (self, frame):
+    def find_red (self, frame):
         """reference = cv2.imread("ref_frame.jpg")
         gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -159,12 +158,12 @@ class Detector:
         # Finding position of all contours
         if len(mask_contour) != 0:
             for mask_contour in mask_contour:
-                if cv2.contourArea(mask_contour) > 100
-                    ((x, y), radius) = cv2.minEnclosingCircle(max_contour)
-                    
+                if cv2.contourArea(mask_contour) > 5:
+                    x, y, w, h = cv2.boundingRect(mask_contour)
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)  # drawing rectangle
+                    return x, y
 
-
-        """# set my output img to zero everywhere except my mask
+    """# set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
         mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for contour in mask_contours:
@@ -180,7 +179,7 @@ class Detector:
 
             return cx, cy"""
 
-    def find_red(self, frame):
+    def ffind_red(self, frame):
         # Adjust the color range for red
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
@@ -193,8 +192,8 @@ class Detector:
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Specify the minimum and maximum mass thresholds
-        min_mass_threshold = 5
-        max_mass_threshold = 1000
+        min_mass_threshold = 30
+        max_mass_threshold = 100
 
         # Process each contour
         for contour in mask_contours:
