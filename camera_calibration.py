@@ -37,7 +37,9 @@ class CameraCalibrator:  #TODO unfinished
         self.objpoints = [] # 3d point in real world space. project down to 2d plane. lineær algebra
         self.imgpoints = [] # 2d points in image plane.
 
-    def create_arrays(objpoints, imgpoints):
+    def create_arrays():
+        objpoints = self.objpoints
+        imgpoints = self.imgpoints
         A = []
         B = []
         for i in range(1, len(objpoints)//2 + 1):
@@ -111,7 +113,7 @@ class CameraCalibrator:  #TODO unfinished
     def calibrate_camera(self):
         print("objpoints:", self.objpoints)
         print("imgpoints", self.imgpoints)
-        self.create_arrays(self.objpoints, self.imgpoints)
+        self.create_arrays()
         self.ret, self.camera_matrix, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, self.frame_size, None, None)
         print("Camera matrix")
         print(self.camera_matrix)
