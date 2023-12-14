@@ -53,12 +53,14 @@ class CameraCalibrator:  #TODO unfinished
         #return self.get_calibration_data
 
     def reverse_project(self):
-        pixel = np.array([[300, 200, 1]], dtype=np.float32)
+        cx = 300
+        cy = 200
+        pixel = np.array([[cx, cy, 1]], dtype=np.float32)
         pixel = pixel.reshape((1, 3)) # Reshape pixel to (1, 3)
         point, _ = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)       # Convert the 3D point to spherical coordinates
         a = point[0][0] - self.tvecs
         b = np.array([[0], [0], [1]])
-        cos_theta = np.dot(a.T, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+        cos_theta = (a.squeeze() @ b) / (np.linalg.norm(a) * np.linalg.norm(b))
         theta = np.arccos(cos_theta)
         # Convert theta from radians to degrees
         theta = np.degrees(theta)
