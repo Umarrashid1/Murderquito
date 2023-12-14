@@ -135,7 +135,7 @@ class Detector:
 
         return bbox
 
-    def find_red_dot (self, frame):
+    def find_red (self, frame):
         #reference = cv2.imread("ref_frame.jpg")
         #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
