@@ -132,7 +132,7 @@ class Detector:
 
         return bbox
 
-    def ffind_red (self, frame):
+    def find_red (self, frame):
         """reference = cv2.imread("ref_frame.jpg")
         gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -182,7 +182,7 @@ class Detector:
 
             return cx, cy"""
 
-    def find_red(self, frame):
+    def ffind_red(self, frame):
         # Adjust the color range for red
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
