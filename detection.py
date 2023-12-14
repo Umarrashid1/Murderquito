@@ -160,10 +160,11 @@ class Detector:
                 min_to_max_contour = max(mask_contour, key=cv2.contourArea)
                 if min_to_max_contour < 9 < 20:
                     ((x, y), radius) = cv2.minEnclosingCircle(min_to_max_contour)
-                    cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
-                    cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                                (0, 0, 255), 2)
                     return int(x), int(y), int(radius), min_to_max_contour
+
+        cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
+        cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (0, 0, 255), 2)
 
                     
 
@@ -218,10 +219,11 @@ class Detector:
                 cv2.putText(frame, f'Mass: {mass["m00"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 cv2.putText(frame, f'Center: ({cx}, {cy})', (x, y - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 print(cx, cy)
-        # Show the frame with bounding boxes
-        cv2.imshow("Frame with Bounding Boxes", frame)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+                return cx, cy
+            else:
+                print("no red dot found")
+                return 0, 0
+
 
 
 
