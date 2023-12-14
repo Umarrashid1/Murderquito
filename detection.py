@@ -154,7 +154,9 @@ class Detector:
         # Creating Color range
         mask = cv2.inRange(frame_con, lower, upper)
 
-        # set my output img to zero everywhere except my mask
+        
+
+        """# set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
         mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for contour in mask_contours:
@@ -168,7 +170,7 @@ class Detector:
                 cx, cy = 0, 0
             print("center of mass is: ", cx, ",", cy)
 
-            return cx, cy
+            return cx, cy"""
 
     def find_red(self, frame):
         
@@ -178,6 +180,7 @@ class Detector:
 
         # Create a binary mask
         mask = cv2.inRange(frame, lower, upper)
+        cv2.imwrite("testingRONI.jpg", mask)
 
         # Find contours in the mask
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
