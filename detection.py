@@ -137,7 +137,7 @@ class Detector:
 
     def find_red(self, frame):
         lower = np.array([0, 0, 200])
-        upper = np.array([50, 50, 255])
+        upper = np.array([255, 50, 50])
 
         # Creating a mask to find red color
         mask = cv2.inRange(frame, lower, upper)
@@ -154,7 +154,7 @@ class Detector:
             ellipse = cv2.fitEllipse(largest_contour)
             frame_with_contours = frame.copy()
             cv2.drawContours(frame_with_contours, [largest_contour], -1, (0, 255, 0),
-                             2)  
+                             2)
 
             # Save the image with contours
             cv2.imwrite("contours_image.jpg", frame_with_contours)
