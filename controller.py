@@ -25,13 +25,13 @@ servo_c = Servo_controller()
 servo_cal = ServoCalibrator(cam, servo_c)
 laser = Laser()
 laser.toggle_laser()
-chosen_servo = 'y' #servox virker ikke. ved vinkelret bevæger den sig ikke ind i billedet.
-if chosen_servo == 'x': 
-    servo_cal.prepare_for_calibration(servo_c, chosen_servo)
-elif chosen_servo == 'y': 
-    servo_cal.prepare_for_calibration(servo_c, chosen_servo)
-servo_cal.find_indiv_center_angles(cam, det, servo_c, chosen_servo)        
-identical, distance = servo_cal.calc_dist_from_centerangle(servo_c)
+#chosen_servo = 'y' #servox virker ikke. ved vinkelret bevæger den sig ikke ind i billedet.
+#if chosen_servo == 'x': 
+    #servo_cal.prepare_for_calibration(servo_c, chosen_servo)
+#elif chosen_servo == 'y': 
+    #servo_cal.prepare_for_calibration(servo_c, chosen_servo)
+#servo_cal.find_indiv_center_angles(cam, det, servo_c, chosen_servo)        
+#identical, distance = servo_cal.calc_dist_from_centerangle(servo_c)
 
 servo_cal.prepare_for_calibration(servo_c)
 check = servo_cal.center_laser(cam, det, servo_c) # virker!      
