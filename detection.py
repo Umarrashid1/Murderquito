@@ -132,7 +132,7 @@ class Detector:
 
         return bbox
 
-    def ffind_red (self, frame):
+    def find_red (self, frame):
         """reference = cv2.imread("ref_frame.jpg")
         gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -160,6 +160,9 @@ class Detector:
                 min_to_max_contour = max(mask_contour, key=cv2.contourArea)
                 if min_to_max_contour < 9 < 20:
                     ((x, y), radius) = cv2.minEnclosingCircle(min_to_max_contour)
+                    cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
+                    cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                (0, 0, 255), 2)
                     return int(x), int(y), int(radius), min_to_max_contour
 
                     
@@ -180,7 +183,7 @@ class Detector:
 
             return cx, cy"""
 
-    def find_red(self, frame):
+    def ffind_red(self, frame):
         # Adjust the color range for red
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
