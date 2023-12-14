@@ -150,10 +150,10 @@ class Detector:
         reference = cv2.imread("ref_frame.jpg")
         mask = cv2.subtract(frame, reference)
         gray_mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
-        blurred = cv2.GaussianBlur(gray_mask, (9, 9), 2)
-        mask2 = cv2.threshold(blurred, 25, 255, cv2.THRESH_BINARY_INV)[1]
+        blurred = cv2.GaussianBlur(gray_mask, (7, 7), 2)
+        mask2 = cv2.threshold(blurred, 35, 255, cv2.THRESH_BINARY_INV)[1]
         mask22 = cv2.bitwise_not(mask2)
-
+        cv2.imwrite("testimg.jpg", mask22)
         mask_contours, hierarchy = cv2.findContours(mask22, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Find the position of the contour and draw a circle
@@ -164,6 +164,7 @@ class Detector:
                     # Setting up the circle
                     (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                     center = (int(x), int(y))
+                    print(center)
                     radius = int(radius)
                     return center
         return False
