@@ -157,8 +157,7 @@ class Detector:
         # Finding position of all contours
         if len(mask_contour) != 0:
             for mask_contour in mask_contour:
-                min_to_max_contour = max(mask_contour, key=cv2.contourArea)
-                if min_to_max_contour < 15:
+                if mask_contour < 20:
                     ((x, y), radius) = cv2.minEnclosingCircle(min_to_max_contour)
                     cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
                     cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
