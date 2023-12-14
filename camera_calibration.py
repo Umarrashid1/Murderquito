@@ -55,18 +55,16 @@ class CameraCalibrator:  #TODO unfinished
     def reverse_project(self):
         pixel = np.array([[300, 200, 1]], dtype=np.float32)
         pixel = pixel.reshape((1, 3)) # Reshape pixel to (1, 3)
-        point, _ = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)
-        # Convert the 3D point to spherical coordinates
-        r = np.sqrt(point[0][0][0]**2 + point[0][0][1]**2 + point[0][0][2]**2)
+        point, _ = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)       # Convert the 3D point to spherical coordinates
+        r = np.sqrt(point[0][0][0]**2 + point[0][0][1]**2) # Remove point[0][0][2]
         theta = np.arctan2(point[0][0][1], point[0][0][0])
-        phi = np.arccos(point[0][0][2] / r)
+        phi = np.arccos(point[0][0][1] / r) # Change point[0][0][2] to point[0][0][1]
         # Print the spherical coordinates
         print("Spherical coordinates:")
         print("Radius:", r)
         print("Azimuth:", theta)
         print("Elevation:", phi)
-
-
+    
     def find_chess_corners(self):  #TODO: general
         # https://calib.io/blogs/knowledge-base/calibration-patterns-explained
         # rows need to be even
