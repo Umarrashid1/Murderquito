@@ -1,3 +1,4 @@
+from pprint import *
 import cv2
 
 
@@ -10,26 +11,29 @@ class Camera:
         #device 0 is for pi cam, and any inputparameter is for normal pc camera
         if device == 0:
             from picamera2 import Picamera2
+            from libcamera import Transform
+            # reference:
+            #   https://datasheets.raspberrypi.com/camera/picamera2-manual.pdf
             self.camera = Picamera2()
-            config = self.camera.create_preview_configuration({'format': 'RGB888'})
+            #pprint(self.camera.sensor_modes)   #printer information ud
+            #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
+            config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'RGB888', 'size': (1920, 1080), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
-            self.frame = cv2.flip(self.camera.capture_array(), 0)
+            self.frame = self.camera.capture_array()
         else:
-
             self.camera = cv2.VideoCapture(0)
             ok, int_frame = self.camera.read()
             self.frame = cv2.flip(int_frame, 0)
             self.device = 1
-        # print("value of frame:", self.frame)
     def autofocus(self):
         from libcamera import controls
         self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
 
     def run(self):
         if self.device == 0:
-            self.frame = cv2.flip(self.camera.capture_array(), 0)
+            self.frame = self.camera.capture_array()
         else:
             ok, self.frame = self.camera.read()
         return self.frame
