@@ -1,6 +1,4 @@
 import cv2
-
-# from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
 from camera import Camera
 
@@ -158,10 +156,12 @@ class Detector:
         # Finding position of all contours
         if len(mask_contour) != 0:
             for mask_contour in mask_contour:
-                if cv2.contourArea(mask_contour) > 5:
+                if cv2.contourArea(mask_contour) > 10:
                     x, y, w, h = cv2.boundingRect(mask_contour)
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)  # drawing rectangle
                     return x, y
+
+                    
 
     """# set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
