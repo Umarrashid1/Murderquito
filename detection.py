@@ -148,8 +148,9 @@ class Detector:
         lower = np.array([155, 0, 20])
         upper = np.array([180, 250,255])
 
-        #frame_con =
-        mask = frame
+        frame_con = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        #
+
         # set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
         mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -194,6 +195,10 @@ class Detector:
                 cy = int(mass["m01"] / mass["m00"])
 
                 print("Center of mass is: ", cx, ",", cy)
+                return cx, cy
+            else:
+                return False
+
 
 
 
