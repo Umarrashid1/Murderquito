@@ -135,18 +135,17 @@ class Detector:
 
         return bbox
 
-    def find_red (self, frame):
+    def find_red(self, frame):
         reference = cv2.imread("ref_frame.jpg")
-
-
+        gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        thresh_ref = cv2.threshold(self.gray_ref, 100, 1, cv2.THRESH_BINARY_INV)[1]
+        thresh_frame = cv2.threshold(self.gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
         # join my masks
-        mask = reference + frame
+        mask = cv2.bitwise_xor(thresh_ref, thresh_frame)
 
         # set my output img to zero everywhere except my mask
-        output_img = frame.copy()
-        output_img[np.where(mask == 0)] = 0
         cv2.imwrite("testimg1213.jpg", mask)
-        cv2.imwrite("testimg1212.jpg", output_img)
         mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for contour in mask_contours:
             # Calculate the moments of the contour
