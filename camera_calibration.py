@@ -37,6 +37,19 @@ class CameraCalibrator:  #TODO unfinished
         self.objpoints = [] # 3d point in real world space. project down to 2d plane. lineær algebra
         self.imgpoints = [] # 2d points in image plane.
 
+    def create_arrays(objpoints, imgpoints):
+        A = []
+        B = []
+        for i in range(1, len(objpoints)//2 + 1):
+            x = objpoints[f'x{i}']
+            y = objpoints[f'y{i}']
+            X = imgpoints[f'X{i}']
+            Y = imgpoints[f'Y{i}']
+            A.extend([[x, y, 1, 0, 0, 0, -X*x, -X*y],
+                      [0, 0, 0, x, y, 1, -Y*x, -Y*y]])
+            B.extend([X, Y])
+        return np.array(A), np.array(B)
+
     def show_corners(self):
         cv2.drawChessboardCorners(self.img_corners, self.chessboard_size, self.corners2, None)
         cv2.imwrite('calibration\chessybesy.png', self.img_corners)
