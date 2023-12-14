@@ -10,7 +10,7 @@ import numpy as np
 
 class CameraCalibrator:  #TODO unfinished
     # NOTE: https://youtu.be/3h7wgR5fYik?si=Ij60L5DQ3I3LYzy4
-    chessboard_size = (10, 7) # number of corners in width and height
+    chessboard_size = (9, 6) # number of corners in width and height
     
     # termination criteria til at finde præcise hjørner med subpixels
     #           ved ikke præcist hvad det er 
@@ -51,6 +51,19 @@ class CameraCalibrator:  #TODO unfinished
         self.calibrate_camera()
         #self.undistort()
         #return self.get_calibration_data
+        
+        def create_arrays(objpoints, imgpoints):
+            A = []
+            B = []
+            for i in range(1, len(objpoints)//2 + 1):
+                x = objpoints[f'x{i}']
+                y = objpoints[f'y{i}']
+                X = imgpoints[f'X{i}']
+                Y = imgpoints[f'Y{i}']
+                A.extend([[x, y, 1, 0, 0, 0, -X*x, -X*y],
+                          [0, 0, 0, x, y, 1, -Y*x, -Y*y]])
+                B.extend([X, Y])
+            return np.array(A), np.array(B)
 
     def reverse_project(self):
         cx = 300
@@ -85,7 +98,7 @@ class CameraCalibrator:  #TODO unfinished
     def calibrate_camera(self):
         print("objpoints:", self.objpoints)
         print("imgpoints", self.imgpoints)
-        
+        self.create_arrays(self.objpoints, self.imgpoints)
         self.ret, self.camera_matrix, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, self.frame_size, None, None)
         print("Camera matrix")
         print(self.camera_matrix)
