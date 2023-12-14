@@ -135,15 +135,21 @@ class Detector:
 
         return bbox
 
-    def find_red(self, frame):
-        reference = cv2.imread("ref_frame.jpg")
+    def ffind_red (self, frame):
+        """reference = cv2.imread("ref_frame.jpg")
         gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         thresh_ref = cv2.threshold(gray_ref, 100, 1, cv2.THRESH_BINARY_INV)[1]
         thresh_frame = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
         # join my masks
-        mask = cv2.bitwise_xor(thresh_ref, thresh_frame)
+        mask = cv2.bitwise_xor(thresh_ref, thresh_frame)"""
 
+        # Setting the upper and lower bound
+        lower = np.array([155, 0, 20])
+        upper = np.array([180, 250,255])
+
+        #frame_con =
+        mask = frame
         # set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
         mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -160,7 +166,34 @@ class Detector:
 
             return cx, cy
 
+    def find_red(self, frame):
+        
+            # Adjust the color range for red
+        lower = np.array([0, 50, 50])
+        upper = np.array([10, 255, 255])
 
+        # Create a binary mask
+        mask = cv2.inRange(frame, lower, upper)
+
+        # Find contours in the mask
+        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Specify the minimum and maximum mass thresholds
+        min_mass_threshold = 10
+        max_mass_threshold = 1000
+
+        # Process each contour
+        for contour in mask_contours:
+            # Calculate the moments of the contour
+            mass = cv2.moments(contour)
+
+            # Check if the mass is within the specified range
+            if min_mass_threshold < mass["m00"] < max_mass_threshold:
+                # Calculate the center of mass of the contour
+                cx = int(mass["m10"] / mass["m00"])
+                cy = int(mass["m01"] / mass["m00"])
+
+                print("Center of mass is: ", cx, ",", cy)
 
 
 
