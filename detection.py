@@ -135,43 +135,32 @@ class Detector:
 
         return bbox
 
-    def find_red(self, frame):
-        lower = np.array([230, 245, 220])
-        upper = np.array([255, 255, 255])
+    def find_red (self, frame):
+        #reference = cv2.imread("ref_frame.jpg")
 
-        # Creating a mask to find red color
+        lower = np.array([0, 4, 4])
+        upper = np.array([255, 15, 15])
+
         mask = cv2.inRange(frame, lower, upper)
-
         cv2.imwrite("testimg1213.jpg", mask)
+        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for contour in mask_contours:
+            # Calculate the moments of the contour
+            mass = cv2.moments(contour)
 
-        # Find contours in the binary image
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        frame_with_contours = frame.copy()
-
-        for contour in contours:
-            # Approximate the polygonal curve of each contour
-            epsilon = 0.02 * cv2.arcLength(contour, True)
-            approx_polygon = cv2.approxPolyDP(contour, epsilon, True)
-
-            cv2.drawContours(frame_with_contours, [approx_polygon], -1, (0, 255, 0), 2)
-
-            # Extract the ellipse information for each contour
-            center_coordinates, axes, angle = cv2.fitEllipse(approx_polygon)
-            print("Center:", center_coordinates)
-
-        # Save the image with contours
-        cv2.imwrite("contours_image.jpg", frame_with_contours)
-
-        if contours:
-            return True
-        else:
-            print("No red ellipse found")
-            return False
+            # Calculate the center of mass of the contour
+            if mass["m00"] != 0:
+                cx = int(mass["m10"] / mass["m00"])
+                cy = int(mass["m01"] / mass["m00"])
+            else:
+                cx, cy = 0, 0
+            print("center of mass is: ", cx, ",", cy)
 
 
 
-        # mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+
+
 
 
     def find_person(self, cam):
