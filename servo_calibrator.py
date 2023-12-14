@@ -217,20 +217,19 @@ class ServoCalibrator:
 
     def calc_dist_checkers(NotImplemented): NotImplemented     
     def calc_dist_box(): NotImplemented 
-    def _calc_dim_conv_fact_perpendicular_laser(self, frame, det = Detector,  servo_c = Servo_controller): NotImplemented
+    def _calc_dim_conv_fact_perpendicular_laser(self, frame, det = Detector,  servo_c = Servo_controller):
     
-        #px_to_cm_heigth_scale = False 
-        #px_to_cm_width_scale = False
-        #coords =  det.find_red(frame)
+        servo_c.make_laser_perpendicular()
+        las_coords =  det.find_red(frame)
         #hvis laseren er lige på, så er afstand fra midten til laserdot, det samme som kamera til laser
+        #pixel_dist = lascoords - self.center
 
-        #if servo_c.tilt_servo is Servo and servo_c.tilt_servo.angle == 128:
-         #   dot_offset_x = abs((self.px_width/2)- coords[0]) #abs for kun at få positv værdi
-          #  px_to_cm_width_scale = (dot_offset_x / self.cam_to_pan_dist) 
+            #dot_offset_x = abs((self.px_width/2)- coords[0]) #abs for kun at få positv værdi
+            #px_to_cm_width_scale = (dot_offset_x / self.cam_to_pan_dist)
         
         
         #if servo_c.pan_servo is Servo and servo_c.pan_servo.angle == 100:
          #   dot_offset_y = abs((self.px_height/2)- coords[1]) #abs for kun at få positv værdi
           #  px_to_cm_heigth_scale = (dot_offset_y / self.cam_to_tilt_dist)
 
-        #return px_to_cm_heigth_scale, px_to_cm_width_scale
+        # return px_to_cm_heigth_scale, px_to_cm_width_scale
