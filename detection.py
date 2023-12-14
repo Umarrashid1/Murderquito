@@ -135,9 +135,9 @@ class Detector:
 
         return bbox
 
-    def find_red(self, frame):
-        reference = cv2.imread("ref_frame.jpg")
-        frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+    def find_red_dot (self, frame):
+        #reference = cv2.imread("ref_frame.jpg")
+        #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
         
         #noget jeg lige tester:
@@ -159,16 +159,18 @@ class Detector:
         mask = cv2.inRange(frame_rgb, lower, upper)
                     cv2.imwrite("imgtestdet1.jpg", frame_rgb)
                     cv2.imwrite("imgtestdet2.jpg", mask)
-        # Finding contours in mask image"""
+        # Finding contours in mask image
+        """
+
         lower = np.array([230, 245, 220])
         upper = np.array([255, 255, 255])
+
         # Creating a mask to find our color
+        img_conv = cv2.cvtColor(frame, cv2.Color_BGR2HSV)
         mask = cv2.inRange(frame, lower, upper)
         cv2.imwrite("testimg1213.jpg", mask)
 
-        blurred = cv2.GaussianBlur(mask, (5, 5), 2)
-
-        # Use Hough Circle Transform to detect circles
+        """ Use Hough Circle Transform to detect circles
         circles = cv2.HoughCircles(
             blurred,
             cv2.HOUGH_GRADIENT,
@@ -180,15 +182,15 @@ class Detector:
             maxRadius=90  # Maximum radius of detected circles
         )
 
-        if circles is not None:
+        #if circles is not None:
             # Convert the (x, y) coordinates and radius of the circles to integers
             circles = np.round(circles[0, :]).astype("int")
 
             # Return the bounding box of the first detected circle
             x, y, radius = circles[0]
             bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
+        """
 
-        
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Find the position of the contour and draw a circle
