@@ -18,6 +18,7 @@ laser = Laser()
 laser.toggle_laser(0)
 
 cam = Camera(input_param)
+cam.run()
 cv2.imwrite("ref_frame.jpg", cam.get_frame())
 det = Detector(cam)
 servo_c = Servo_controller()
