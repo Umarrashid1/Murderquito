@@ -148,7 +148,20 @@ class Detector:
         # Finding contours in mask image"""
 
         reference = cv2.imread("ref_frame.jpg")
+        mask_clr_1 = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+        mask_clr_2 = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+        #sssssss
+        s_min = (0, 30, 220)
+        s_max = (10, 240, 255)
+        mask111 = cv2.inRange(hsvMat, s_min, s_max, mask_clr_1)
+        s_min = (170, 30, 220)
+        s_max = (180, 240, 255)
+        mask222 = cv2.inRange(hsvMat, s_min, s_max, mask_clr_2)
+
+
+        #forsøg med subtract, virker på hel plain baggrund
         mask = cv2.subtract(frame, reference)
+        cv2.imwrite("testimg1.jpg", mask)
         gray_mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
         blurred = cv2.GaussianBlur(gray_mask, (7, 7), 2)
         mask2 = cv2.threshold(blurred, 35, 255, cv2.THRESH_BINARY_INV)[1]
