@@ -54,7 +54,7 @@ class CameraCalibrator:  #TODO unfinished
 
     def reverse_project(self):
         pixel = np.array([[300, 200, 1]], dtype=np.float32)
-        point = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)       # Convert the 3D point to spherical coordinates
+        point, _ = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)       # Convert the 3D point to spherical coordinates
         r = np.sqrt(point[0][0][0]**2 + point[0][0][1]**2 + point[0][0][2]**2)
         theta = np.arctan2(point[0][0][1], point[0][0][0])
         phi = np.arccos(point[0][0][2] / r)
