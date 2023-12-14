@@ -17,7 +17,8 @@ class Camera:
             self.camera = Picamera2()
             #pprint(self.camera.sensor_modes)   #printer information ud
             #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
-            config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'RGB888', 'size': (1920, 1080), })
+            config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),
+                                                            main={'format': 'RGB888', 'size': (1920, 1080), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
@@ -45,7 +46,7 @@ class Camera:
         return self.frame
 
     def get_gray_frame(self):
-        gray_frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+        gray_frame = cv2.cvtColor(self.frame, cv2.COLOR_RGB2GRAY)
         return gray_frame
 
     def get_thresh_frame(self):
