@@ -159,7 +159,7 @@ class Detector:
         # Finding position of all contours
         if len(mask_contour) != 0:
             for mask_contour in mask_contour:
-                if cv2.contourArea(mask_contour) > 100
+                if cv2.contourArea(mask_contour) > 100:
                     ((x, y), radius) = cv2.minEnclosingCircle(max_contour)
                     
 
