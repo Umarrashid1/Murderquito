@@ -136,8 +136,8 @@ class Detector:
         return bbox
 
     def find_red(self, frame):
-        lower = np.array([0, 0, 200])
-        upper = np.array([255, 50, 50])
+        lower = np.array([230, 245, 220])
+        upper = np.array([255, 255, 255])
 
         # Creating a mask to find red color
         mask = cv2.inRange(frame, lower, upper)
@@ -147,22 +147,23 @@ class Detector:
         # Find contours in the binary image
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+        frame_with_contours = frame.copy()
 
-        if contours:
-            # Fit ellipse to the largest contour
-            largest_contour = max(contours, key=cv2.contourArea)
-            ellipse = cv2.fitEllipse(largest_contour)
-            frame_with_contours = frame.copy()
-            cv2.drawContours(frame_with_contours, [largest_contour], -1, (0, 255, 0),
-                             2)
+        for contour in contours:
+            # Approximate the polygonal curve of each contour
+            epsilon = 0.02 * cv2.arcLength(contour, True)
+            approx_polygon = cv2.approxPolyDP(contour, epsilon, True)
 
-            # Save the image with contours
-            cv2.imwrite("contours_image.jpg", frame_with_contours)
+            cv2.drawContours(frame_with_contours, [approx_polygon], -1, (0, 255, 0), 2)
 
-            # Extract the ellipse information
-            center_coordinates, axes, angle = ellipse
+            # Extract the ellipse information for each contour
+            center_coordinates, axes, angle = cv2.fitEllipse(approx_polygon)
             print("Center:", center_coordinates)
 
+        # Save the image with contours
+        cv2.imwrite("contours_image.jpg", frame_with_contours)
+
+        if contours:
             return True
         else:
             print("No red ellipse found")
