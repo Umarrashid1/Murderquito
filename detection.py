@@ -137,6 +137,19 @@ class Detector:
 
     def find_red(self, frame):
         reference = cv2.imread("ref_frame.jpg")
+        frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+
+        
+        #noget jeg lige tester:
+        # define range wanted color in HSV
+        #lower_val_hsv_1 = np.array([0,42,0]) 
+        #upper_val_hsv_1 = np.array([7,255,255]) 
+        #lower_val_hsv_2 = np.array([0,42,0]) 
+        #upper_val_hsv_2 = np.array([7,255,255]) 
+
+        # Threshold the HSV image - any green color will show up as white
+        #mask_hsv = cv2.inRange(frame_hsv, lower_val_hsv_1, upper_val_hsv_2)
+        #cv2.imwrite("testimg12133.jpg", mask_hsv)
         """
         # Specifying the color that we want to detect
         lower = np.array([0, 250, 220])
@@ -153,41 +166,36 @@ class Detector:
         mask = cv2.inRange(frame, lower, upper)
         cv2.imwrite("testimg1213.jpg", mask)
 
-        """
-        frame_hsv_1 = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        frame_hsv_2 = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
-        """
-        #cv2.imwrite("testimg1213.jpg", frame_hsv_1)
+        blurred = cv2.GaussianBlur(mask, (5, 5), 2)
 
-        #det her virker ikke, men bliver til at kigge på
-        """
-        s_min = (0, 30, 220)
-        s_max = (10, 240, 255)
-        mask111 = cv2.inRange(frame_hsv_1, s_min, s_max)
-        s_min = (170, 30, 220)
-        s_max = (180, 240, 255)
-        mask222 = cv2.inRange(frame_hsv_2, s_min, s_max)
-        cv2.imwrite("testimg222.jpg", mask222)
-        cv2.imwrite("testimg111.jpg", mask111)
-        """
+        # Use Hough Circle Transform to detect circles
+        circles = cv2.HoughCircles(
+            blurred,
+            cv2.HOUGH_GRADIENT,
+            dp=1,  # 1 means the accumulator has the same resolution as the input image
+            minDist=80,  # Minimum distance between the centers of detected circles
+            param1=70,  # Higher value means less sensitive edge detection
+            param2=70,  # Higher value allows detection with lower confidence
+            minRadius=1,  # Minimum radius of detected circles
+            maxRadius=90  # Maximum radius of detected circles
+        )
 
-        #forsøg med subtract, virker på hel plain baggrund
-        """
-        mask = cv2.subtract(frame, reference)
-        cv2.imwrite("testimg1.jpg", mask)
-        gray_mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
-        blurred = cv2.GaussianBlur(gray_mask, (7, 7), 2)
-        mask2 = cv2.threshold(blurred, 35, 255, cv2.THRESH_BINARY_INV)[1]
-        mask22 = cv2.bitwise_not(mask2)
-        """
-        cv2.imwrite("testimg.jpg", mask22)
-        mask_contours, hierarchy = cv2.findContours(mask22, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if circles is not None:
+            # Convert the (x, y) coordinates and radius of the circles to integers
+            circles = np.round(circles[0, :]).astype("int")
+
+            # Return the bounding box of the first detected circle
+            x, y, radius = circles[0]
+            bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
+
+        
+        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Find the position of the contour and draw a circle
         if len(mask_contours) != 0:
             for mask_contour in mask_contours:
                 # Defining the least amount of pixels, I want it to register.
-                if cv2.contourArea(mask_contour) > 2:
+                if cv2.contourArea(mask_contour) > 40:
                     # Setting up the circle
                     (x, y), radius = cv2.minEnclosingCircle(mask_contour)
                     center = (int(x), int(y))
