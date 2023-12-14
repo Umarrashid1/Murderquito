@@ -136,10 +136,11 @@ class Detector:
         return bbox
 
     def find_red (self, frame):
-        #reference = cv2.imread("ref_frame.jpg")
+        reference = cv2.imread("ref_frame.jpg")
+
 
         # join my masks
-        mask = mask0 + mask1
+        mask = reference + frame
 
         # set my output img to zero everywhere except my mask
         output_img = frame.copy()
