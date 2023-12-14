@@ -50,7 +50,7 @@ class CameraCalibrator:  #TODO unfinished
         self.find_chess_corners()
         self.calibrate_camera()
         #self.undistort()
-        return self.get_calibration_data
+        #return self.get_calibration_data
 
     def reverse_project(self):
         pixel = np.array([[300, 200, 1]], dtype=np.float32)
