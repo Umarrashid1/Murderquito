@@ -24,6 +24,7 @@ servo_c = Servo_controller()
 servo_cal = ServoCalibrator(cam, servo_c)
 cam_cal = CameraCalibrator(cam.get_gray_frame())
 cal_matrix, cal_dist = cam_cal.run_calibrations()
+cam_cal.reverse_project()
 print("21332232323232323232323")
 laser.toggle_laser()
 chosen_servo = 'y' #servox virker ikke. ved vinkelret bevæger den sig ikke ind i billedet.
