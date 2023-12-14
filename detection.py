@@ -139,8 +139,8 @@ class Detector:
         reference = cv2.imread("ref_frame.jpg")
         gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        thresh_ref = cv2.threshold(self.gray_ref, 100, 1, cv2.THRESH_BINARY_INV)[1]
-        thresh_frame = cv2.threshold(self.gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
+        thresh_ref = cv2.threshold(gray_ref, 100, 1, cv2.THRESH_BINARY_INV)[1]
+        thresh_frame = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
         # join my masks
         mask = cv2.bitwise_xor(thresh_ref, thresh_frame)
 
