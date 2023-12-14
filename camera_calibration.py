@@ -37,7 +37,7 @@ class CameraCalibrator:  #TODO unfinished
         self.objpoints = [] # 3d point in real world space. project down to 2d plane. lineær algebra
         self.imgpoints = [] # 2d points in image plane.
 
-    def create_arrays():
+    def create_arrays(self):
         objpoints = self.objpoints
         imgpoints = self.imgpoints
         A = []
@@ -67,7 +67,9 @@ class CameraCalibrator:  #TODO unfinished
         #self.undistort()
         #return self.get_calibration_data
         
-        def create_arrays(objpoints, imgpoints):
+        def create_arrays(self):
+            objpoints = self.objpoints
+            imgpoints = self.imgpoints
             A = []
             B = []
             for i in range(1, len(objpoints)//2 + 1):
