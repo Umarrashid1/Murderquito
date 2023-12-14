@@ -196,8 +196,8 @@ class Detector:
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Specify the minimum and maximum mass thresholds
-        min_mass_threshold = 30
-        max_mass_threshold = 100
+        min_mass_threshold = 20
+        max_mass_threshold = 200
 
         # Process each contour
         for contour in mask_contours:
