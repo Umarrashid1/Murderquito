@@ -150,13 +150,14 @@ class Detector:
 
         # Creating Color range
         mask = cv2.inRange(frame_con, lower, upper)
+        cv2.imwrite("testingJANICE.jpg", mask)
 
         mask_contour, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Finding position of all contours
         if len(mask_contour) != 0:
             for mask_contour in mask_contour:
-                if cv2.contourArea(mask_contour) > 10:
+                if cv2.contourArea(mask_contour) < 20:
                     x, y, w, h = cv2.boundingRect(mask_contour)
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 3)  # drawing rectangle
                     return x, y
