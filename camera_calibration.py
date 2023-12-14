@@ -83,6 +83,9 @@ class CameraCalibrator:  #TODO unfinished
     
 
     def calibrate_camera(self):
+        print("objpoints:", self.objpoints)
+        print("imgpoints", self.imgpoints)
+        
         self.ret, self.camera_matrix, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, self.frame_size, None, None)
         print("Camera matrix")
         print(self.camera_matrix)
