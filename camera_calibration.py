@@ -52,6 +52,20 @@ class CameraCalibrator:  #TODO unfinished
         #self.undistort()
         return self.get_calibration_data()
 
+    def reverse_project
+        pixel = np.array([[300, 200]], dtype=np.float32)
+        point = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist, flags=cv2.SOLVEPNP_UPNP)[0][0][0]
+        # Convert the 3D point to spherical coordinates
+        r = np.sqrt(point[0]**2 + point[1]**2 + point[2]**2)
+        theta = np.arctan2(point[1], point[0])
+        phi = np.arccos(point[2] / r)
+
+        # Print the spherical coordinates
+        print("Spherical coordinates:")
+        print("Radius:", r)
+        print("Azimuth:", theta)
+        print("Elevation:", phi)
+
 
     def find_chess_corners(self):  #TODO: general
         # https://calib.io/blogs/knowledge-base/calibration-patterns-explained
@@ -68,7 +82,10 @@ class CameraCalibrator:  #TODO unfinished
 
     def calibrate_camera(self):
         self.ret, self.camera_matrix, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, self.frame_size, None, None)
-
+        print("Camera matrix")
+        print(self.camera_matrix)
+        print("Distortion coeff")
+        print(self.dist)
         # Save the camera calibration result for later use
         pickle.dump((self.camera_matrix, self.dist), open( "calibration.pkl", "wb" ))
         pickle.dump(self.camera_matrix, open( "camera_matrix.pkl", "wb" ))
