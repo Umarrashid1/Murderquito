@@ -5,7 +5,7 @@ import glob
 #from camera import Camera
 import numpy as np
 #from servo import Servo
-from detection import Detection
+#from detection import Detector
 
 
 class CameraCalibrator:  #TODO unfinished
@@ -70,20 +70,19 @@ class CameraCalibrator:  #TODO unfinished
         self.ret, self.camera_matrix, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints, self.frame_size, None, None)
 
         # Save the camera calibration result for later use
-        pickle.dump((self.camera_matrix, self.dist), open( "calibration\calibration.pkl", "wb" ))
-        pickle.dump(self.camera_matrix, open( "calibration\camera_matrix.pkl", "wb" ))
-        pickle.dump(self.dist, open( "calibration\dist.pkl", "wb" ))
+        pickle.dump((self.camera_matrix, self.dist), open( "calibration.pkl", "wb" ))
+        pickle.dump(self.camera_matrix, open( "camera_matrix.pkl", "wb" ))
+        pickle.dump(self.dist, open( "dist.pkl", "wb" ))
         
         
 
 
-    def undistort(self, choice = None): #TODO: undersøg hvorfor man bruger de her billeder 
-        img = cv2.imread('calibration\img-chessboard-02.png')
-        h,  w = img.shape[:2]
+    def undistort(self, frame, choice = None): #TODO: undersøg hvorfor man bruger de her billeder 
+        h,  w = frame.shape[:2]
         newcamera_matrix, roi = cv2.getOptimalNewCameraMatrix(self.camera_matrix, self.dist, (w,h), 1, (w,h))
 
         # Undistort
-        dst1 = cv2.undistort(img, self.camera_matrix, self.dist, None, newcamera_matrix)
+        dst1 = cv2.undistort(frame, self.camera_matrix, self.dist, None, newcamera_matrix)
         
         # crop image
         x, y, w, h = roi
@@ -93,7 +92,7 @@ class CameraCalibrator:  #TODO unfinished
             return dst1, dst1_crop
         # Undistort with Remapping
         mapx, mapy = cv2.initUndistortRectifyMap(self.camera_matrix, self.dist, None, newcamera_matrix, (w,h), 5)
-        dst2 = cv2.remap(img, mapx, mapy, cv2.INTER_LINEAR)
+        dst2 = cv2.remap(frame, mapx, mapy, cv2.INTER_LINEAR)
 
         # crop the image
         x, y, w, h = roi
