@@ -222,10 +222,10 @@ class ServoCalibrator:
         servo_c.make_laser_perpendicular()
         las_coords =  det.find_red(frame)
         #hvis laseren er lige på, så er afstand fra midten til laserdot, det samme som kamera til laser
-        #pixel_dist = lascoords - self.center
+        pixel_dist = las_coords - self.center
 
-            #dot_offset_x = abs((self.px_width/2)- coords[0]) #abs for kun at få positv værdi
-            #px_to_cm_width_scale = (dot_offset_x / self.cam_to_pan_dist)
+        px_to_cm_width_scale = (pixel_dist[0] / self.cam_to_pan_dist)
+        px_to_cm_height_scale = (pixel_dist[0] /self.cam_to_tilt_dist)
         
         
         #if servo_c.pan_servo is Servo and servo_c.pan_servo.angle == 100:

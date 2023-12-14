@@ -136,51 +136,28 @@ class Detector:
         return bbox
 
     def find_red(self, frame):
-        #reference = cv2.imread("ref_frame.jpg")
-        #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
+        lower = np.array([0, 0, 200])
+        upper = np.array([50, 50, 255])
 
-        
-        #noget jeg lige tester:
-        # define range wanted color in HSV
-        #lower_val_hsv_1 = np.array([0,42,0]) 
-        #upper_val_hsv_1 = np.array([7,255,255]) 
-        #lower_val_hsv_2 = np.array([0,42,0]) 
-        #upper_val_hsv_2 = np.array([7,255,255]) 
-
-        # Threshold the HSV image - any green color will show up as white
-        #mask_hsv = cv2.inRange(frame_hsv, lower_val_hsv_1, upper_val_hsv_2)
-        #cv2.imwrite("testimg12133.jpg", mask_hsv)
-
-        lower = np.array([230, 245, 220])
-        upper = np.array([255, 255, 255])
-
-        # Creating a mask to find our color
+        # Creating a mask to find red color
         mask = cv2.inRange(frame, lower, upper)
-        cv2.imwrite("testimg1213.jpg", mask)
 
-        ellipses = cv2.HoughEllipses(
-            mask,
-            cv2.HOUGH_GRADIENT,
-            dp=1,  # 1 means the accumulator has the same resolution as the input image
-            minDist=80,  # Minimum distance between the centers of detected ellipses
-            param1=30,  # Lower value means less sensitive edge detection
-            param2=30,  #  Lower value allows detection with lower confidence
-            minRadius=1,  # Minimum radius of detected ellipses
-            maxRadius=90  # Maximum radius of detected ellipses
-        )
+        # Find contours in the binary image
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        if ellipses is not None:
-            # Extract the ellipses information
-            ellipses = np.round(ellipses[0, :]).astype("int")
+        if contours:
+            # Fit ellipse to the largest contour
+            largest_contour = max(contours, key=cv2.contourArea)
+            ellipse = cv2.fitEllipse(largest_contour)
 
-            # Return the center coordinates and axes lengths of the first detected ellipse
-            x, y = ellipses[0][0], ellipses[0][1]
-            major_axis, minor_axis = ellipses[0][2], ellipses[0][3]
-            center_coordinates = (x, y)
-            print(center_coordinates)
+            # Extract the ellipse information
+            center_coordinates, axes, angle = ellipse
+            print("Center:", center_coordinates)
+
+            return True
         else:
-            print("no red dot found")
-        return False
+            print("No red ellipse found")
+            return False
 
 
 
