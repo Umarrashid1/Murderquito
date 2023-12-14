@@ -146,10 +146,13 @@ class Detector:
 
         # Setting the upper and lower bound
         lower = np.array([155, 0, 20])
-        upper = np.array([180, 250,255])
+        upper = np.array([180, 250, 255])
 
+        # Converting frame pixel to HSV format
         frame_con = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        #
+
+        # Creating Color range
+        mask = cv2.inRange(frame_con, lower, upper)
 
         # set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
@@ -169,9 +172,9 @@ class Detector:
 
     def find_red(self, frame):
         
-            # Adjust the color range for red
-        lower = np.array([0, 50, 50])
-        upper = np.array([10, 255, 255])
+        # Adjust the color range for red
+        lower = np.array([0, 250, 220])
+        upper = np.array([255, 255, 255])
 
         # Create a binary mask
         mask = cv2.inRange(frame, lower, upper)
@@ -180,7 +183,7 @@ class Detector:
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Specify the minimum and maximum mass thresholds
-        min_mass_threshold = 10
+        min_mass_threshold = 5
         max_mass_threshold = 1000
 
         # Process each contour
@@ -197,7 +200,8 @@ class Detector:
                 print("Center of mass is: ", cx, ",", cy)
                 return cx, cy
             else:
-                return False
+                print("Nothing was found mate")
+                return 0, 0
 
 
 
