@@ -43,6 +43,7 @@ laser.toggle_laser()
 #time.sleep(120)
 cam_cal = CameraCalibrator(cam.get_frame())
 cal_matrix, cal_dist = cam_cal.run_calibrations()
+cam_cal.reverse_project()
 #Vil gerne se hvordan forskellen er på dataen og billederne, når matricen og undistort bruges
 
 '''

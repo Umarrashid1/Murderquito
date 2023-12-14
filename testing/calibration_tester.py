@@ -35,5 +35,6 @@ img_cal = ImageCalibrator(gray_frame)
 img_cal.run_calibrations()
 img_cal.show_corners()
 img_cal.undistort()
+img_cal.
 
 
