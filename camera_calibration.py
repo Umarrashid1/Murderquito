@@ -10,7 +10,7 @@ import numpy as np
 
 class CameraCalibrator:  #TODO unfinished
     # NOTE: https://youtu.be/3h7wgR5fYik?si=Ij60L5DQ3I3LYzy4
-    chessboard_size = (9, 6) # number of corners in width and height
+    chessboard_size = (10, 8) # number of corners in width and height
     
     # termination criteria til at finde præcise hjørner med subpixels
     #           ved ikke præcist hvad det er 
