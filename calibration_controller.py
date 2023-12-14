@@ -22,7 +22,9 @@ cv2.imwrite("ref_frame.jpg", cam.get_frame())
 det = Detector(cam)
 servo_c = Servo_controller()
 servo_cal = ServoCalibrator(cam, servo_c)
-laser = Laser()
+cam_cal = CameraCalibrator(cam.get_gray_frame())
+cal_matrix, cal_dist = cam_cal.run_calibrations()
+print("21332232323232323232323")
 laser.toggle_laser()
 chosen_servo = 'y' #servox virker ikke. ved vinkelret bevæger den sig ikke ind i billedet.
 if chosen_servo == 'x': 
@@ -38,7 +40,6 @@ identical, distance2 = servo_cal.calc_dist_from_centerangle(servo_c)
 
 laser.toggle_laser()
 #time.sleep(120)
-ventehygge = input("wwwwaaaa")
 cam_cal = CameraCalibrator(cam.get_frame())
 cal_matrix, cal_dist = cam_cal.run_calibrations()
 #Vil gerne se hvordan forskellen er på dataen og billederne, når matricen og undistort bruges
