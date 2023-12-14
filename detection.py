@@ -154,7 +154,15 @@ class Detector:
         # Creating Color range
         mask = cv2.inRange(frame_con, lower, upper)
 
-        
+        mask_contour, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Finding position of all contours
+        if len(mask_contour) != 0:
+            for mask_contour in mask_contour:
+                if cv2.contourArea(mask_contour) > 100
+                    ((x, y), radius) = cv2.minEnclosingCircle(max_contour)
+                    
+
 
         """# set my output img to zero everywhere except my mask
         cv2.imwrite("testimg1213.jpg", mask)
@@ -173,7 +181,6 @@ class Detector:
             return cx, cy"""
 
     def find_red(self, frame):
-        
         # Adjust the color range for red
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
@@ -200,11 +207,18 @@ class Detector:
                 cx = int(mass["m10"] / mass["m00"])
                 cy = int(mass["m01"] / mass["m00"])
 
-                print("Center of mass is: ", cx, ",", cy)
-                return cx, cy
-            else:
-                print("Nothing was found mate")
-                return 0, 0
+                # Draw bounding box around the contour
+                x, y, w, h = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+                # Display mass and center of mass
+                cv2.putText(frame, f'Mass: {mass["m00"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(frame, f'Center: ({cx}, {cy})', (x, y - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+        # Show the frame with bounding boxes
+        cv2.imshow("Frame with Bounding Boxes", frame)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
 
 
