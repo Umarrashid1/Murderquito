@@ -155,7 +155,6 @@ class Detector:
         upper = np.array([255, 255, 255])
 
         # Creating a mask to find our color
-        img_conv = cv2.cvtColor(frame, cv2.Color_BGR2HSV)
         mask = cv2.inRange(frame, lower, upper)
         cv2.imwrite("testimg1213.jpg", mask)
 
