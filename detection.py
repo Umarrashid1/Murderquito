@@ -160,11 +160,10 @@ class Detector:
                 min_to_max_contour = max(mask_contour, key=cv2.contourArea)
                 if min_to_max_contour < 9 < 20:
                     ((x, y), radius) = cv2.minEnclosingCircle(min_to_max_contour)
+                    cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
+                    cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                (0, 0, 255), 2)
                     return int(x), int(y), int(radius), min_to_max_contour
-
-        cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
-        cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                    (0, 0, 255), 2)
 
                     
 
