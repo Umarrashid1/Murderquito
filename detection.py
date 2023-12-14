@@ -154,18 +154,14 @@ class Detector:
         mask = mask0 + mask1
 
         # set my output img to zero everywhere except my mask
-        output_img = img.copy()
+        output_img = frame.copy()
         output_img[np.where(mask == 0)] = 0
-
-        # or your HSV image, which I *believe* is what you want
-        output_hsv = img_hsv.copy()
-        output_hsv[np.where(mask == 0)] = 0
         cv2.imwrite("testimg1213.jpg", mask)
-        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.imwrite("testimg1212.jpg", output_img)
+        mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         for contour in mask_contours:
             # Calculate the moments of the contour
             mass = cv2.moments(contour)
-
             # Calculate the center of mass of the contour
             if mass["m00"] != 0:
                 cx = int(mass["m10"] / mass["m00"])
