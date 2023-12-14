@@ -57,6 +57,7 @@ class CameraCalibrator:  #TODO unfinished
         cy = 200
         pixel = np.array([[cx, cy, 1]], dtype=np.float32)
         pixel = pixel.reshape((1, 3)) # Reshape pixel to (1, 3)
+        print("dist", self.dist)
         point, _ = cv2.projectPoints(pixel, np.zeros((3, 1)), np.zeros((3, 1)), self.camera_matrix, self.dist)       # Convert the 3D point to spherical coordinates
         print ("point:", point)
         a = point[0][0] - self.tvecs
