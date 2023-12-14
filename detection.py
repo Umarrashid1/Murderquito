@@ -142,13 +142,22 @@ class Detector:
         # Creating a mask to find red color
         mask = cv2.inRange(frame, lower, upper)
 
+        cv2.imwrite("testimg1213.jpg", mask)
+
         # Find contours in the binary image
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
 
         if contours:
             # Fit ellipse to the largest contour
             largest_contour = max(contours, key=cv2.contourArea)
             ellipse = cv2.fitEllipse(largest_contour)
+            frame_with_contours = frame.copy()
+            cv2.drawContours(frame_with_contours, [largest_contour], -1, (0, 255, 0),
+                             2)  
+
+            # Save the image with contours
+            cv2.imwrite("contours_image.jpg", frame_with_contours)
 
             # Extract the ellipse information
             center_coordinates, axes, angle = ellipse
