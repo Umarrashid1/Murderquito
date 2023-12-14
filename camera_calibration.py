@@ -18,7 +18,7 @@ class CameraCalibrator:  #TODO unfinished
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
     # (x, y, gray_scale val)
-    objp = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
+    objp = np.zeros((chessboard_size[0] * chessboard_size[1], 2), np.float32)
     objp[:, :2] = np.mgrid[0: chessboard_size[0], 0: chessboard_size[1]].T.reshape(-1, 2)  
 
     size_of_chessboard_squares_mm = 24.1 #actual physical size of squares on the printout. measure accurately!
