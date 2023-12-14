@@ -135,7 +135,7 @@ class Detector:
 
         return bbox
 
-    def find_red (self, frame):
+    def find_red(self, frame):
         #reference = cv2.imread("ref_frame.jpg")
         #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
@@ -150,17 +150,6 @@ class Detector:
         # Threshold the HSV image - any green color will show up as white
         #mask_hsv = cv2.inRange(frame_hsv, lower_val_hsv_1, upper_val_hsv_2)
         #cv2.imwrite("testimg12133.jpg", mask_hsv)
-        """
-        # Specifying the color that we want to detect
-        lower = np.array([0, 250, 220])
-        upper = np.array([255, 255, 255])
-        # Creating a mask to find our color
-        frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
-        mask = cv2.inRange(frame_rgb, lower, upper)
-                    cv2.imwrite("imgtestdet1.jpg", frame_rgb)
-                    cv2.imwrite("imgtestdet2.jpg", mask)
-        # Finding contours in mask image
-        """
 
         lower = np.array([230, 245, 220])
         upper = np.array([255, 255, 255])
@@ -170,41 +159,34 @@ class Detector:
         mask = cv2.inRange(frame, lower, upper)
         cv2.imwrite("testimg1213.jpg", mask)
 
-        """ Use Hough Circle Transform to detect circles
-        circles = cv2.HoughCircles(
-            blurred,
+        ellipses = cv2.HoughEllipses(
+            mask,
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
-            minDist=80,  # Minimum distance between the centers of detected circles
-            param1=70,  # Higher value means less sensitive edge detection
-            param2=70,  # Higher value allows detection with lower confidence
-            minRadius=1,  # Minimum radius of detected circles
-            maxRadius=90  # Maximum radius of detected circles
+            minDist=80,  # Minimum distance between the centers of detected ellipses
+            param1=30,  # Lower value means less sensitive edge detection
+            param2=30,  #  Lower value allows detection with lower confidence
+            minRadius=1,  # Minimum radius of detected ellipses
+            maxRadius=90  # Maximum radius of detected ellipses
         )
 
-        #if circles is not None:
-            # Convert the (x, y) coordinates and radius of the circles to integers
-            circles = np.round(circles[0, :]).astype("int")
+        if ellipses is not None:
+            # Extract the ellipses information
+            ellipses = np.round(ellipses[0, :]).astype("int")
 
-            # Return the bounding box of the first detected circle
-            x, y, radius = circles[0]
-            bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
-        """
-
-        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Find the position of the contour and draw a circle
-        if len(mask_contours) != 0:
-            for mask_contour in mask_contours:
-                # Defining the least amount of pixels, I want it to register.
-                if cv2.contourArea(mask_contour) > 40:
-                    # Setting up the circle
-                    (x, y), radius = cv2.minEnclosingCircle(mask_contour)
-                    center = (int(x), int(y))
-                    print(center)
-                    radius = int(radius)
-                    return center
+            # Return the center coordinates and axes lengths of the first detected ellipse
+            x, y = ellipses[0][0], ellipses[0][1]
+            major_axis, minor_axis = ellipses[0][2], ellipses[0][3]
+            center_coordinates = (x, y)
+            print(center_coordinates)
+        else:
+            print("no red dot found")
         return False
+
+
+
+        # mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
 
     def find_person(self, cam):
         bounding_boxes = []
