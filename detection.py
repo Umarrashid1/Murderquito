@@ -12,6 +12,8 @@ class Detector:
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
+        self.bg_frame = cam.get_frame()
+
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
@@ -133,14 +135,24 @@ class Detector:
         return bbox
 
     def find_red (self, frame):
-        """reference = cv2.imread("ref_frame.jpg")
-        gray_ref = cv2.cvtColor(reference, cv2.COLOR_RGB2GRAY)
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        thresh_ref = cv2.threshold(gray_ref, 100, 1, cv2.THRESH_BINARY_INV)[1]
-        thresh_frame = cv2.threshold(gray_frame, 100, 1, cv2.THRESH_BINARY_INV)[1]
-        # join my masks
-        mask = cv2.bitwise_xor(thresh_ref, thresh_frame)"""
+        gray_bg = cv2.cvtColor(self.bg_frame, cv2.COLOR_RGB2GRAY)
+        sub = cv2.subtract(gray_frame, gray_bg)
+        cv2.imwrite("sub.jpg", sub)
+        thresh = cv2.threshold(sub, 30, 255, cv2.THRESH_BINARY)[1]
+        cv2.imwrite("sub22.jpg", thresh)
 
+        mask_contour, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(sub, mask_contour, -1, (0,255,0), 3)
+        cv2.imwrite("cunt.jpg", sub)
+
+        if len(mask_contour) != 0:
+            for mask_contour in mask_contour:
+                    ((x, y), radius) = cv2.minEnclosingCircle(mask_contour)
+                    red_las_center = (int(x), int(y))
+                    print(red_las_center)
+                    return int(x), int(y)
+        '''
         # Setting the upper and lower bound
         lower = np.array([155, 0, 20])
         upper = np.array([180, 250, 255])
@@ -162,8 +174,8 @@ class Detector:
                     cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
                     cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                 (0, 0, 255), 2)
-                    return int(x), int(y), int(radius), mask_contour
-
+                    return int(x), int(y),
+        '''
                     
 
     """# set my output img to zero everywhere except my mask

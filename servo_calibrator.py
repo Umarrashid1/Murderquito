@@ -18,18 +18,19 @@ class ServoCalibrator:
     cam_to_wall = 0
 
     def __init__(self, cam=Camera, servo_c=Servo_controller) -> None:
-        self.cam_to_tilt_dist = 43
-        self.cam_to_pan_dist = 46
+        self.cam_to_tilt_dist = 4.383 #hevet fra CAD
+        self.cam_to_pan_dist = 4.904 #hevet fra CAD
+        self.cam_to_pan_depth = 2.625 #hevet fra CAD
         self.dist_cam_axis_origin = math.sqrt(
             self.cam_to_tilt_dist * self.cam_to_tilt_dist + self.cam_to_pan_dist * self.cam_to_pan_dist)
         self.px_height, self.px_width, self.channels = cam.frame.shape
         self.center = (self.px_width / 2, self.px_height / 2)
         self.las_perp_coords = None
 
-    def prepare_for_calibration(self, det, frame, servo_c, choice=None):
+    def prepare_for_calibration(self, det, cam, servo_c, choice=None):
         self.pan_angle, self.tilt_angle = servo_c.make_laser_perpendicular()
         if self.las_perp_coords is None:
-            self.las_perp_coords = det.find_red(frame)
+            self.las_perp_coords = det.find_red(cam.run())
         if (choice is None or choice == 'x'):
             servo_c.pan_servo.move(102)
             self.pan_angle = 102
@@ -53,6 +54,7 @@ class ServoCalibrator:
             las_is_centered = False
             while las_is_centered is False:
                 frame = cam.run()
+                print(center)
                 las_coords = det.find_red(frame)
                 if las_coords is False:
                     print("Error: no laser found!")
@@ -170,9 +172,8 @@ class ServoCalibrator:
     def calc_centerangle_from_distance(self, det, servo_c, dist_to_wall):
         # Given α(angle of corner at wall): β(angle of laser corner) = 90 - α
         # β = arctan(b / a)     OR     β = arccot(a / b)
-        # self.laser_to_center_angle_origin = 90 - math.atan(self.cam_to_wall/self.dist_cam_axis_origin)
-        self.centered_tilt_angle = math.atan(dist_to_wall / self.cam_to_tilt_dist)  # + 90 + servo_c.tilt.angle_offset
-        self.centered_pan_angle = math.atan(dist_to_wall / self.cam_to_pan_dist)  # + 90 + servo_c.pan.angle_offset
+        self.centered_pan_angle = math.degrees(math.atan((dist_to_wall + self.cam_to_pan_depth) / self.cam_to_pan_dist))  + 100 # servo_c.pan.angle_offset
+        self.centered_tilt_angle = math.degrees(math.atan((dist_to_wall + self.cam_to_pan_depth) / self.cam_to_tilt_dist)) + 128  # + 90 + servo_c.tilt.angle_offset
         return (self.centered_pan_angle, self.centered_tilt_angle)
 
     def calc_dist_from_centerangle(self, servo_c=Servo_controller, choice=None):
@@ -184,19 +185,15 @@ class ServoCalibrator:
         tilt_angle = tilt_angle - 90
         pan_angle = 90 - pan_angle
         tilt_angle = 90 - tilt_angle
-        print(pan_angle)
-        print(tilt_angle)
-        print('hhhhhhhhhmmmmmmmmm')
-        # b = a × tan(β)
-        cam_to_wall_x = self.cam_to_pan_dist * (math.tan(tilt_angle))
-        cam_to_wall_y = self.cam_to_tilt_dist * (math.tan(tilt_angle))
+        # b = a × tan(β) #men tag højde for at vinklen er påvirket af dybdeforskellen mellem kamera og origo. bare træk den fra
+        cam_to_wall_x = self.cam_to_pan_dist * (math.tan(math.radians(pan_angle))) - self.cam_to_pan_depth
+        cam_to_wall_y = self.cam_to_tilt_dist * (math.tan(math.radians(tilt_angle))) - self.cam_to_pan_depth
         print(cam_to_wall_x)
         print(cam_to_wall_y)
 
+
         # cam_to_wall_x = self.cam_to_tilt_dist * (math.tan(tilt_angle))
         # cam_to_wall_y = self.cam_to_pan_dist  * (math.tan(pan_angle))
-        return cam_to_wall_x, cam_to_wall_y
-
         # tjek om de giver den samme distance til væggen. returnerer om de giver den samme distance, og så en distance
         if cam_to_wall_x == cam_to_wall_y:
             self.cam_to_wall = cam_to_wall_x
@@ -209,19 +206,17 @@ class ServoCalibrator:
             self.cam_to_wall = (cam_to_wall_x + cam_to_wall_y / 2)
             return False, (cam_to_wall_x + cam_to_wall_y / 2)
 
-    def calc_dim_conv_fact_perpendicular_laser(self, frame, det=Detector, servo_c=Servo_controller):
-
-        servo_c.make_laser_perpendicular()
-        las_coords = det.find_red(frame)
+    def calc_dim_conv_fact_perpendicular_laser(self):
         # hvis laseren er lige på, så er afstand fra midten til laserdot, det samme som kamera til laser
-        self.pixel_dist = las_coords - self.center
+        pixel_dist =  self.las_perp_coords - self.center
 
-        self.px_to_cm_width_scale = (self.pixel_dist[0] / self.cam_to_pan_dist)
-        self.px_to_cm_height_scale = (self.pixel_dist[0] / self.cam_to_tilt_dist)
+        self.px_to_cm_width_scale = (pixel_dist[0] / self.cam_to_pan_dist)
+        self.px_to_cm_height_scale = (pixel_dist[0] / self.cam_to_tilt_dist)
 
-        return self.px_to_cm_height_scale, self.px_to_cm_width_scale
+        return  self.px_to_cm_width_scale, self.px_to_cm_height_scale
 
     def get_angle_for_coords(self, coords):
+        #skal nok omskrives for læsbarhed of effekt
         pan_angle_is_pos = None
         tilt_angle_is_pos = None
         if coords[0] > self.las_perp_coords[0]:
@@ -249,16 +244,18 @@ class ServoCalibrator:
         if real_pan_dist > 0:
             a = real_pan_dist
             b = self.cam_to_wall
-            real_pan_angle = math.atanh((a / b))
+            real_pan_angle = math.degrees(math.atanh((a / b)))
+            if pan_angle_is_pos is False:
+                real_pan_angle + real_pan_angle * -1
         else: real_pan_angle = False
         if real_tilt_dist > 0:
             a = real_tilt_dist
             b = self.cam_to_wall
-            real_tilt_angle = math.atanh((a / b))
+            real_tilt_angle = math.degrees(math.atanh((a / b)))
             if tilt_angle_is_pos is False:
-                real_tilt_angle * -1
+                real_tilt_angle = real_tilt_angle * -1
         else: real_tilt_angle = False
 
         #returnerer vinkler som skal lægges / trækkes fra perpendicular angle: ((vinkel, True for læg til, False træk fra), (tilt-vinkel)
-        return (real_pan_angle, pan_angle_is_pos) , (real_tilt_angle, tilt_angle_is_pos)
+        return (real_pan_angle , real_tilt_angle)
 
