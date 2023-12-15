@@ -13,6 +13,6 @@ from servo import Servo
 io = pigpio.pi()
 servo_x = Servo("x", io)
 for i in range(180):
-    servo_x.move(i)
+    servo_x.move(0)
     print(i)
     time.sleep(0.5)

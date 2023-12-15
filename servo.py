@@ -8,6 +8,11 @@ class Servo:
     pwm_hz = 50    # Frequency
     angle = 0
     axis = 0
+    BottomAngles  = [-26.054 , -19.63 , -12.6 , -5.29 , 2.3 , 9.98 , 17.27 , 24.06]
+    BottomSignals = [139, 132.5, 125, 117.5, 108, 100.5, 91.5, 85]
+    TopAngles     = [6.21 , 8.12 , 12.39 , 23.24 , 36.3]
+    TopSignals    = [62.75 , 61 , 57.5 , 45 , 33]
+    
     def __init__(self, axis, io):
         self.axis = axis
         if axis == "x":
@@ -27,9 +32,9 @@ class Servo:
     def move(self, angle):
         self.angle = angle
         if self.axis == "x":
-            self.set_pwm(self.angle_pwm_conv(angle + 100))
+            self.set_pwm(self.angle_pwm_conv(angle))
         else:
-            self.set_pwm(self.angle_pwm_conv(angle + 128))
+            self.set_pwm(self.angle_pwm_conv(angle))
 
 
     def angle_pwm_conv(self, angle):
