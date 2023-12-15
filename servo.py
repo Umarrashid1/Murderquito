@@ -27,7 +27,7 @@ class Servo:
     def move(self, angle):
         self.angle = angle
         if self.axis == "x":
-            self.set_pwm(self.angle_pwm_conv(angle + 128))
+            self.set_pwm(self.angle_pwm_conv(angle))
         else:
             self.set_pwm(self.angle_pwm_conv(angle + 128))
 
