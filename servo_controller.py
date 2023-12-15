@@ -19,11 +19,11 @@ class Servo_controller:
         self.servoes = (self.pan_servo, self.tilt_servo)
 
     def make_laser_perpendicular(self):
-        self.pan_servo.move(100)
-        self.pan_servo.angle = 100
+        self.pan_servo.move(0)
+        self.pan_servo.angle = 0
         time.sleep(2)
-        self.tilt_servo.move(128)
-        self.tilt_servo.angle = 128
+        self.tilt_servo.move(0)
+        self.tilt_servo.angle = 0
         time.sleep(2)
         return self.pan_servo.angle, self.tilt_servo.angle
 
@@ -31,8 +31,7 @@ class Servo_controller:
 
     # skal bare have de gemte koordinater fra midten blev fundet under kalibrering.
 
-    def convert_pixel_angles(self, coordinates, linear_ratio, frame):
-        img_height, img_width, _ = frame.shape
+    def convert_pixel_angles(self, coordinates, linear_ratio, img_width, img_height):
         # calc X and Z using linear_ratio
         X = coordinates[0] - (img_width / 2) * linear_ratio
         Y = ((img_height / 2) - coordinates[1]) * linear_ratio
@@ -52,8 +51,7 @@ class Servo_controller:
         top_angle = math.degrees(math.atan(y / h))
         return bottom_angle, top_angle
 
-    def move(self, coordinates, linear_ratio, frame):
-        bottom_angle, top_angle = self.convert_pixel_angles(coordinates, linear_ratio, frame)
-        print("angle", bottom_angle, top_angle)
+    def move(self, coordinates, linear_ratio):
+        bottom_angle, top_angle = self.convert_pixel_angles(coordinates, linear_ratio)
         self.pan_servo.move(bottom_angle)
         self.pan_servo.move(top_angle)
