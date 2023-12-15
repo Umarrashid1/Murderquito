@@ -19,13 +19,12 @@ laser.toggle_laser(0)
 
 cam = Camera(input_param)
 cam.run()
-cv2.imwrite("ref_frame.jpg", cam.get_frame())
-det = Detector(cam)
+cv2.imwrite("ref_frame.jpg", cam.run())
 servo_c = Servo_controller()
 servo_cal = ServoCalibrator(cam, servo_c)
-laser = Laser()
+det = Detector(cam)
 laser.toggle_laser()
-#chosen_servo = 'y' #servox virker ikke. ved vinkelret bevæger den sig ikke ind i billedet.
+#chosen_servo = 'y' #er måske smartere at finde vinklerne indivduelt, så de ikke påvirker hinanden
 #if chosen_servo == 'x': 
     #servo_cal.prepare_for_calibration(servo_c, chosen_servo)
 #elif chosen_servo == 'y': 
@@ -33,13 +32,19 @@ laser.toggle_laser()
 #servo_cal.find_indiv_center_angles(cam, det, servo_c, chosen_servo)        
 #identical, distance = servo_cal.calc_dist_from_centerangle(servo_c)
 
-servo_cal.prepare_for_calibration(servo_c)
-check = servo_cal.center_laser(cam, det, servo_c) # virker!      
+servo_cal.prepare_for_calibration(det, cam, servo_c)
+servo_cal.center_laser(cam, det, servo_c) # virker!      
 identical, distance2 = servo_cal.calc_dist_from_centerangle(servo_c)
-
+if identical is True : print('siiiiiick')
 laser.toggle_laser()
+px_to_cm_x, px_to_cm_y = servo_cal.calc_dim_conv_fact_perpendicular_laser()
+phys_angles = servo_cal.get_angle_for_coords((520,220))
+servo_c.pan_servo.move(100 + phys_angles[0])
+time.sleep(2)
+servo_c.tilt_servo.move(128 + phys_angles[1])
+time.sleep(2)
+laser.fire_pulse()
 #time.sleep(120)
-ventehygge = input("wwwwaaaa")
 cam_cal = CameraCalibrator(cam.get_frame())
 cal_matrix, cal_dist = cam_cal.run_calibrations()
 '''

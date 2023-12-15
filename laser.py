@@ -7,7 +7,9 @@ class Laser:
 
     def __init__(self, pulse_ln = None):
         #self.io = pigpio.pi()
-        if pulse_ln is not None: 
+        if pulse_ln is None: 
+            self.pulse_length = 2
+        else:
             self.pulse_length = pulse_ln
         GPIO.setwarnings(False)
         self.pin = 16
@@ -45,10 +47,11 @@ class Laser:
         GPIO.output(self.pin, False)
         return False
     
-    def fire_laser_pulse(self):
-        self.laser_status = self._set_laser_on
-        time.sleep(self.pulse_length)
-        self.laser_status = self._set_laser_off
+    def fire_pulse(self, duration = None):
+        if duration is None: duration = self.pulse_length
+        self.laser_status = self._set_laser_on()
+        time.sleep(duration)
+        self.laser_status = self._set_laser_off()
     
     def set_pulse_length(self, time_ln):
         self.pulse_length = time_ln
