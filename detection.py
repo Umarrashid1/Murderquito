@@ -1,4 +1,7 @@
 import cv2
+from Bounding_Boxes_subclasses.rectangle import Rectangle
+
+# from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
 from camera import Camera
 
@@ -12,8 +15,6 @@ class Detector:
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
-        self.bg_frame = cam.get_frame()
-
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
@@ -135,109 +136,75 @@ class Detector:
         return bbox
 
     def find_red (self, frame):
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        gray_bg = cv2.cvtColor(self.bg_frame, cv2.COLOR_RGB2GRAY)
-        sub = cv2.subtract(gray_frame, gray_bg)
-        cv2.imwrite("sub.jpg", sub)
-        thresh = cv2.threshold(sub, 30, 255, cv2.THRESH_BINARY)[1]
-        cv2.imwrite("sub22.jpg", thresh)
+        #reference = cv2.imread("ref_frame.jpg")
+        #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
-        mask_contour, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(sub, mask_contour, -1, (0,255,0), 3)
-        cv2.imwrite("cunt.jpg", sub)
+        
+        #noget jeg lige tester:
+        # define range wanted color in HSV
+        #lower_val_hsv_1 = np.array([0,42,0]) 
+        #upper_val_hsv_1 = np.array([7,255,255]) 
+        #lower_val_hsv_2 = np.array([0,42,0]) 
+        #upper_val_hsv_2 = np.array([7,255,255]) 
 
-        if len(mask_contour) != 0:
-            for mask_contour in mask_contour:
-                    ((x, y), radius) = cv2.minEnclosingCircle(mask_contour)
-                    red_las_center = (int(x), int(y))
-                    print(red_las_center)
-                    return int(x), int(y)
-        '''
-        # Setting the upper and lower bound
-        lower = np.array([155, 0, 20])
-        upper = np.array([180, 250, 255])
-
-        # Converting frame pixel to HSV format
-        frame_con = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-
-        # Creating Color range
-        mask = cv2.inRange(frame_con, lower, upper)
-        cv2.imwrite("testingJANICE.jpg", mask)
-
-        mask_contour, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Finding position of all contours
-        if len(mask_contour) != 0:
-            for mask_contour in mask_contour:
-                if mask_contour < 20:
-                    ((x, y), radius) = cv2.minEnclosingCircle(mask_contour)
-                    cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
-                    cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                                (0, 0, 255), 2)
-                    return int(x), int(y),
-        '''
-                    
-
-    """# set my output img to zero everywhere except my mask
-        cv2.imwrite("testimg1213.jpg", mask)
-        mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        for contour in mask_contours:
-            # Calculate the moments of the contour
-            mass = cv2.moments(contour)
-            # Calculate the center of mass of the contour
-            if mass["m00"] != 0:
-                cx = int(mass["m10"] / mass["m00"])
-                cy = int(mass["m01"] / mass["m00"])
-            else:
-                cx, cy = 0, 0
-            print("center of mass is: ", cx, ",", cy)
-
-            return cx, cy"""
-
-    def ffind_red(self, frame):
-        # Adjust the color range for red
+        # Threshold the HSV image - any green color will show up as white
+        #mask_hsv = cv2.inRange(frame_hsv, lower_val_hsv_1, upper_val_hsv_2)
+        #cv2.imwrite("testimg12133.jpg", mask_hsv)
+        """
+        # Specifying the color that we want to detect
         lower = np.array([0, 250, 220])
         upper = np.array([255, 255, 255])
+        # Creating a mask to find our color
+        frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
+        mask = cv2.inRange(frame_rgb, lower, upper)
+                    cv2.imwrite("imgtestdet1.jpg", frame_rgb)
+                    cv2.imwrite("imgtestdet2.jpg", mask)
+        # Finding contours in mask image
+        """
 
-        # Create a binary mask
+        lower = np.array([230, 245, 220])
+        upper = np.array([255, 255, 255])
+
+        # Creating a mask to find our color
+        img_conv = cv2.cvtColor(frame, cv2.Color_BGR2HSV)
         mask = cv2.inRange(frame, lower, upper)
-        cv2.imwrite("testingRONI.jpg", mask)
+        cv2.imwrite("testimg1213.jpg", mask)
 
-        # Find contours in the mask
+        """ Use Hough Circle Transform to detect circles
+        circles = cv2.HoughCircles(
+            blurred,
+            cv2.HOUGH_GRADIENT,
+            dp=1,  # 1 means the accumulator has the same resolution as the input image
+            minDist=80,  # Minimum distance between the centers of detected circles
+            param1=70,  # Higher value means less sensitive edge detection
+            param2=70,  # Higher value allows detection with lower confidence
+            minRadius=1,  # Minimum radius of detected circles
+            maxRadius=90  # Maximum radius of detected circles
+        )
+
+        #if circles is not None:
+            # Convert the (x, y) coordinates and radius of the circles to integers
+            circles = np.round(circles[0, :]).astype("int")
+
+            # Return the bounding box of the first detected circle
+            x, y, radius = circles[0]
+            bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
+        """
+
         mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        # Specify the minimum and maximum mass thresholds
-        min_mass_threshold = 20
-        max_mass_threshold = 200
-
-        # Process each contour
-        for contour in mask_contours:
-            # Calculate the moments of the contour
-            mass = cv2.moments(contour)
-
-            # Check if the mass is within the specified range
-            if min_mass_threshold < mass["m00"] < max_mass_threshold:
-                # Calculate the center of mass of the contour
-                cx = int(mass["m10"] / mass["m00"])
-                cy = int(mass["m01"] / mass["m00"])
-
-                # Draw bounding box around the contour
-                x, y, w, h = cv2.boundingRect(contour)
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-                # Display mass and center of mass
-                cv2.putText(frame, f'Mass: {mass["m00"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                cv2.putText(frame, f'Center: ({cx}, {cy})', (x, y - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-                print(cx, cy)
-                return cx, cy
-            else:
-                print("no red dot found")
-                return 0, 0
-
-
-
-
-
+        # Find the position of the contour and draw a circle
+        if len(mask_contours) != 0:
+            for mask_contour in mask_contours:
+                # Defining the least amount of pixels, I want it to register.
+                if cv2.contourArea(mask_contour) > 40:
+                    # Setting up the circle
+                    (x, y), radius = cv2.minEnclosingCircle(mask_contour)
+                    center = (int(x), int(y))
+                    print(center)
+                    radius = int(radius)
+                    return center
+        return False
 
     def find_person(self, cam):
         bounding_boxes = []
