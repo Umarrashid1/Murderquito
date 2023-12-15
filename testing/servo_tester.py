@@ -11,7 +11,7 @@ sys.path.insert(0, parentdir)
 import time
 from servo import Servo
 io = pigpio.pi()
-servo_x = Servo("x", io)
+servo_x = Servo("y", io)
 for i in range(180):
     servo_x.move(0)
     print(i)
