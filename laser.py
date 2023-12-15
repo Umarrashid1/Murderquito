@@ -1,7 +1,7 @@
-import time
-import pigpio
-import io
-import RPi.GPIO as GPIO
+#import time
+#import pigpio
+#import io
+#import RPi.GPIO as GPIO
 
 class Laser:
 

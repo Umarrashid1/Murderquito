@@ -103,8 +103,8 @@ class Detector:
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
             minDist=30,  # Minimum distance between the centers of detected circles
-            param1=90,  # Higher value means less sensitive edge Detector
-            param2=90,  # Higher value allows Detector with lower confidence
+            param1=50,  # Higher value means less sensitive edge Detector
+            param2=40,  # Higher value allows Detector with lower confidence
             minRadius=2,  # Minimum radius of detected circles
             maxRadius=400  # Maximum radius of detected circles
         )
@@ -135,7 +135,7 @@ class Detector:
 
         return bbox
 
-    def find_red (self, frame):
+    def find_red(self, frame):
         #reference = cv2.imread("ref_frame.jpg")
         #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 

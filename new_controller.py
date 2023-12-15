@@ -24,7 +24,8 @@ while True:
     det.draw_cross(cam)
     det.draw_boundingbox(cam)
     coordinates = det.get_center_coordinates()
-    servo_c.move(coordinates, linear_ratio)
+    servo_c.move(coordinates, linear_ratio, frame)
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
