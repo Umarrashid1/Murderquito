@@ -15,7 +15,7 @@ else:
 
 cam = Camera(input_param)
 det = Detector(cam)
-servo_c = Servo_controller
+servo_c = Servo_controller()
 linear_ratio = calc_distance.find_linear_ratio(cam)
 
 while True:
