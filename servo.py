@@ -33,6 +33,7 @@ class Servo:
         return duty
     
     def set_pwm(self, dc):
+        print("dc is:", dc)
         self.io.hardware_PWM(self.pin, self.pwm_hz, int(dc*10000))
 
     def stop(self):
