@@ -21,9 +21,9 @@ cam = Camera(input_param)
 cam.run()
 cv2.imwrite("ref_frame.jpg", cam.run())
 servo_c = Servo_controller()
-servo_cal = ServoCalibrator(cam, servo_c)
 det = Detector(cam)
 laser.toggle_laser()
+servo_cal = ServoCalibrator(cam, det, servo_c)
 #chosen_servo = 'y' #er måske smartere at finde vinklerne indivduelt, så de ikke påvirker hinanden
 #if chosen_servo == 'x': 
     #servo_cal.prepare_for_calibration(servo_c, chosen_servo)
@@ -32,21 +32,40 @@ laser.toggle_laser()
 #servo_cal.find_indiv_center_angles(cam, det, servo_c, chosen_servo)        
 #identical, distance = servo_cal.calc_dist_from_centerangle(servo_c)
 
-servo_cal.prepare_for_calibration(det, cam, servo_c)
+servo_cal.prepare_for_calibration(servo_c)
 servo_cal.center_laser(cam, det, servo_c) # virker!      
-identical, distance2 = servo_cal.calc_dist_from_centerangle(servo_c)
+identical, distance1 = servo_cal.calc_dist_from_centerangle(servo_c)
 if identical is True : print('siiiiiick')
+
+servo_cal.prepare_for_calibration(servo_c, 'y')
+servo_cal.find_indiv_center_angles(cam, det, servo_c, 'y')
+distance_oth = servo_cal.calc_dist_from_centerangle(servo_c, 'y')
+print('distance med begge centretet , distance ved y centreret')
+print(distance1, distance_oth)
 laser.toggle_laser()
+
 px_to_cm_x, px_to_cm_y = servo_cal.calc_dim_conv_fact_perpendicular_laser()
-phys_angles = servo_cal.get_angle_for_coords((520,220))
+phys_angles = servo_cal.get_angle_for_coords((float(520),float(220)))
+print('phys angles er:')
+print(phys_angles)
+
 servo_c.pan_servo.move(100 + phys_angles[0])
 time.sleep(2)
 servo_c.tilt_servo.move(128 + phys_angles[1])
 time.sleep(2)
+print('servovinkler: pan, tilt')
+print(servo_c.pan_servo.angle, servo_c.tilt_servo.angle)
 laser.fire_pulse()
+laser.toggle_laser(1)
+laser_place = det.find_red(cam.run())
+print(laser_place)
+print('real: 520, 220')
+laser.toggle_laser()
+
+
 #time.sleep(120)
-cam_cal = CameraCalibrator(cam.get_frame())
-cal_matrix, cal_dist = cam_cal.run_calibrations()
+#cam_cal = CameraCalibrator(cam.get_frame())
+#cal_matrix, cal_dist = cam_cal.run_calibrations()
 '''
 while True:
     frame = cam.run()
