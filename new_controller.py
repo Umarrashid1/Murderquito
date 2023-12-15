@@ -24,6 +24,7 @@ while True:
     det.draw_cross(cam)
     det.draw_boundingbox(cam)
     coordinates = det.get_center_coordinates()
+    print(coordinates)
     servo_c.move(coordinates, linear_ratio, frame)
 
 
