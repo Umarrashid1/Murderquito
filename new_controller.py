@@ -25,7 +25,8 @@ while True:
     det.draw_boundingbox(cam)
     coordinates = det.get_center_coordinates()
     print(coordinates)
-    servo_c.move(coordinates, linear_ratio, frame)
+    if coordinates[0] != 0 or coordinates[1] != 0:
+        servo_c.move(coordinates, linear_ratio, frame)
 
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
