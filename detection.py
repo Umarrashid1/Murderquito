@@ -24,10 +24,6 @@ class Detector:
                 self.tracker.init(frame, self.bbox)
             except cv2.error as e:
                 print(f"Error during tracker initialization: {e}")
-                # print(frame)
-                # print(self.bbox)
-                # exit(1)
-                # Handle the error gracefully, e.g., by falling back to find_circle
                 self.bbox = self.find_circle(cam)
 
     def update_tracker(self, cam):
@@ -35,8 +31,6 @@ class Detector:
             frame = cam.get_frame()
 
             try:
-                # Check if the frame size matches the expected size
-
                 self.ok, self.bbox = self.tracker.update(frame)
                 if not self.ok:
                     # Object is lost, fall back to find_circle
@@ -45,11 +39,9 @@ class Detector:
                     self.init_tracker(cam)
             except cv2.error as e:
                 print(f"Error during tracker update: {e}")
-                # Handle the error gracefully, e.g., by falling back to find_circle
                 self.bbox = self.find_circle(cam)
                 self.tracker = cv2.TrackerKCF.create()
                 self.init_tracker(cam)
-
         else:
             # Handle the case where self.bbox is False or all elements are 0
             self.bbox = self.find_circle(cam)
@@ -79,9 +71,7 @@ class Detector:
             return 0, 0
 
     def draw_cross(self, cam):
-
         center_x, center_y = self.get_center_coordinates()
-
         frame = cam.get_frame()
 
         # Draw horizontal line
@@ -121,19 +111,6 @@ class Detector:
         # Return False if no circle is found
         return False
 
-    def find_black_dot(self, cam):
-
-        # Finding contours in mask image
-        mask_contours, _ = cv2.findContours(cam.thresh_frame(), cv2.RETR_EXTERNAL,
-                                            cv2.CHAIN_APPROX_SIMPLE)
-        if len(mask_contours) != 0:
-            for mask_contour in mask_contours:
-                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register/filter away noise
-                    x, y, w, h = cv2.boundingRect(mask_contour)
-                    bbox = (x, y, w, h)
-                    # cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-        return bbox
 
     def find_red(self, frame):
         #reference = cv2.imread("ref_frame.jpg")
