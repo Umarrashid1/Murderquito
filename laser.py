@@ -1,12 +1,12 @@
-#import time
-#import pigpio
-#import io
-#import RPi.GPIO as GPIO
+import time
+import pigpio
+import io
+import RPi.GPIO as GPIO
 
 class Laser:
 
     def __init__(self, pulse_ln = None):
-        #self.io = pigpio.pi()
+        self.io = pigpio.pi()
         if pulse_ln is None: 
             self.pulse_length = 2
         else:
