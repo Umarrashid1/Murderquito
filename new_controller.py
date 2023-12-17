@@ -20,14 +20,8 @@ servo_c = Servo_controller()
 linear_ratio = calc_distance.find_linear_ratio(cam)
 frame_counter = 0
 
-
-def get_frame_counter():
-    return frame_counter
-
-
-
 elapsed_times = []
-for i in range(10000):
+for i in range(2500):
     frame_counter += 1
     start_time = time.time()
     frame = cam.run()
