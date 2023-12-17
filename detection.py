@@ -7,14 +7,14 @@ class Detector:
     bbox = None
     tracker = None
     ok = False
-    TRACKER_TYPE = "legacy.TrackerBOOSTING"
+    TRACKER_TYPE = "TrackerBOOSTING"
     tracking_fail_counter = 0
     dupli_count = 0
     fail_array = []
 
     def __init__(self, cam):
         frame = cam.get_frame()
-        Tracker = getattr(cv2, self.TRACKER_TYPE)
+        Tracker = getattr(cv2.legacy, self.TRACKER_TYPE)
         self.tracker = Tracker.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
@@ -41,13 +41,13 @@ class Detector:
                 if not self.ok:
                     # Object is lost, fall back to find_circle
                     self.bbox = self.find_circle(cam)
-                    Tracker = getattr(cv2, self.TRACKER_TYPE)
+                    Tracker = getattr(cv2.legacy, self.TRACKER_TYPE)
                     self.tracker = Tracker.create()
                     self.init_tracker(cam)
             except cv2.error as e:
                 print(f"Error during tracker update: {e}")
                 self.bbox = self.find_circle(cam)
-                Tracker = getattr(cv2, self.TRACKER_TYPE)
+                Tracker = getattr(cv2.legacy, self.TRACKER_TYPE)
                 self.tracker = Tracker.create()
                 self.init_tracker(cam)
         else:
