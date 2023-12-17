@@ -187,8 +187,8 @@ class Detector:
 
     def detect_fail(self, cam):
         if self.bbox == self.bbox_old:
-            self.dupli_count += 1
-        if self.dupli_count == 5:
+            self.dubli_count += 1
+        if self.dubli_count == 5:
             self.bbox = self.find_circle(cam)
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
