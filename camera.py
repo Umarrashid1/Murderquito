@@ -33,8 +33,9 @@ class Camera:
         from libcamera import controls
         success = False
         while success is False:
-            successss = self.camera.autofocus_cycle()
+            success = self.camera.autofocus_cycle()
             time.sleep(5)
+        print("Autofucus success")
 
     def run(self):
         if self.device == 0:
