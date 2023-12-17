@@ -20,7 +20,7 @@ class Servo_controller:
     def move_center(self): NotImplemented
 
     # skal bare have de gemte koordinater fra midten blev fundet under kalibrering.
-def convert_pixel_angles(self, coordinates, linear_ratio, frame):
+    def convert_pixel_angles(self, coordinates, linear_ratio, frame):
         img_height, img_width, _ = frame.shape
         # calc X and Z using linear_ratio
         X = (coordinates[0] - (img_width / 2)) * linear_ratio
