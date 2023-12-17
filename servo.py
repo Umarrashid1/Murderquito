@@ -22,7 +22,6 @@ class Servo:
             self.pin = 12
             self.angle_offset = 10
             self.io.set_mode(self.pin, pigpio.OUTPUT)
-
             self.move(90)
             # højre mod venstre
         else:
