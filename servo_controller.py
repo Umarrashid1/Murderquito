@@ -33,10 +33,10 @@ class Servo_controller:
         
         if x < 0:
             x = abs(X + 49.04)
-            bottom_angle = math.degrees(math.atan(x, z)) * -1
+            bottom_angle = math.degrees(math.atan2(x, z)) * -1
         else:
             # calc the bottom servo angle and conv to degrees
-            bottom_angle = math.degrees(math.atan(x, z))
+            bottom_angle = math.degrees(math.atan2(x, z))
 
         if y < 0:
             y = abs(Y + 43.83)
