@@ -43,7 +43,9 @@ class Servo_controller:
         return bottom_angle, top_angle
 
     def move(self, coordinates, linear_ratio, frame):
-        bottom_angle, top_angle = int(self.convert_pixel_angles(coordinates, linear_ratio, frame))
+        bottom_angle, top_angle = self.convert_pixel_angles(coordinates, linear_ratio, frame)
+        bottom_angle = int(bottom_angle)
+        top_angle = int(top_angle)
         print("Angle is:", bottom_angle, top_angle)
         self.pan_servo.move(bottom_angle)
         self.pan_servo.move(top_angle)
