@@ -54,7 +54,7 @@ class Detector:
             self.init_tracker(cam)
         self.detect_fail(cam, frame_counter)
 
-    def draw_boundingbox(self, cam, fps):
+    def draw_boundingbox(self, cam):
         frame_boundingbox = cam.get_frame()
         if self.bbox is not False:
             # Tracking success
