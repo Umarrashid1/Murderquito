@@ -33,7 +33,7 @@ for i in range(1000):
     frame = cam.run()
     det.update_tracker(cam, frame_counter)
     det.draw_cross(cam)
-    det.draw_bounding_boxes(cam)
+    det.draw_bounding_box(cam)
     coordinates = det.get_center_coordinates()
     print(coordinates)
     if coordinates[0] != 0 or coordinates[1] != 0:
