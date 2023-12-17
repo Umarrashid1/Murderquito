@@ -15,17 +15,7 @@ class Servo_controller:
         io = pigpio.pi()
         self.pan_servo = Servo("x", io)
         self.tilt_servo = Servo("y", io)
-        self.make_laser_perpendicular()
         self.servoes = (self.pan_servo, self.tilt_servo)
-
-    def make_laser_perpendicular(self):
-        self.pan_servo.move(0)
-        self.pan_servo.angle = 0
-        time.sleep(2)
-        self.tilt_servo.move(0)
-        self.tilt_servo.angle = 0
-        time.sleep(2)
-        return self.pan_servo.angle, self.tilt_servo.angle
 
     def move_center(self): NotImplemented
 
