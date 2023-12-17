@@ -29,6 +29,9 @@ real_coords_column = []
 laser_coords_column = []
 real_coords_all = []
 laser_coords_all = []
+
+
+
 for x in range(7):
     width_eights = frame_width/8 * (x+1)
     real_coords_column = []
@@ -42,6 +45,9 @@ for x in range(7):
     
     real_coords_all.append(real_coords_column)
     laser_coords_all.append(laser_coords_column)
+
+
+
 with open('real_coords_all.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(real_coords_all)
