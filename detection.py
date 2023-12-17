@@ -9,6 +9,7 @@ class Detector:
     ok = False
 
     tracking_fail_counter = 0
+    dubli_count = 0
 
     def __init__(self, cam):
         frame = cam.get_frame()
