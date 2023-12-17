@@ -6,6 +6,9 @@ class Camera:
     frame = None
     camera = None
     device = 0
+    width = 680
+    height = 480
+    
 
     def __init__(self, device = 0):
         #device 0 is for pi cam, and any inputparameter is for normal pc camera
@@ -18,17 +21,18 @@ class Camera:
             #pprint(self.camera.sensor_modes)   #printer information ud
             #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
             config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),
-                                                            main={'format': 'RGB888', 'size': (1280, 720), })
+                                                            main={'format': 'RGB888', 'size': (self.width, self.height), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
             frame = self.camera.capture_array()
-            self.frame = cv2.resize(frame, (1280, 720), interpolation = cv2.INTER_AREA)
+            self.frame = cv2.resize(frame, (self.width, self.height), interpolation = cv2.INTER_AREA)
         else:
             self.camera = cv2.VideoCapture(0)
             ok, int_frame = self.camera.read()
             self.frame = cv2.flip(int_frame, 0)
             self.device = 1
+
     def autofocus(self):
         from libcamera import controls
         success = False
