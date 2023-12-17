@@ -39,15 +39,10 @@ class ServoCalibrator:
 
     def center_laser(self, cam, det, servo_c, dist_to_wall=None):
         center = self.center
+        self.pan_angle = servo_c.pan_servo.__getattribute__("angle")
+        self.tilt_angle = servo_c.tilt_servo.__getattribute__("angle")
 
-        if dist_to_wall is not None:
-            self.cam_to_wall = dist_to_wall
-            angles = self.calc_centerangle_from_distance(det, servo_c, dist_to_wall)
-            servo_c.pan.move(angles[0])
-            servo_c.tilt.move(angles[1])
-            return True
-
-        else:
+        if True:
             las_is_centered = False
             while las_is_centered is False:
                 frame = cam.run()
