@@ -41,7 +41,7 @@ class Servo:
             self.set_pwm(self.angle_pwm_conv(angle))
         else:
             if angle < 100:
-            self.set_pwm(self.angle_pwm_conv(angle))
+                self.set_pwm(self.angle_pwm_conv(angle))
 
 
     def angle_pwm_conv(self, angle):
