@@ -30,6 +30,7 @@ class Detector:
                 self.bbox = self.find_circle(cam)
 
     def update_tracker(self, cam):
+        self.bbox_old = self.bbox
         if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
             try:
@@ -49,6 +50,7 @@ class Detector:
             self.bbox = self.find_circle(cam)
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
+        self.detect_fail(cam)
 
     def draw_boundingbox(self, cam, fps):
         frame_boundingbox = cam.get_frame()
@@ -179,3 +181,14 @@ class Detector:
     def draw_bounding_boxes(self, frame, bounding_boxes):
         for (x1, y1, x2, y2) in bounding_boxes:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+
+
+    def detect_fail(self, cam):
+        if self.bbox == self.bbox_old:
+            self.dupli_count += 1
+        if self.dupli_count == 5:
+            self.bbox = self.find_circle(cam)
+            self.tracker = cv2.TrackerKCF.create()
+            self.init_tracker(cam)
+            self.tracking_fail_counter += 1

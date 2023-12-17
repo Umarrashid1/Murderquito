@@ -45,7 +45,7 @@ for i in range(1000):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-
+print("tracking fails:", det.__getattribute__("tracking_fail_counter"))
 with open('elapsed_times.csv', 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Elapsed Time"])
