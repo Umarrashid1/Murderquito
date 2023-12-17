@@ -67,9 +67,7 @@ class Detector:
                         (0, 0, 255), 2)
             self.tracking_fail_counter = self.tracking_fail_counter + 1
         # Add FPS text to the frame
-        fps_text = f"FPS: {fps:.2f}"
-        cv2.putText(frame_boundingbox, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
+        
         # Display the frame
         cv2.imshow("Tracking", frame_boundingbox)
 
