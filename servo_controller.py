@@ -47,5 +47,5 @@ class Servo_controller:
         bottom_angle = int(bottom_angle)
         top_angle = int(top_angle)
         print("Angle is:", bottom_angle, top_angle)
-        self.pan_servo.move(bottom_angle + 90)
         self.pan_servo.move(top_angle + 90)
+        self.pan_servo.move(bottom_angle + 90)
