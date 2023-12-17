@@ -47,7 +47,7 @@ for i in range(1000):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-results = det.__getattribute__("tracking_fail_counter")
+results = det.__getattribute__("fail_array")
 with open('fails.csv', 'w', newline='') as file:
     writer = csv.writer(file)
     # Write the header
