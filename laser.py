@@ -38,11 +38,13 @@ class Laser:
             return False
         
     def _set_laser_on(self):
+        print("Laser is ON")
         self.laser_status = 1
         GPIO.output(self.pin, True)
         return True
     
     def _set_laser_off(self):
+        print("laser is OFF")
         self.laser_status = 0
         GPIO.output(self.pin, False)
         return False
