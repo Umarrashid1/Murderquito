@@ -30,17 +30,18 @@ laser_coords_column = []
 real_coords_all = []
 laser_coords_all = []
 for x in range(7):
-    width_eights = width_eights * (x+1)
+    width_eights = frame_width/8 * (x+1)
+    real_coords_column = []
+    laser_coords_column = []
     for y in range(7):
+        height_eights = frame_height/8 * (y+1)
         frame = cam.run()
-        height_eights = height_eights * (x+1)
         servo_c.move((width_eights,height_eights), linear_ratio, frame)
-        laser_coords_column[y] = det.find_red(frame)
-        real_coords[y] = (width_eights,height_eights)
+        laser_coords_column.append(det.find_red(frame))
+        real_coords_column.append((width_eights,height_eights))
     
-    real_coords_all[x] = real_coords_column
-    laser_coords_all[x] = laser_coords_column
-
+    real_coords_all.append(real_coords_column)
+    laser_coords_all.append(laser_coords_column)
 with open('real_coords_all.csv', 'w', newline='') as f:
     writer = csv.writer(f)
     writer.writerows(real_coords_all)
