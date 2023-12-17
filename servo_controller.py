@@ -24,13 +24,13 @@ class Servo_controller:
     def convert_pixel_angles(self, coordinates, linear_ratio, frame):
         img_height, img_width, _ = frame.shape
         # calc X and Z using linear_ratio
-        X = coordinates[0] - (img_width / 2) * linear_ratio
+        X = (coordinates[0] - (img_width / 2)) * linear_ratio
         Y = ((img_height / 2) - coordinates[1]) * linear_ratio
 
         # calculate target position relative to turret
         x = X + 49.04
         y = Y + 43.83
-        z = 2000 + 26.25
+        z = 1300 + 26.25
 
         # calc the bottom servo angle and conv to degrees
         bottom_angle = math.degrees(math.atan(x / z))
