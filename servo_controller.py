@@ -20,8 +20,7 @@ class Servo_controller:
     def move_center(self): NotImplemented
 
     # skal bare have de gemte koordinater fra midten blev fundet under kalibrering.
-
-    def convert_pixel_angles(self, coordinates, linear_ratio, frame):
+def convert_pixel_angles(self, coordinates, linear_ratio, frame):
         img_height, img_width, _ = frame.shape
         # calc X and Z using linear_ratio
         X = (coordinates[0] - (img_width / 2)) * linear_ratio
@@ -43,9 +42,10 @@ class Servo_controller:
         return bottom_angle, top_angle
 
     def move(self, coordinates, linear_ratio, frame):
+
         bottom_angle, top_angle = self.convert_pixel_angles(coordinates, linear_ratio, frame)
-        bottom_angle = 180 - int(bottom_angle)
-        top_angle = 180 - int(top_angle)
+        bottom_angle = abs(int(bottom_angle) - 185)
+        top_angle = abs(int(top_angle) - 185)
         print("Angle is:", bottom_angle, top_angle)
         self.pan_servo.move(bottom_angle + 90)
         self.tilt_servo.move(top_angle + 90)
