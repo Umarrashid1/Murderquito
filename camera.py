@@ -1,6 +1,6 @@
 from pprint import *
 import cv2
-
+import time
 
 class Camera:
     frame = None
@@ -18,7 +18,7 @@ class Camera:
             #pprint(self.camera.sensor_modes)   #printer information ud
             #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
             config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),
-                                                            main={'format': 'RGB888', 'size': (1929, 1080), })
+                                                            main={'format': 'RGB888', 'size': (1280, 720), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
@@ -31,7 +31,10 @@ class Camera:
             self.device = 1
     def autofocus(self):
         from libcamera import controls
-        self.camera.set_controls({"AfMode": controls.AfModeEnum.Continuous})
+        success = False
+        while success is False:
+            successss = self.camera.autofocus_cycle()
+            time.sleep(5)
 
     def run(self):
         if self.device == 0:
