@@ -34,12 +34,8 @@ class ServoCalibrator:
     def prepare_for_calibration(self, servo_c,  choice=None):
         self.pan_angle, self.tilt_angle = servo_c.make_laser_perpendicular()
         if (choice is None or choice == 'x'):
-            servo_c.pan_servo.move(102)
-            self.pan_angle = 102
             time.sleep(2)
         if (choice is None or choice == 'y'):
-            servo_c.tilt_servo.move(135)
-            self.tilt_angle = 135
             time.sleep(2)
 
     def center_laser(self, cam, det, servo_c, dist_to_wall=None):
