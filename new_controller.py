@@ -5,6 +5,7 @@ import calc_distance
 from servo_controller import Servo_controller
 from camera import Camera
 from detection import Detector
+import csv
 
 # Get CLI arguments
 args = sys.argv[1:]
@@ -24,16 +25,13 @@ def get_frame_counter():
     return frame_counter
 
 
-start_time = time.time()
-fps = 0
 
-
-while True:
-    frame_counter += 1
+elapsed_times = []
+for i in range(1000):
+    start_time = time.time()
     frame = cam.run()
     det.update_tracker(cam)
     det.draw_cross(cam)
-    det.draw_boundingbox(cam, fps)
     coordinates = det.get_center_coordinates()
     print(coordinates)
     if coordinates[0] != 0 or coordinates[1] != 0:
@@ -43,10 +41,13 @@ while True:
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    fps = round(frame_counter / elapsed_time)
+    elapsed_times.append(elapsed_time)
 
-
-
+with open('elapsed_times.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(["Elapsed Time"])
+    for elapsed_time in elapsed_times:
+        writer.writerow([elapsed_time])
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
