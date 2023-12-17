@@ -11,9 +11,13 @@ class Detector:
     tracking_fail_counter = 0
 
     def __init__(self, cam):
+        frame = cam.get_frame()
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
+        self.bg_frame = cam.get_frame()
+
+        
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
