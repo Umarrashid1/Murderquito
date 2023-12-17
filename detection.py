@@ -7,7 +7,7 @@ class Detector:
     bbox = None
     tracker = None
     ok = False
-    TRACKER_TYPE = "TrackerBOOSTING"
+    TRACKER_TYPE = "TrackerBoosting"
     tracking_fail_counter = 0
     dupli_count = 0
     fail_array = []
