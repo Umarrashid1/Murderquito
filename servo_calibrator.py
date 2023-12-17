@@ -173,8 +173,8 @@ class ServoCalibrator:
     def calc_dist_from_centerangle(self, servo_c=Servo_controller, choice=None):
         # laseren skal  vaere centreret
         # b = a × tan(β)
-        pan_angle = servo_c.pan_servo.angle - 10
-        tilt_angle = servo_c.tilt_servo.angle - 38
+        pan_angle = servo_c.pan_servo.angle
+        tilt_angle = servo_c.tilt_servo.angle + 2
         pan_angle = pan_angle - 90
         tilt_angle = tilt_angle - 90
         pan_angle = 90 - pan_angle
