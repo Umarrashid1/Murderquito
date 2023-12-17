@@ -12,7 +12,7 @@ class Laser:
         else:
             self.pulse_length = pulse_ln
         GPIO.setwarnings(False)
-        self.pin = 16
+        self.pin = 6
         GPIO.setmode(GPIO.BCM) 
         GPIO.setup(self.pin, GPIO.OUT)
         #self.io.set_mode(self.pin, pigpio.OUTPUT)
