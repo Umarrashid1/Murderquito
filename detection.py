@@ -9,7 +9,7 @@ class Detector:
     ok = False
 
     tracking_fail_counter = 0
-    dupli_count = 0
+    fail_array = []
 
     def __init__(self, cam):
         frame = cam.get_frame()
@@ -30,7 +30,7 @@ class Detector:
                 print(f"Error during tracker initialization: {e}")
                 self.bbox = self.find_circle(cam)
 
-    def update_tracker(self, cam):
+    def update_tracker(self, cam, frame_counter):
         self.bbox_old = self.bbox
         if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
@@ -51,7 +51,7 @@ class Detector:
             self.bbox = self.find_circle(cam)
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
-        self.detect_fail(cam)
+        self.detect_fail(cam, frame_counter)
 
     def draw_boundingbox(self, cam, fps):
         frame_boundingbox = cam.get_frame()
@@ -185,11 +185,12 @@ class Detector:
 
 
 
-    def detect_fail(self, cam):
+    def detect_fail(self, cam, frame_counter):
         if self.bbox == self.bbox_old:
             self.dupli_count += 1
         if self.dupli_count == 5:
+            self.fail_array.append([frame_counter, "failed"])
             self.bbox = self.find_circle(cam)
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
-            self.tracking_fail_counter += 1
+            

@@ -28,9 +28,10 @@ def get_frame_counter():
 
 elapsed_times = []
 for i in range(1000):
+    frame_counter += 1
     start_time = time.time()
     frame = cam.run()
-    det.update_tracker(cam)
+    det.update_tracker(cam, frame_counter)
     det.draw_cross(cam)
     coordinates = det.get_center_coordinates()
     print(coordinates)
@@ -45,7 +46,15 @@ for i in range(1000):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-print("tracking fails:", det.__getattribute__("tracking_fail_counter"))
+results = det.__getattribute__("tracking_fail_counter")
+with open('fails.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    # Write the header
+    writer.writerow(["Frame Counter", "Status"])
+    # Write the data
+    for result in results:
+        writer.writerow(result)
+
 with open('elapsed_times.csv', 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Elapsed Time"])
