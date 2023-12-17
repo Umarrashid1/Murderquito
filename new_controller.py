@@ -35,7 +35,7 @@ for i in range(10000):
     det.draw_cross(cam)
     det.draw_boundingbox(cam)
     coordinates = det.get_center_coordinates()
-    print(coordinates)
+    print(coordinates, i)
     if coordinates[0] != 0 or coordinates[1] != 0:
         servo_c.move(coordinates, linear_ratio, frame)
 
