@@ -1,7 +1,4 @@
 import cv2
-from Bounding_Boxes_subclasses.rectangle import Rectangle
-
-# from Bounding_Boxes_subclasses.circle import Circle
 import numpy as np
 from camera import Camera
 
@@ -10,6 +7,8 @@ class Detector:
     bbox = None
     tracker = None
     ok = False
+
+    tracking_fail_counter = 0
 
     def __init__(self, cam):
         self.tracker = cv2.TrackerKCF.create()
@@ -29,7 +28,6 @@ class Detector:
     def update_tracker(self, cam):
         if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
-
             try:
                 self.ok, self.bbox = self.tracker.update(frame)
                 if not self.ok:
@@ -48,7 +46,7 @@ class Detector:
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
 
-    def draw_boundingbox(self, cam):
+    def draw_boundingbox(self, cam, fps):
         frame_boundingbox = cam.get_frame()
         if self.bbox is not False:
             # Tracking success
@@ -59,6 +57,12 @@ class Detector:
             # Tracking failure
             cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                         (0, 0, 255), 2)
+            self.tracking_fail_counter = self.tracking_fail_counter + 1
+        # Add FPS text to the frame
+        fps_text = f"FPS: {fps:.2f}"
+        cv2.putText(frame_boundingbox, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        # Display the frame
         cv2.imshow("Tracking", frame_boundingbox)
 
     def get_center_coordinates(self):
