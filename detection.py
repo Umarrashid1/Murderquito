@@ -115,78 +115,45 @@ class Detector:
         # Return False if no circle is found
         return False
 
+    def find_red (self, frame):
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+        gray_bg = cv2.cvtColor(self.bg_frame, cv2.COLOR_RGB2GRAY)
+        sub = cv2.subtract(gray_frame, gray_bg)
+        cv2.imwrite("sub.jpg", sub)
+        thresh = cv2.threshold(sub, 30, 255, cv2.THRESH_BINARY)[1]
+        cv2.imwrite("sub22.jpg", thresh)
 
-    def find_red(self, frame):
-        #reference = cv2.imread("ref_frame.jpg")
-        #frame_hsv = cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
-
+        mask_contour, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(sub, mask_contour, -1, (0,255,0), 3)
+        cv2.imwrite("cuntjjjjj.jpg", sub)
+        # Specify the minimum and maximum mass thresholds
+        min_mass_threshold = 4
+        max_mass_threshold = 200
         
-        #noget jeg lige tester:
-        # define range wanted color in HSV
-        #lower_val_hsv_1 = np.array([0,42,0]) 
-        #upper_val_hsv_1 = np.array([7,255,255]) 
-        #lower_val_hsv_2 = np.array([0,42,0]) 
-        #upper_val_hsv_2 = np.array([7,255,255]) 
+        for contour in mask_contour:
+            # Calculate the moments of the contour
+            mass = cv2.moments(contour)
 
-        # Threshold the HSV image - any green color will show up as white
-        #mask_hsv = cv2.inRange(frame_hsv, lower_val_hsv_1, upper_val_hsv_2)
-        #cv2.imwrite("testimg12133.jpg", mask_hsv)
-        """
-        # Specifying the color that we want to detect
-        lower = np.array([0, 250, 220])
-        upper = np.array([255, 255, 255])
-        # Creating a mask to find our color
-        frame_rgb = cv2.cvtColor(cam.get_frame(), cv2.COLOR_BGR2RGB)
-        mask = cv2.inRange(frame_rgb, lower, upper)
-                    cv2.imwrite("imgtestdet1.jpg", frame_rgb)
-                    cv2.imwrite("imgtestdet2.jpg", mask)
-        # Finding contours in mask image
-        """
+            # Check if the mass is within the specified range
+            if min_mass_threshold < mass["m00"] < max_mass_threshold:
+                # Calculate the center of mass of the contour
+                cx = int(mass["m10"] / mass["m00"])
+                cy = int(mass["m01"] / mass["m00"])
 
-        lower = np.array([230, 245, 220])
-        upper = np.array([255, 255, 255])
+                # Draw bounding box around the contour
+                x, y, w, h = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-        # Creating a mask to find our color
-        img_conv = cv2.cvtColor(frame, cv2.Color_BGR2HSV)
-        mask = cv2.inRange(frame, lower, upper)
-        cv2.imwrite("testimg1213.jpg", mask)
+                # Display mass and center of mass
+                cv2.putText(frame, f'Mass: {mass["m00"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(frame, f'Center: ({cx}, {cy})', (x, y - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                print(cx, cy)
+                return (int(cx), int(cy))
+            else:
+                print("no red dot found")
+                return 0, 0
 
-        """ Use Hough Circle Transform to detect circles
-        circles = cv2.HoughCircles(
-            blurred,
-            cv2.HOUGH_GRADIENT,
-            dp=1,  # 1 means the accumulator has the same resolution as the input image
-            minDist=80,  # Minimum distance between the centers of detected circles
-            param1=70,  # Higher value means less sensitive edge detection
-            param2=70,  # Higher value allows detection with lower confidence
-            minRadius=1,  # Minimum radius of detected circles
-            maxRadius=90  # Maximum radius of detected circles
-        )
-
-        #if circles is not None:
-            # Convert the (x, y) coordinates and radius of the circles to integers
-            circles = np.round(circles[0, :]).astype("int")
-
-            # Return the bounding box of the first detected circle
-            x, y, radius = circles[0]
-            bbox = (x - radius, y - radius, 2 * radius, 2 * radius)
-        """
-
-        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        # Find the position of the contour and draw a circle
-        if len(mask_contours) != 0:
-            for mask_contour in mask_contours:
-                # Defining the least amount of pixels, I want it to register.
-                if cv2.contourArea(mask_contour) > 40:
-                    # Setting up the circle
-                    (x, y), radius = cv2.minEnclosingCircle(mask_contour)
-                    center = (int(x), int(y))
-                    print(center)
-                    radius = int(radius)
-                    return center
-        return False
-
+  
     def find_person(self, cam):
         bounding_boxes = []
         person_detector = cv2.CascadeClassifier("data_cascade/haarcascade_frontalface_default.xml")
