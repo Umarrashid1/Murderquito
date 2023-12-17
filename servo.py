@@ -3,8 +3,8 @@ import pigpio
 
 
 class Servo:
-    dc_min = 1       # duty cycle for 0 degrees
-    dc_max = 12    # duty cyckle for 180 degrees
+    dc_min = 2.4       # duty cycle for 0 degrees
+    dc_max = 12.4    # duty cyckle for 180 degrees
     pwm_hz = 50    # Frequency
     angle = 0
     axis = 0
