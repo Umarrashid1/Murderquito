@@ -25,7 +25,6 @@ class ServoCalibrator:
             self.cam_to_tilt_dist * self.cam_to_tilt_dist + self.cam_to_pan_dist * self.cam_to_pan_dist)
         self.px_height, self.px_width, self.channels = cam.frame.shape
         self.center = (self.px_width / 2, self.px_height / 2)
-        self.pan_angle, self.tilt_angle = servo_c.make_laser_perpendicular()
         time.sleep(2)
         self.las_perp_coords = det.find_red(cam.run())
         print('når laser er vinkelret:')
