@@ -9,6 +9,7 @@ class Detector:
     ok = False
 
     tracking_fail_counter = 0
+    dupli_count = 0
     fail_array = []
 
     def __init__(self, cam):
