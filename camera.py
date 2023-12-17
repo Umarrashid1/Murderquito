@@ -18,7 +18,7 @@ class Camera:
             #pprint(self.camera.sensor_modes)   #printer information ud
             #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
             config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),
-                                                            main={'format': 'RGB888', 'size': (1920, 1080), })
+                                                            main={'format': 'RGB888', 'size': (1280, 720), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
