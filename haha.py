@@ -8,16 +8,12 @@ class Detector:
     tracker = None
     ok = False
 
-    tracking_fail_counter = 0
-
     def __init__(self, cam):
-        frame = cam.get_frame()
         self.tracker = cv2.TrackerKCF.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
         self.bg_frame = cam.get_frame()
 
-        
 
     def init_tracker(self, cam):
         frame = cam.get_frame()
@@ -27,12 +23,19 @@ class Detector:
                 self.tracker.init(frame, self.bbox)
             except cv2.error as e:
                 print(f"Error during tracker initialization: {e}")
+                # print(frame)
+                # print(self.bbox)
+                # exit(1)
+                # Handle the error gracefully, e.g., by falling back to find_circle
                 self.bbox = self.find_circle(cam)
 
     def update_tracker(self, cam):
         if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
+
             try:
+                # Check if the frame size matches the expected size
+
                 self.ok, self.bbox = self.tracker.update(frame)
                 if not self.ok:
                     # Object is lost, fall back to find_circle
@@ -41,16 +44,18 @@ class Detector:
                     self.init_tracker(cam)
             except cv2.error as e:
                 print(f"Error during tracker update: {e}")
+                # Handle the error gracefully, e.g., by falling back to find_circle
                 self.bbox = self.find_circle(cam)
                 self.tracker = cv2.TrackerKCF.create()
                 self.init_tracker(cam)
+
         else:
             # Handle the case where self.bbox is False or all elements are 0
             self.bbox = self.find_circle(cam)
             self.tracker = cv2.TrackerKCF.create()
             self.init_tracker(cam)
 
-    def draw_boundingbox(self, cam, fps):
+    def draw_boundingbox(self, cam):
         frame_boundingbox = cam.get_frame()
         if self.bbox is not False:
             # Tracking success
@@ -61,12 +66,6 @@ class Detector:
             # Tracking failure
             cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                         (0, 0, 255), 2)
-            self.tracking_fail_counter = self.tracking_fail_counter + 1
-        # Add FPS text to the frame
-        fps_text = f"FPS: {fps:.2f}"
-        cv2.putText(frame_boundingbox, fps_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        # Display the frame
         cv2.imshow("Tracking", frame_boundingbox)
 
     def get_center_coordinates(self):
@@ -79,7 +78,9 @@ class Detector:
             return 0, 0
 
     def draw_cross(self, cam):
+
         center_x, center_y = self.get_center_coordinates()
+
         frame = cam.get_frame()
 
         # Draw horizontal line
@@ -101,8 +102,8 @@ class Detector:
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
             minDist=30,  # Minimum distance between the centers of detected circles
-            param1=50,  # Higher value means less sensitive edge Detector
-            param2=40,  # Higher value allows Detector with lower confidence
+            param1=90,  # Higher value means less sensitive edge Detector
+            param2=90,  # Higher value allows Detector with lower confidence
             minRadius=2,  # Minimum radius of detected circles
             maxRadius=400  # Maximum radius of detected circles
         )
@@ -118,6 +119,20 @@ class Detector:
 
         # Return False if no circle is found
         return False
+
+    def find_black_dot(self, cam):
+
+        # Finding contours in mask image
+        mask_contours, _ = cv2.findContours(cam.thresh_frame(), cv2.RETR_EXTERNAL,
+                                            cv2.CHAIN_APPROX_SIMPLE)
+        if len(mask_contours) != 0:
+            for mask_contour in mask_contours:
+                if cv2.contourArea(mask_contour) > 100:  # minimum amount of pixels to register/filter away noise
+                    x, y, w, h = cv2.boundingRect(mask_contour)
+                    bbox = (x, y, w, h)
+                    # cv2.putText(gray_frame, f'({x},{y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        return bbox
 
     def find_red (self, frame):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -155,9 +170,94 @@ class Detector:
                 return (int(cx), int(cy))
             else:
                 print("no red dot found")
-                return False
+                return 0, 0
+        '''
+        # Setting the upper and lower bound
+        lower = np.array([155, 0, 20])
+        upper = np.array([180, 250, 255])
 
-  
+        # Converting frame pixel to HSV format
+        frame_con = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # Creating Color range
+        mask = cv2.inRange(frame_con, lower, upper)
+        cv2.imwrite("testingJANICE.jpg", mask)
+
+        mask_contour, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Finding position of all contours
+        if len(mask_contour) != 0:
+            for mask_contour in mask_contour:
+                if mask_contour < 20:
+                    ((x, y), radius) = cv2.minEnclosingCircle(mask_contour)
+                    cv2.circle(frame, (x, y), radius, (0, 0, 255), 3)
+                    cv2.putText(frame, f'({x}, {y})', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                                (0, 0, 255), 2)
+                    return int(x), int(y),
+        '''
+                    
+
+    """# set my output img to zero everywhere except my mask
+        cv2.imwrite("testimg1213.jpg", mask)
+        mask_contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for contour in mask_contours:
+            # Calculate the moments of the contour
+            mass = cv2.moments(contour)
+            # Calculate the center of mass of the contour
+            if mass["m00"] != 0:
+                cx = int(mass["m10"] / mass["m00"])
+                cy = int(mass["m01"] / mass["m00"])
+            else:
+                cx, cy = 0, 0
+            print("center of mass is: ", cx, ",", cy)
+
+            return cx, cy"""
+
+    def ffind_red(self, frame):
+        # Adjust the color range for red
+        lower = np.array([0, 250, 220])
+        upper = np.array([255, 255, 255])
+
+        # Create a binary mask
+        mask = cv2.inRange(frame, lower, upper)
+        cv2.imwrite("testingRONI.jpg", mask)
+
+        # Find contours in the mask
+        mask_contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Specify the minimum and maximum mass thresholds
+        min_mass_threshold = 20
+        max_mass_threshold = 200
+
+        # Process each contour
+        for contour in mask_contours:
+            # Calculate the moments of the contour
+            mass = cv2.moments(contour)
+
+            # Check if the mass is within the specified range
+            if min_mass_threshold < mass["m00"] < max_mass_threshold:
+                # Calculate the center of mass of the contour
+                cx = int(mass["m10"] / mass["m00"])
+                cy = int(mass["m01"] / mass["m00"])
+
+                # Draw bounding box around the contour
+                x, y, w, h = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+                # Display mass and center of mass
+                cv2.putText(frame, f'Mass: {mass["m00"]}', (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(frame, f'Center: ({cx}, {cy})', (x, y - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                print(cx, cy)
+                return cx, cy
+            else:
+                print("no red dot found")
+                return 0, 0
+
+
+
+
+
+
     def find_person(self, cam):
         bounding_boxes = []
         person_detector = cv2.CascadeClassifier("data_cascade/haarcascade_frontalface_default.xml")
@@ -179,3 +279,4 @@ class Detector:
     def draw_bounding_boxes(self, frame, bounding_boxes):
         for (x1, y1, x2, y2) in bounding_boxes:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
