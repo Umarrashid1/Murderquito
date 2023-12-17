@@ -18,11 +18,12 @@ class Camera:
             #pprint(self.camera.sensor_modes)   #printer information ud
             #config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),main={'format': 'BGR888', 'size': (1920, 1080), })
             config = self.camera.create_video_configuration(transform=Transform(hflip=True, vflip=True),
-                                                            main={'format': 'RGB888', 'size': (1280, 720), })
+                                                            main={'format': 'RGB888', 'size': (1929, 1080), })
             self.camera.configure(config)
             self.camera.start()
             self.autofocus()
-            self.frame = self.camera.capture_array()
+            frame = self.camera.capture_array()
+            self.frame = cv2.resize(frame, (1280, 720), interpolation = cv2.INTER_AREA)
         else:
             self.camera = cv2.VideoCapture(0)
             ok, int_frame = self.camera.read()
