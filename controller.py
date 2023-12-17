@@ -23,7 +23,7 @@ cv2.imwrite("ref_frame.jpg", cam.run())
 servo_c = Servo_controller()
 time.sleep(5)
 det = Detector(cam)
-laser.toggle_laser()
+laser.toggle_laser(1)
 servo_cal = ServoCalibrator(cam, det, servo_c)
 #chosen_servo = 'y' #er måske smartere at finde vinklerne indivduelt, så de ikke påvirker hinanden
 #if chosen_servo == 'x': 
