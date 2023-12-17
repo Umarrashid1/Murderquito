@@ -23,29 +23,40 @@ class Servo_controller:
     def convert_pixel_angles(self, coordinates, linear_ratio, frame):
         img_height, img_width, _ = frame.shape
         # calc X and Z using linear_ratio
-        X = (coordinates[0] - (img_width / 2)) * linear_ratio
-        Y = ((img_height / 2) - coordinates[1]) * linear_ratio
-
+        X = ((img_width / 2) - coordinates[0]) * linear_ratio
+        Y = (coordinates[1] - (img_height / 2)) * linear_ratio
+             
         # calculate target position relative to turret
-        x = X + 49.04
+        x = X + 49.04         
         y = Y + 43.83
         z = 1300 + 26.25
+        
+        if x < 0:
+            x = abs(X + 49.04)
+            bottom_angle = math.degrees(math.atan(x, z)) * -1
+        else:
+            # calc the bottom servo angle and conv to degrees
+            bottom_angle = math.degrees(math.atan(x, z))
 
-        # calc the bottom servo angle and conv to degrees
-        bottom_angle = math.degrees(math.atan(x / z))
-
+        if y < 0:
+            y = abs(Y + 43.83)
+            top_angle = math.degrees(math.atan2(y,z)) * -1
+        else:
+            top_angle = math.degrees(math.atan2(y,z)) 
         # temp variable
-        h = math.sqrt(x * x + z * z)
+        #h = math.sqrt(x * x + z * z)
 
         # calc the top servo angle and conv to degrees
-        top_angle = math.degrees(math.atan(y / h))
-        return bottom_angle, top_angle
+        #top_angle = math.degrees(math.atan(y / h))
+        
 
+        return bottom_angle, top_angle
+         
     def move(self, coordinates, linear_ratio, frame):
 
         bottom_angle, top_angle = self.convert_pixel_angles(coordinates, linear_ratio, frame)
-        bottom_angle = abs(int(bottom_angle) - 180)
-        top_angle = abs(int(top_angle) - 180)
+        bottom_angle = (int(bottom_angle))
+        top_angle = (int(top_angle))
         print("Angle is:", bottom_angle, top_angle)
         self.pan_servo.move(bottom_angle)
         self.tilt_servo.move(top_angle)
