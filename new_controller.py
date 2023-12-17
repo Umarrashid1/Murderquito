@@ -42,12 +42,12 @@ for i in range(1000):
     end_time = time.time()
     elapsed_time = end_time - start_time
     elapsed_times.append(elapsed_time)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
 
 with open('elapsed_times.csv', 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["Elapsed Time"])
     for elapsed_time in elapsed_times:
         writer.writerow([elapsed_time])
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
