@@ -7,14 +7,15 @@ class Detector:
     bbox = None
     tracker = None
     ok = False
-
+    TRACKER_TYPE = "TrackerKCF"
     tracking_fail_counter = 0
     dupli_count = 0
     fail_array = []
 
     def __init__(self, cam):
         frame = cam.get_frame()
-        self.tracker = cv2.TrackerKCF.create()
+        Tracker = getattr(cv2, self.TRACKER_TYPE)
+        self.tracker = Tracker.create()
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
         self.bg_frame = cam.get_frame()
