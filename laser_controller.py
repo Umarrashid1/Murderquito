@@ -19,6 +19,7 @@ det = Detector(cam)
 servo_c = Servo_controller()
 linear_ratio = calc_distance.find_linear_ratio(cam)
 frame_counter = 0
+time.sleep(5)
 
 
 frame = cam.get_frame()
@@ -42,6 +43,7 @@ for x in range(7):
         servo_c.move((width_eights,height_eights), linear_ratio, frame)
         laser_coords_column.append(det.find_red(frame))
         real_coords_column.append((width_eights,height_eights))
+        time.sleep(1)
     
     real_coords_all.append(real_coords_column)
     laser_coords_all.append(laser_coords_column)
