@@ -6,8 +6,8 @@ class Camera:
     frame = None
     camera = None
     device = 0
-    width = 680
-    height = 480
+    width = 1920
+    height = 1080
     
 
     def __init__(self, device = 0):
