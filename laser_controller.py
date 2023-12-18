@@ -16,6 +16,7 @@ else:
 
 cam = Camera(input_param)
 linear_ratio = calc_distance.find_linear_ratio(cam)
+time.sleep(5)
 det = Detector(cam)
 servo_c = Servo_controller()
 frame_counter = 0
