@@ -7,7 +7,7 @@ class Detector:
     bbox = None
     tracker = None
     ok = False
-    TRACKER_TYPE = "TrackerGOTURN"
+    TRACKER_TYPE = "TrackerKCF"
     tracking_fail_counter = 0
     dupli_count = 0
     fail_array = []
@@ -108,9 +108,9 @@ class Detector:
             cv2.HOUGH_GRADIENT,
             dp=1,  # 1 means the accumulator has the same resolution as the input image
             minDist=30,  # Minimum distance between the centers of detected circles
-            param1=50,  # Higher value means less sensitive edge Detector
-            param2=40,  # Higher value allows Detector with lower confidence
-            minRadius=2,  # Minimum radius of detected circles
+            param1=65,  # Higher value means less sensitive edge Detector
+            param2=65,  # Higher value allows Detector with lower confidence
+            minRadius=5,  # Minimum radius of detected circles
             maxRadius=400  # Maximum radius of detected circles
         )
 
