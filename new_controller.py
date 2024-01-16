@@ -4,6 +4,8 @@ import calc_distance
 from servo_controller import Servo_controller
 from camera import Camera
 from detection import Detector
+from laser import Laser
+import time
 
 # Get CLI arguments
 args = sys.argv[1:]
@@ -16,8 +18,9 @@ cam = Camera(input_param)
 det = Detector(cam)
 servo_c = Servo_controller()
 linear_ratio = calc_distance.find_linear_ratio(cam)
- 
-
+laser = Laser()
+time.sleep(1)
+laser._set_laser_on()
 while True:
     frame = cam.run()
     det.update_tracker(cam)
