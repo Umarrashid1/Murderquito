@@ -64,7 +64,6 @@ class Detector:
             # Tracking failure
             cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                         (0, 0, 255), 2)
-            self.tracking_fail_counter = self.tracking_fail_counter + 1
         # Display the frame
         cv2.imshow("Tracking", frame_boundingbox)
 
