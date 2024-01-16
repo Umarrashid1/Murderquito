@@ -8,9 +8,6 @@ class Detector:
     tracker = None
     ok = False
     TRACKER_TYPE = "TrackerMedianFlow"
-    tracking_fail_counter = 0
-    dupli_count = 0
-    fail_array = []
 
     def __init__(self, cam):
         frame = cam.get_frame()
@@ -19,12 +16,9 @@ class Detector:
         self.bbox = self.find_circle(cam)
         self.init_tracker(cam)
         self.bg_frame = cam.get_frame()
-
         
-
     def init_tracker(self, cam):
         frame = cam.get_frame()
-
         if frame is not None and self.bbox is not False and not all(i == 0 for i in self.bbox):
             try:
                 self.tracker.init(frame, self.bbox)
@@ -71,8 +65,6 @@ class Detector:
             cv2.putText(frame_boundingbox, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                         (0, 0, 255), 2)
             self.tracking_fail_counter = self.tracking_fail_counter + 1
-        # Add FPS text to the frame
-        
         # Display the frame
         cv2.imshow("Tracking", frame_boundingbox)
 
@@ -186,15 +178,3 @@ class Detector:
     def draw_bounding_boxes(self, frame, bounding_boxes):
         for (x1, y1, x2, y2) in bounding_boxes:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-
-
-    def detect_fail(self, cam, frame_counter):
-        if self.bbox == self.bbox_old:
-            self.dupli_count += 1
-        if self.dupli_count == 5:
-            self.fail_array.append([frame_counter, "failed"])
-            self.bbox = self.find_circle(cam)
-            self.tracker = cv2.TrackerKCF.create()
-            self.init_tracker(cam)
-            
