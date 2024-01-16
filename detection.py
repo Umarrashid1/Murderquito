@@ -26,7 +26,7 @@ class Detector:
                 print(f"Error during tracker initialization: {e}")
                 self.bbox = self.find_circle(cam)
 
-    def update_tracker(self, cam, frame_counter):
+    def update_tracker(self, cam):
         self.bbox_old = self.bbox
         if self.bbox is not False and not all(i == 0 for i in self.bbox):
             frame = cam.get_frame()
@@ -51,7 +51,7 @@ class Detector:
             self.tracker = Tracker.create()
 
             self.init_tracker(cam)
-        self.detect_fail(cam, frame_counter)
+        
 
     def draw_boundingbox(self, cam):
         frame_boundingbox = cam.get_frame()
